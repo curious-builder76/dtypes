@@ -1,0 +1,49 @@
+gcc -I../.. hashmap_benchmark.c -O2 -Wextra -Wall -o bench_hashmap
+gcc -I../.. hashset_benchmark.c  -O2 -Wextra -Wall -o bench_hashset
+gcc -I../.. array_benchmark.c  -O2 -Wextra -Wall -o bench_array
+gcc -I../.. lookup_benchmark.c  -O2 -Wextra -Wall -o bench_lookup
+./bench_hashset
+====benchmark of hashset====
+Key put test
+hashset_put: 1000000 operations in 2.084 seconds
+Key contains test
+hashset_contains: 1000000 operations in 0.108 seconds
+Busy page test.
+Test passed.
+All tests passed.
+No memroy leaks.
+./bench_hashmap
+====benchmark of hashmap====
+Key put test
+hashmap_put: 1000000 operations in 2.184 seconds
+Test passed
+Key get test.
+hashmap_get: 1000000 operations in 0.126 seconds
+Test passed.
+Busy page test.
+No busy pages were found
+All tests passed.
+No memroy leaks.
+./bench_array
+==== benchmark of array====
+Initializing...
+done.
+Array put test.
+Test passed.
+array_put: 1000000 operations in 0.006 seconds.
+Array iteration test.
+Test passed.
+array_at: 1000000 operations in 0.000 seconds.
+All tests passed.
+No memroy leaks.
+./bench_lookup
+====benchmark of lookup====
+Key put test.
+Test passed.
+1000000 operations in 1.144 seconds
+Nonexistent key test.
+Test passed.
+Missing entries test.
+1000000 operations in 0.059 seconds
+Test passed.
+All tests passed.
