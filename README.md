@@ -1,4 +1,4 @@
-# A collection of simple data types.
+# A collection of simple data structures.
 
 - This repository consists of data structures that C lacks naturay.
 - The repository has minimal C dependency.
