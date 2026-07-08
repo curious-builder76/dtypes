@@ -1,8 +1,10 @@
-# A collection of simple data structures.
+A Collection of Simple Data Structures
 
-- This repository consists of data structures that C lacks naturay.
-- The repository has minimal C dependency.
-- Every data structure was created to be generic and fast.
+A lightweight collection of generic data structures for C.
 
-- More data structures are in progress.
+Features
 
+- Provides data structures that are not part of the C standard library.
+- Designed with minimal dependencies.
+- Generic, reusable, and performance-oriented implementations.
+- Additional data structures are planned and will be added over time.
