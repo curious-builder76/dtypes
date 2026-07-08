@@ -36,10 +36,21 @@ typedef struct{
 	uint32_t* hashes;
 }lpage_t;
 
+typedef struct{
+	uint32_t (*hash)(void*, uint32_t);
+	void* (*malloc)(size_t);
+	void (*free)(void*);
+	uint32_t page_size;
+	uint32_t element_size;
+	uint32_t table_size;
+	lpage_t* pages;
+}lookup_t;
 
-int lpage_init(lpage_t* lpage,uint32_t capacity){
+
+
+int lpage_init(lookup_t* look,lpage_t* lpage,uint32_t capacity){
 	uint32_t* hashes=NULL;
-	hashes=malloc(sizeof(uint32_t)*capacity);
+	hashes=look->malloc(sizeof(uint32_t)*capacity);
 	if(hashes==NULL)
 		goto lpage_new_failed;
 	lpage->used=0;
@@ -48,7 +59,7 @@ int lpage_init(lpage_t* lpage,uint32_t capacity){
 	return 0;
 lpage_new_failed:
 	if(hashes!=NULL)
-		free(hashes);
+		look->free(hashes);
 	return 1;
 }
 
@@ -71,58 +82,70 @@ int lpage_push(lpage_t* page,uint32_t hash){
 }
 
 
-void lpage_destroy(lpage_t* page){
-	free(page->hashes);
+void lpage_destroy(lookup_t* look,lpage_t* page){
+	look->free(page->hashes);
 	page->hashes=NULL;
 }
 
-typedef struct{
-	uint32_t (*hash)(void*, uint32_t);
-	uint32_t page_size;
-	uint32_t element_size;
-	uint32_t table_size;
-	lpage_t* pages;
-}lookup_t;
-
-lookup_t*  lookup_new(
-		uint32_t page_size,
+lookup_t*  lookup_custom(
 		uint32_t element_size,
-		uint32_t (*hash_function)(void*, uint32_t)
+		uint32_t page_size,
+		uint32_t (*hash_function)(void*, uint32_t),
+		void* (*xmalloc)(size_t),
+		void (*xfree)(void*)
 		)
 {
 	if(hash_function==NULL)
 		hash_function=djb_hash;
 	lookup_t* look=NULL;
 	lpage_t* pages=NULL;
-	look=malloc(sizeof(lookup_t));
+	look=xmalloc(sizeof(lookup_t));
 	if(look==NULL)
 		goto lookup_new_failed;
+	look->malloc=xmalloc;
+	look->free=xfree;
 	look->hash=hash_function;
 	look->page_size=page_size;
 	look->element_size=element_size;
 	look->table_size=4;
-	pages=malloc(sizeof(lpage_t)*look->table_size);
+	pages=xmalloc(sizeof(lpage_t)*look->table_size);
 	if(pages==NULL)
 		goto lookup_new_failed;
 	look->pages=pages;
 	uint32_t i=0;
 	for(;i<look->table_size;i++){
-		if(lpage_init(look->pages+i,page_size)==0)
+		if(lpage_init(look,look->pages+i,page_size)==0)
 			continue;
 		while(i--){
-			lpage_destroy(look->pages+i);
+			lpage_destroy(look,look->pages+i);
 		}
 		goto lookup_new_failed;
 	}
 	return look;
 lookup_new_failed:
 	if(look!=NULL)
-		free(look);
+		xfree(look);
 	if(pages!=NULL){
-		free(pages);
+		xfree(pages);
 	}
 	return NULL;
 }
+
+lookup_t* lookup_new(
+		uint32_t element_size,
+		uint32_t page_size,
+		uint32_t (*hash_function)(void*, uint32_t)
+		)
+{
+	return lookup_custom(
+			element_size,
+			page_size,
+			hash_function,
+			malloc,
+			free);
+}
+
+
 
 int lookup_has_hot_bucket(lookup_t* look){
 	for(uint32_t i=0;i<look->table_size;i++){
@@ -139,14 +162,14 @@ int lookup_grow(lookup_t* look){
 	uint32_t new_capacity=old_capacity*2;
 	lpage_t* old_pages=look->pages;
 	
-	lpage_t* new_pages=malloc(sizeof(lpage_t)*new_capacity);
+	lpage_t* new_pages=look->malloc(sizeof(lpage_t)*new_capacity);
 	if(new_pages==NULL)
 		goto lookup_grow_failed;
 	for(uint32_t idx=0;idx<new_capacity;idx++){
-		if(lpage_init(new_pages+idx,look->page_size)==0)
+		if(lpage_init(look,new_pages+idx,look->page_size)==0)
 			continue;
 		while(idx--){
-			lpage_destroy(new_pages+idx);
+			lpage_destroy(look,new_pages+idx);
 		}
 		goto lookup_grow_failed;
 	}
@@ -161,11 +184,15 @@ int lookup_grow(lookup_t* look){
 	}
 	look->table_size=new_capacity;
 	look->pages=new_pages;
-	free(old_pages);
+	while(old_capacity){
+		old_capacity--;
+		lpage_destroy(look,old_pages+old_capacity);
+	}
+	look->free(old_pages);
 	return 0;
 lookup_grow_failed:
 	if(new_pages!=NULL)
-		free(new_pages);
+		look->free(new_pages);
 	return 1;
 }
 
@@ -189,5 +216,12 @@ int lookup_contains(lookup_t* look,void* obj){
 	return lpage_has(page,hash);
 }
 
-
+void lookup_destroy(lookup_t* look){
+	while(look->table_size){
+		look->table_size--;
+		lpage_destroy(look,look->pages+look->table_size);
+	};
+	look->free(look->pages);
+	look->free(look);
+}
 #endif

@@ -13,22 +13,32 @@ typedef struct{
 	uint32_t element_size;
 	uint32_t capacity;
 	uint32_t used;
+	void* (*malloc)(size_t);
+	void* (*realloc)(void* , size_t);
+	void (*free)(void* );
 	uchar* elements;
 }array_t;
 
-// Creates an new array.
+
+// Creates an new "custom" array.
 // Returns null upon failure.
-array_t* array_new(uint32_t element_size){
+array_t* array_custom(
+		uint32_t element_size,
+		void* (*xmalloc)(size_t),
+		void* (*xrealloc)(void* , size_t),
+		void (*xfree)(void*)
+		)
+{
 	uint32_t capacity=512;
 	uint32_t mem_required=capacity*element_size;
 	
 	uchar* elements=NULL;
 	array_t* array=NULL;
 
-	elements=malloc(mem_required);
+	elements=xmalloc(mem_required);
 	if(elements==NULL) goto array_new_failed;
 
-	array=malloc(sizeof(array_t));
+	array=xmalloc(sizeof(array_t));
 
 	if(array==NULL) goto array_new_failed;
 
@@ -37,11 +47,25 @@ array_t* array_new(uint32_t element_size){
 	array->element_size=element_size;
 	array->capacity=capacity;
 	array->oom=0;
+	array->malloc=xmalloc;
+	array->realloc=xrealloc;
+	array->free=xfree;
 	return array;
 array_new_failed:
-	if(array!=NULL) free(array);
-	if(elements!=NULL) free(elements);
+	if(array!=NULL) xfree(array);
+	if(elements!=NULL) xfree(elements);
 	return NULL;
+}
+
+// Wrapper of array_custom for ease of use.
+//
+array_t* array_new(uint32_t element_size){
+	return array_custom( 
+			element_size,
+			malloc,
+			realloc,
+			free
+			);
 }
 
 // Grows the size of array.
@@ -52,7 +76,7 @@ int array_grow(array_t* array){
 
 	uint32_t mem_required=new_capacity*array->element_size;
 
-	uchar* new_mem=realloc(array->elements,mem_required);
+	uchar* new_mem=array->realloc(array->elements,mem_required);
 	if(new_mem==NULL){
 		array->oom=1;
 		return 1;
@@ -141,8 +165,8 @@ int array_oom(array_t* array){
 // You should'nt use that array after 
 // this function is called on it.
 int array_destroy(array_t* array){
-	free(array->elements);
-	free(array);
+	array->free(array->elements);
+	array->free(array);
 	return 0;
 }
 

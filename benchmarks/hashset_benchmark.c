@@ -3,19 +3,28 @@
 #include<time.h>
 
 #define __HASHSET_DEBUG
-#include "hashset.h"
+#include "dtypes/hashset.h"
+#include "test_alloc.h"
 
 
 void benchmark(){
 
+	hashset_debug("====benchmark of hashset====");
 	char key[32];
-	hashset_t* set=hashset_new(512,sizeof(key),NULL);
+	hashset_t* set=hashset_custom(
+			512,
+			sizeof(key),
+			NULL,
+			memcmp,
+			xmalloc,
+			xfree
+			);
 	if(set==NULL){
 		perror("hashset_new()");
 		return;
 	}
 	
-	int times=100000;
+	int times=1000000;
 
 	int tests_failed=0;
 	
@@ -83,8 +92,11 @@ void benchmark(){
 		hashset_debug("All tests passed.");
 	}else
 		hashset_debug("%d tests failed out of %d",tests_failed,3);
-	hashset_debug("\n\n");
+
 	hashset_destroy(set);
+
+	memory_leak();
+	set=NULL;
 }
 
 

@@ -2,7 +2,9 @@
 #include<time.h>
 #include<string.h>
 #include<stdlib.h>
-#include "array.h"
+#include "dtypes/array.h"
+
+#include "test_alloc.h"
 
 #define log(...) do {\
 	fprintf(stderr,__VA_ARGS__);\
@@ -17,8 +19,8 @@ typedef struct{
 }digit_t;
 
 void benchmark(){
-
-	uint32_t times=100000;
+	log("==== benchmark of array====");
+	uint32_t times=1000000;
 	
 	digit_t* digits=malloc(sizeof(digit_t)*times);
 	if(digits==NULL){
@@ -26,7 +28,7 @@ void benchmark(){
 		return;
 	}
 
-	log("\n\ninitializing...");
+	log("Initializing...");
 	for(uint32_t idx=0;idx<times;idx++){
 		digit_t* digit=digits+idx;
 		memset(digit,0,sizeof(digit_t));
@@ -42,7 +44,12 @@ void benchmark(){
 	int total_tests=2;
 	int tests_failed=0;
 	
-	array_t* array=array_new(sizeof(digit_t));
+	array_t* array=array_custom(
+			sizeof(digit_t),
+			xmalloc,
+			xrealloc,
+			xfree
+			);
 	if(array==NULL){
 		perror("");
 		return;
@@ -92,12 +99,11 @@ void benchmark(){
 
 	if(!tests_failed){
 		log("All tests passed.");
-		return;
-	}
+	}else
 
 	log("%d tests failed of  %d tests", test_failed,total_tests);
-	
 
+	memory_leak();
 }
 
 

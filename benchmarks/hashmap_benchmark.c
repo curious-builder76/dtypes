@@ -4,10 +4,13 @@
 
 
 #define __HASHMAP_DEBUG
-#include "hashmap.h"
+#include "dtypes/hashmap.h"
+#include "test_alloc.h"
 void hashmap_benchmark(hashmap_t* map){
-        int times=100000;
+        int times=1000000;
         int tests_failed=0;
+
+	debug("====benchmark of hashmap====");
         debug("Key put test");
 	
 	double time_elapsed;
@@ -78,9 +81,18 @@ void hashmap_benchmark(hashmap_t* map){
 }
 
 int main(){
-        hashmap_t* map=hashmap_new(512,32,32,djb_hash,memcmp);
+        hashmap_t* map=hashmap_custom(
+			512,
+			32,
+			32,
+			djb_hash,
+			memcmp,
+			xmalloc,
+			xfree
+			);
         hashmap_benchmark(map);
         hashmap_destroy(map);
+	memory_leak();
         map=NULL;
         return 0;
 }
