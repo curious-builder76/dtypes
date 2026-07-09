@@ -112,6 +112,7 @@ void benchmark(){
 	}else{
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
 		debug("%d operations in %.3f seconds",times,time_elapsed);
+		debug("No missing entries were found.");
 		debug("Test passed.");
 	}
 	lookup_destroy(lookup);

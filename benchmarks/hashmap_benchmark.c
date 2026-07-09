@@ -1,11 +1,13 @@
 
 #include<stdio.h>
 #include<time.h>
-
+#include<string.h>
+#include<stdint.h>
 
 #define __HASHMAP_DEBUG
-#include "dtypes/hashmap.h"
+#include "dtypes/hashmap.c"
 #include "test_alloc.h"
+#include "dtypes/hash_function.h"
 void hashmap_benchmark(hashmap_t* map){
         int times=1000000;
         int tests_failed=0;

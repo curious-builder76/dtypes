@@ -3,7 +3,7 @@
 #include<time.h>
 
 #define __HASHSET_DEBUG
-#include "dtypes/hashset.h"
+#include "dtypes/hashset.c"
 #include "test_alloc.h"
 
 
