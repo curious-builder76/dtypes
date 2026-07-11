@@ -23,7 +23,8 @@ main(){
 	run_benchmark hashmap
 	run_benchmark lookup
 	run_benchmark hashset
+	run_benchmark trie
 }
-
+set -e
 main
 
