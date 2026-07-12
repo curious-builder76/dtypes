@@ -18,7 +18,11 @@ typedef struct __node{
 
 // A trie is a forest of nodes
 // which allows custom allocators,
-// destructors to integrate smoothly
+// destructors to integrate smoothly/
+//
+// Nodes are kept in contigious memory 
+// and are pre-allocated for enhanced performance
+// and better CPU friendliness.
 
 typedef struct{
 	void* (*malloc)(size_t);
@@ -29,6 +33,7 @@ typedef struct{
 	node_t* nodes;
 }trie_t;
 
+// Initialize a new node already allocated by trie.
 
 int node_init(trie_t* trie,node_t* node,char ch){
 	node->used=0;
@@ -41,6 +46,8 @@ int node_init(trie_t* trie,node_t* node,char ch){
 	node->node_value=ch;
 	return 0;
 }
+
+// Grow the size of node by doubling it's size.
 
 int node_grow(trie_t* trie,node_t* node){
 	uint8_t cap_max=(uint8_t)(-1);
@@ -62,6 +69,8 @@ int node_grow(trie_t* trie,node_t* node){
 	node->capacity=new_cap;
 	return 0;
 }
+
+// Insert a string into the tree.
 
 int node_insert(trie_t* trie,node_t* node,char* buff){
 	if(node->used>=node->capacity){
@@ -96,7 +105,8 @@ int node_insert(trie_t* trie,node_t* node,char* buff){
 }
 
 
-
+// Returns zero if the node contains given "buff"
+// and  non zero if not present
 int node_contains(node_t* node,char* buff){	
 	for(uint8_t idx=0;idx<node->used;idx++){
 		node_t* child=node->nodes+idx;
@@ -111,6 +121,9 @@ int node_contains(node_t* node,char* buff){
 	}
 	return 0;
 }
+
+// Release the resources aquired by node.
+//
 void node_destroy(trie_t* trie,node_t* node){
 	for(uint8_t idx=0;idx<node->used;idx++){
 		node_t* child=node->nodes+idx;
@@ -118,6 +131,9 @@ void node_destroy(trie_t* trie,node_t* node){
 	}
 	trie->free(node->nodes);
 }
+
+// Create a new custom trie with custom allocators and 
+// deallocators
 trie_t* trie_custom(
 		void* (*xmalloc)(size_t),
 		void* (*xrealloc)(void*, size_t),
@@ -139,6 +155,10 @@ trie_t* trie_custom(
 	}
 	return root;
 }
+
+// Wrapper around trie_custom which uses
+// malloc(), realloc(), and free()
+// provided by libc.
 trie_t* trie_new(){
 	return trie_custom(
 			malloc,
@@ -146,6 +166,11 @@ trie_t* trie_new(){
 			free
 			);
 }
+
+
+// Grow the trie forest by
+// doubling it's size
+
 int trie_grow(trie_t* trie){
 	uint8_t max_cap= (uint8_t)(-1);
 	if(trie->capacity==max_cap)
@@ -165,6 +190,7 @@ int trie_grow(trie_t* trie){
 	return 0;
 }
 
+// Insert a string to the given trie.
 int trie_insert(trie_t* root,char* buff){
 	if(*buff=='\0'){
 		return 0; // Supress error.
@@ -189,6 +215,12 @@ int trie_insert(trie_t* root,char* buff){
 	return node_insert(root,child,buff+1);
 }
 
+
+
+// Check for membership of string in trie.
+// returns zero if the string is not present
+// or returns a non zero number if present.
+
 int trie_contains(trie_t* trie,char* buff){
 	if(*buff==0){
 		return 0;
@@ -202,6 +234,8 @@ int trie_contains(trie_t* trie,char* buff){
 	return 0;
 }
 
+// Release the resources aquired by trie,
+// and it's sub nodes.
 void trie_destroy(trie_t* trie){
 	for(uint8_t idx=0;idx<trie->used;idx++){
 		node_t* child=trie->nodes+idx;
