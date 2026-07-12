@@ -104,6 +104,7 @@ the API now exposes
 `array_t` and `array_*` functions to your project
 
 and so on
+
 and every header file consists
 of 
 
