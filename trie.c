@@ -97,21 +97,17 @@ int node_insert(trie_t* trie,node_t* node,char* buff){
 
 
 
-int node_contains(node_t* node,char* buff){
-	if(*buff=='\0'){
-		for(uint8_t idx=0;idx<node->used;idx++){
-			node_t* child=node->nodes+idx;
-			if(child->node_value=='\0'){
-				return 1;
-			}
-		}
-		return 0;
-	 }
+int node_contains(node_t* node,char* buff){	
 	for(uint8_t idx=0;idx<node->used;idx++){
 		node_t* child=node->nodes+idx;
-		if(child->node_value==*buff){
-			return node_contains(child,buff+1);
+		if(child->node_value!=*buff){
+			continue;
 		}
+		if(child->node_value=='\0'){
+			return 1;
+		}
+		return node_contains(child,buff+1);
+		
 	}
 	return 0;
 }
