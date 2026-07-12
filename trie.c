@@ -54,24 +54,30 @@ int node_grow(trie_t* trie,node_t* node){
 		// Overflow.
 		new_cap= cap_max;
 	}
-	node_t* subnodes= trie->realloc(node->nodes,new_cap);
+	node_t* subnodes= trie->realloc(node->nodes,sizeof(node_t)*new_cap);
 	if(subnodes==NULL){
 		return 1;
 	}
 	node->nodes=subnodes;
-
+	node->capacity=new_cap;
 	return 0;
 }
 
 int node_insert(trie_t* trie,node_t* node,char* buff){
-	if(*buff=='\0'){
-		return 0; // Supress error.
-	}
-
 	if(node->used>=node->capacity){
 		if(node_grow(trie,node)!=0){
 			return 1;
 		}
+	}
+	if(*buff=='\0'){
+		// node_null()
+		node_t* child=node->nodes+node->used;
+		node->used++;
+		child->used=0;
+		child->capacity=0;
+		child->nodes=NULL;
+		child->node_value=*buff;
+		return 0;
 	}
 
 	for(uint8_t idx=0;idx<node->used;idx++){
@@ -81,7 +87,6 @@ int node_insert(trie_t* trie,node_t* node,char* buff){
 		}
 	}
 	// node_push()
-	
 	node_t* child=node->nodes+node->used;
 	if(node_init(trie,child,*buff)!=0){
 		return 1;
@@ -90,10 +95,18 @@ int node_insert(trie_t* trie,node_t* node,char* buff){
 	return node_insert(trie,child,buff+1);
 }
 
+
+
 int node_contains(node_t* node,char* buff){
 	if(*buff=='\0'){
-		return 1;
-	}
+		for(uint8_t idx=0;idx<node->used;idx++){
+			node_t* child=node->nodes+idx;
+			if(child->node_value=='\0'){
+				return 1;
+			}
+		}
+		return 0;
+	 }
 	for(uint8_t idx=0;idx<node->used;idx++){
 		node_t* child=node->nodes+idx;
 		if(child->node_value==*buff){
@@ -148,10 +161,11 @@ int trie_grow(trie_t* trie){
 		// Over flow.
 		new_cap=max_cap;
 	}
-	node_t* subnodes=trie->malloc(sizeof(node_t)*new_cap);
+	node_t* subnodes=trie->realloc(trie->nodes,sizeof(node_t)*new_cap);
 	if(subnodes==NULL)
 		return 1;
 	trie->nodes=subnodes;
+	trie->capacity=new_cap;
 	return 0;
 }
 

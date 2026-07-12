@@ -3,7 +3,7 @@ Initializing...
 done.
 Array put test.
 Test passed.
-array_put: 1000000 operations in 0.007 seconds.
+array_put: 1000000 operations in 0.006 seconds.
 Array iteration test.
 Test passed.
 array_at: 1000000 operations in 0.001 seconds.
@@ -11,32 +11,62 @@ All tests passed.
 No memory leaks.
 ====benchmark of hashmap====
 Key put test
-hashmap_put: 1000000 operations in 3.217 seconds
+hashmap_put: 1000000 operations in 2.202 seconds
 Test passed
 Key get test.
-hashmap_get: 1000000 operations in 0.181 seconds
+hashmap_get: 1000000 operations in 0.128 seconds
 Test passed.
 Busy page test.
 No busy pages were found
 All tests passed.
 No memory leaks.
-====benchmark of lookup====
-Key put test.
-Test passed.
-1000000 operations in 1.756 seconds
-Nonexistent key test.
-Test passed.
-Missing entries test.
-1000000 operations in 0.123 seconds
+====benchmark of hashset====
+Key put test
+hashset_put: 1000000 operations in 2.080 seconds
+Key contains test
+hashset_contains: 1000000 operations in 0.112 seconds
+Busy page test.
 Test passed.
 All tests passed.
 No memory leaks.
-====benchmark of hashset====
-Key put test
-hashset_put: 1000000 operations in 3.038 seconds
-Key contains test
-hashset_contains: 1000000 operations in 0.168 seconds
-Busy page test.
+====benchmark of lookup====
+Key put test.
 Test passed.
+1000000 operations in 1.778 seconds
+Nonexistent key test.
+Test passed.
+Missing entries test.
+1000000 operations in 0.121 seconds
+No missing entries were found.
+Test passed.
+All tests passed.
+No memory leaks.
+==== benchmark of trie.====
+INSERT: apple
+INSERT: aplication
+INSERT: armour
+INSERT: banana
+CONTAINS: apple  -->  true
+Nonexistent entry test
+CONTAINS: panda  -->  false
+Existent entry test.
+CONTAINS: apple  -->  true
+Long insert short get test.
+Expected: segfault.
+INSERT: ppppppppppppppppppppppppppppppppppppp
+CONTAINS: ppp  -->  false
+If you are looking at this message. the test was passed.
+Short insert long get test.
+Expected: segfault.
+INSERT: zzz
+CONTAINS: zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz  -->  false
+CONTAINS: zzz  -->  true
+If you are looking at this message. the test was passed.
+Sequential inserts.
+Test passed
+trie_insert: 1000000 operations in 0.132 seconds.
+Random inserts.
+Test passed.
+trie_insert: 1000000 operations in 0.248 seconds.
 All tests passed.
 No memory leaks.

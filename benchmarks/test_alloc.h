@@ -6,7 +6,6 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdint.h>
-
 uint64_t total_mem_allocated=0;
 uint64_t total_mem_freed=0;
 
