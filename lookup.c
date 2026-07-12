@@ -6,8 +6,8 @@
  */
 
 /*
- * Warning: This thing is not tested.
- * and is for educational purpose only. (unfortunately!).
+ * If the hash function guarantees that  no hash will collide.
+ * then this can also guarantees that there will be neither false positives nor negatives.
  */
 
 #include<string.h>
@@ -18,12 +18,21 @@
 #include "dtypes/lookup.h"
 #include "dtypes/hash_function.h"
 
+// lpage_t is bound object of lookup_t and are internally managed by functions
+// lookup_* and lpage_* functions.
 
 typedef struct{
 	uint32_t used;
 	uint32_t capacity;
 	uint32_t* hashes;
 }lpage_t;
+
+
+
+// lookup is a table of hashes (integers) containing the
+// fingerprint returned by the hash function.
+//
+// This supports custom allocators and deallocators.
 
 typedef struct __lookup_struct{
 	uint32_t (*hash)(void*, uint32_t);
@@ -36,6 +45,8 @@ typedef struct __lookup_struct{
 }lookup_t;
 
 
+
+// Initialize a page
 
 int lpage_init(lookup_t* look,lpage_t* lpage,uint32_t capacity){
 	uint32_t* hashes=NULL;
@@ -52,6 +63,12 @@ lpage_new_failed:
 	return 1;
 }
 
+
+// Check the membership of a hash in the page.
+//
+// return zero upon failure or else a non zero
+// on sucess.
+
 int lpage_has(lpage_t* page,uint32_t hash){
 	for(uint32_t idx=0;idx<page->used;idx++){
 		if(page->hashes[idx]==hash){
@@ -60,6 +77,13 @@ int lpage_has(lpage_t* page,uint32_t hash){
 	}
 	return 0;
 }
+
+
+// Push an hash to the page.
+// return zero upon success or
+// a non zero integer indicating 
+// failure.
+
 int lpage_push(lpage_t* page,uint32_t hash){
 	if(page->used>=page->capacity)
 		return 1;
@@ -70,11 +94,14 @@ int lpage_push(lpage_t* page,uint32_t hash){
 	return 0;
 }
 
-
+// Release the resources aquired by page.
 void lpage_destroy(lookup_t* look,lpage_t* page){
 	look->free(page->hashes);
 	page->hashes=NULL;
 }
+
+// Allow the users to fine tune the data structure
+// as much allowed by the API.
 
 lookup_t*  lookup_custom(
 		uint32_t element_size,
@@ -120,6 +147,10 @@ lookup_new_failed:
 	return NULL;
 }
 
+
+// Wrapper around lookup_custom()
+// Uses default functions 
+
 lookup_t* lookup_new(
 		uint32_t element_size,
 		uint32_t page_size,
@@ -135,7 +166,9 @@ lookup_t* lookup_new(
 }
 
 
-
+// Return a non zero number if any page in the given 
+// "lookup" is 90% full or zero otherwise.
+//
 int lookup_has_hot_bucket(lookup_t* look){
 	for(uint32_t i=0;i<look->table_size;i++){
 		lpage_t* page=look->pages+i;
@@ -146,6 +179,8 @@ int lookup_has_hot_bucket(lookup_t* look){
 	return 0;
 }
 
+// Grow the size of lookup table by doubling it's size
+// and re-distributing it's hashes.
 int lookup_grow(lookup_t* look){
 	uint32_t old_capacity=look->table_size;
 	uint32_t new_capacity=old_capacity*2;
@@ -185,6 +220,10 @@ lookup_grow_failed:
 	return 1;
 }
 
+// Add an item to the lookup object
+// Return zero upon success
+// or a non zero number indicating failure
+
 int lookup_add(lookup_t* look,void* obj){
 	if (lookup_has_hot_bucket(look))
 		if(lookup_grow(look)!=0)
@@ -196,6 +235,10 @@ int lookup_add(lookup_t* look,void* obj){
 	return lpage_push(page,hash);
 }
 
+// Returns a non zero number indicating that 
+// the lookup contains given object as per
+// provided hash function or zero otherwise.
+
 int lookup_contains(lookup_t* look,void* obj){
 	uint32_t hash=look->hash(obj,look->element_size);
 	uint32_t index=hash % look->table_size;
@@ -204,6 +247,10 @@ int lookup_contains(lookup_t* look,void* obj){
 
 	return lpage_has(page,hash);
 }
+
+
+// Release the resources held by 
+// the lookup table.
 
 void lookup_destroy(lookup_t* look){
 	while(look->table_size){
