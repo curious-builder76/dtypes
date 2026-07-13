@@ -49,26 +49,26 @@ Now your project directory shall look something like this.
 
 ```
 [user@localhost][~/path/to/project] $ tree
-
-dtypes
-├── array.c
-├── array.h
-├── benchmarks
-│   ├── array_benchmark.c
-│   ├── benchmark.txt
-│   ├── hashmap_benchmark.c
-│   ├── hashset_benchmark.c
-│       ...
-├── build.sh
-├── hash_function.c
-├── hash_function.h
-├── hashmap.c
-├── hashmap.h
-├── hashset.c   
-├──  ...
-├── libdtypes.a
-├    ...
+.
+├── dtypes
+│   ├── array.c
+│   ├── array.h
+│   ├── benchmarks
+│   │   ├── array_benchmark.c
+│   │   ├── benchmark.txt
+│   │   ├── hashmap_benchmark.c
+│   │       ...
+│   │
+│   ├── build.sh
+│   ├── hash_function.c
+│   ├── hash_function.h
+│   ├── hashmap.c
+│   ├── ...
+│   ├── libdtypes.a
+│   ├── ...
+│   └── trie.h
 └── project.c
+
 ```
 
 Example:
