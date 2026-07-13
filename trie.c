@@ -24,7 +24,7 @@ typedef struct __node{
 // and are pre-allocated for enhanced performance
 // and better CPU friendliness.
 
-typedef struct{
+typedef struct __trie{
 	void* (*malloc)(size_t);
 	void* (*realloc)(void* , size_t);
 	void (*free)(void*);

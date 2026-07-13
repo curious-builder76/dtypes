@@ -42,11 +42,7 @@ typedef struct{
 	char* value;
 }mrecord_t;
 
-typedef struct
-#ifdef __HASHMAP_DEBUG 
-__mpage_struct
-#endif
-{
+typedef struct{
 	uint32_t used;
 	uint32_t capacity;
 	mrecord_t* records;
