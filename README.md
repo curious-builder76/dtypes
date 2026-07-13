@@ -67,8 +67,8 @@ dtypes
 ├── hashset.c   
 ├──  ...
 ├── libdtypes.a
-     ...
-
+├    ...
+└── project.c
 ```
 
 Example:
@@ -195,9 +195,9 @@ If you are going to use it for personal projects
 
 Definetely a big YES.
 
-If you are goind to use it for real industry grade projects
+If you are going to use it for real industry grade projects
 
-Probably no. as it still lacks some of the features.
+Probably no. as it still lacks some of the features set by industries.
 
 If you are going to implement it in lower lever hardwares  such as ESP-32 or Raspberry PI.
 
@@ -212,8 +212,11 @@ and those systems may merely contain the ram required by this.
 - Easier to install (especially on `*NIX` systems)
 - Consistent API.
 - Supports custom allocators.
+
 ## Cons
 
 - A little RAM hungry
 - Doesn't meets standards set by industries (as of now).
 - Can't use it on lower level hardwares.
+- Trade-offs speed with space.
+
