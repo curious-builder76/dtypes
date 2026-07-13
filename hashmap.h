@@ -15,7 +15,7 @@
 #define debug(...)
 #endif
 
-typedef struct __hashmap_struct;
+struct __hashmap_struct;
 
 typedef struct __hashmap_struct hashmap_t;
 

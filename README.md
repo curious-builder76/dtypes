@@ -113,7 +113,8 @@ int main(){
 }
 ```
 ```bash
-gcc -O2 -Wall -Wextra -I. -L dtypes -ldtypes project.c -o project
+gcc project.c -o project -O2 -Wall -Wextra -I. -Ldtypes -ldtypes
+
 ./project
 ```
 
