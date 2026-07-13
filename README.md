@@ -216,7 +216,7 @@ and those systems may merely contain the ram required by this.
 ## Cons
 
 - A little RAM hungry
-- Doesn't meets standards set by industries (as of now).
+- API is stll evolving.
 - Requires dynamic memory allocation
 - Trade-offs speed with space.
 
