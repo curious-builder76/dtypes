@@ -29,12 +29,47 @@ cd dtypes
 # run
 
 BENCH=1 PURGE=1 ./build.sh
+
 ```
 
+
+
 The above commands will create a file `libdtypes.a`
-on the directory `dtypes`
+on the directory `dtypes`.
+
+and finally
+
+```bash
+cd ..
+```
 
 Once done; now you have to just include it into your projects and link against it.
+
+Now your project directory shall look something like this.
+
+```
+[user@localhost][~/path/to/project] $ tree
+
+dtypes
+├── array.c
+├── array.h
+├── benchmarks
+│   ├── array_benchmark.c
+│   ├── benchmark.txt
+│   ├── hashmap_benchmark.c
+│   ├── hashset_benchmark.c
+│       ...
+├── build.sh
+├── hash_function.c
+├── hash_function.h
+├── hashmap.c
+├── hashmap.h
+├── hashset.c   
+├──  ...
+├── libdtypes.a
+     ...
+
+```
 
 Example:
 
@@ -77,7 +112,10 @@ int main(){
       return 0;
 }
 ```
-`gcc -O2 -Wall -Wextra -I. -L dtypes -ldtypes project.c -o project`
+```bash
+gcc -O2 -Wall -Wextra -I. -L dtypes -ldtypes project.c -o project
+./project
+```
 
 ## API Design
 
@@ -114,3 +152,68 @@ of
 *_new()      // which is made for ease of use; and demands the required parameters only.
 *_destroy()  // which releases the resources.
 ```
+
+## Purpose
+
+So why does this library exists?
+
+This library exists to solve a common problem
+
+every C developer faces once in a life time.
+
+that is searching on web for implementations in C
+
+and their web history looks like
+
+```text
+
+bloom filter implementation C github
+
+trie  implementation in C
+
+trie implementation in C industry grade
+
+hashmap implementation in C 
+
+hashmap implementation in C supporting custom allocators.
+
+...
+``` 
+
+and so on.
+
+This library contains all  those data types in one place with the support of custom allocators
+
+
+## Use Case
+
+Everything at last boils down to one question
+
+`Shall I use this library?`
+
+If you are going to use it for personal projects
+
+Definetely a big YES.
+
+If you are goind to use it for real industry grade projects
+
+Probably no. as it still lacks some of the features.
+
+If you are going to implement it in lower lever hardwares  such as ESP-32 or Raspberry PI.
+
+Definetely no. as the project itself is a little RAM hungry (intentionally).
+
+and those systems may merely contain the ram required by this.
+
+## Pros
+
+- Allocates everything in contigious memory.
+- Friendly to CPU cache.
+- Easier to install (especially on `*NIX` systems)
+- Consistent API.
+- Supports custom allocators.
+## Cons
+
+- A little RAM hungry
+- Doesn't meets standards set by industries (as of now).
+- Can't use it on lower level hardwares.
