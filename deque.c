@@ -9,6 +9,7 @@ typedef unsigned char uchar;
 typedef struct __deque{
 	void* (*malloc)(size_t);
 	void (*free)(void*);
+	char oom;
 	size_t capacity;
 	size_t element_size;
 	size_t size;
@@ -16,15 +17,6 @@ typedef struct __deque{
 	size_t rear;
 	uchar* buff;
 }deque_t;
-
-
-// Note to self:
-//
-// For the sake of complexity of algorithms.
-// Don't add dynamic resizing (as of now).
-//
-// Add it at future. when you are ready for it.
-//
 
 
 
@@ -40,7 +32,7 @@ typedef struct __deque{
 // which is;
 //
 // while you own a pointer returned by deque_pop* functions
-// you shall not mutate the deque as it may lead to mutate the pointer 
+// you shall not mutate the deque as it may lead to mutation on the pointer 
 // you are holding. as the pointer is owned by deque it is subject to change.
 //  
 
@@ -50,20 +42,20 @@ typedef struct __deque{
 // allowed by the API. Or NULL upon 
 // failure.
 //
-deque_t* deque_custom(size_t element_size,size_t max_capacity, void* (*xmalloc)(size_t), void (*xfree)(void*)){
+deque_t* deque_custom(size_t element_size,void* (*xmalloc)(size_t), void (*xfree)(void*)){
 	deque_t* deque=xmalloc(sizeof(deque_t));
 	if(deque==NULL)
 		return NULL;
-	size_t memory_required=element_size*max_capacity;
+	deque->capacity=512;
+	size_t memory_required=element_size*deque->capacity;
 	uchar* buff=malloc(memory_required);
 	if(!buff){
 		xfree(deque);
 		return NULL;
 	}
-
+	deque->oom=0;
 	deque->malloc=xmalloc;
 	deque->free=xfree;
-	deque->capacity=max_capacity;
 	deque->front=0;
 	deque->rear=0;
 	deque->size=0;
@@ -75,15 +67,46 @@ deque_t* deque_custom(size_t element_size,size_t max_capacity, void* (*xmalloc)(
 
 // Made for convinence purpose and demands just the neccesary arguments only.
 
-deque_t* deque_new(size_t element_size,size_t max_capacity){
+deque_t* deque_new(size_t element_size){
 	return deque_custom(
 			element_size,
-			max_capacity,
 			malloc,
 			free
 			);
 }
 
+// Grow the deque by doubling it's size and 
+// resetting it's iternal markers.
+
+int deque_grow(deque_t* deque){
+	size_t old_size=deque->capacity*deque->element_size;
+	size_t new_size=old_size*2;
+	deque->oom=0;
+	if(new_size<old_size){
+		return 1;
+	}
+	
+	uchar* new_buff=deque->malloc(new_size);
+	if(!new_buff){
+		deque->oom=1;
+		return 1;
+	}
+	size_t idx=0;
+	for(;;idx++){
+		uchar* element=deque_popleft(deque);
+		if(element==NULL){
+			break;
+		}
+		uchar* new_location=new_buff+(idx*deque->element_size);
+		memcpy(new_location,element,deque->element_size);
+	}
+	deque->front=idx;
+	deque->rear=0;
+	deque->free(deque->buff);
+	deque->buff=new_buff;
+	deque->capacity=new_size/deque->element_size;
+	return 0;
+}
 
 // Append an item from the right side of deque
 // and return zero upon succes or a non zero number indicating failure.
@@ -162,24 +185,3 @@ void deque_destroy(deque_t* deque){
 
 
 
-int main(){
-	deque_t* deque=deque_new(sizeof(int),1<<5);
-	if(!deque){
-		return 1;
-	}
-	for(int i=0;i<32;i++){
-		if(deque_append(deque,&i)!=0){
-			printf("Pop returned non zero ");
-			return 1;
-		}
-		int* k=deque_popleft(deque);
-		if(!k){
-			printf("K is NULL.");
-			break;
-		}
-		printf("append: %d popleft: %d\n",i,*k);
-	}
-	deque_destroy(deque);
-	deque=NULL;
-	return 0;
-}
