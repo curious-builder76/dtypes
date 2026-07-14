@@ -3,6 +3,8 @@
 #include<string.h>
 #include<stdio.h>
 
+#include "dtypes/deque.h"
+
 typedef unsigned char uchar;
 
 
@@ -104,7 +106,7 @@ int deque_grow(deque_t* deque){
 	deque->rear=0;
 	deque->free(deque->buff);
 	deque->buff=new_buff;
-	deque->capacity=new_size/deque->element_size;
+	deque->capacity*=2;
 	return 0;
 }
 
@@ -113,7 +115,9 @@ int deque_grow(deque_t* deque){
 
 int deque_append(deque_t* deque,void* obj){
 	if(deque->size>=deque->capacity){
-		return 1;
+		if(deque_grow(deque)!=0){
+			return 1;
+		}
 	}
 	
 	uchar* location= deque->buff + (deque->element_size*deque->front);
@@ -132,7 +136,7 @@ void* deque_pop(deque_t* deque){
 	if(!deque->size){
 		return NULL;
 	}
-	size_t index= deque->front ?  (deque->front-1) : (deque->capacity-2);
+	size_t index= deque->front ?  (deque->front-1) : (deque->capacity-1);
 	uchar* ret_point=deque->buff+ (index * deque->element_size);
 	deque->front=index;
 	deque->size--;
@@ -150,7 +154,7 @@ int deque_appendleft(deque_t* deque,void* obj){
 		return 1;
 	}
 	
-	size_t new_rear = deque->rear ? (deque->rear-1) : (deque->capacity-2);
+	size_t new_rear = deque->rear ? (deque->rear-1) : (deque->capacity-1);
 	uchar* location= deque->buff + (deque->rear*deque->element_size);
 	memcpy(location,obj,deque->element_size);
 	deque->rear=new_rear;

@@ -26,13 +26,14 @@ void* xmalloc(size_t size){
 }
 
 void xfree(void* ptr){
-	free_called++;
 	if(!ptr)
 		return;
+	free_called++;
 	size_t* orig_ptr=ptr;
 	orig_ptr--;
 
 	total_mem_freed+=(uint64_t)(*orig_ptr);
+
 	free(orig_ptr);
 }
 

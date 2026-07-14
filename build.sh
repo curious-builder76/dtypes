@@ -26,7 +26,8 @@ main(){
 	gcc -Wall -Wextra -c -I.. *.c 
 	ar rcs libdtypes.a *.o
 	rm *.o
-	[  -n "$BENCH"  ] && run_benchmark array hashmap hashset lookup trie
+	# [  -n "$BENCH"  ] && run_benchmark array hashmap hashset lookup trie
+	[  -n "$BENCH"  ] && run_benchmark deque 
 }
 set -e
 main
