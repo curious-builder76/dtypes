@@ -33,16 +33,6 @@ BENCH=1 PURGE=1 ./build.sh
 
 ```
 
-For Windows:
-```text
-Apologies.
-The installation instructions for windows  will come soon.
-If you have MSYS2 installed.
-you can open up a UCRT64 shell and 
-can repeat the same instructions. 
-
-And if not. wait.
-``` 
 The above commands will create a file `libdtypes.a`
 on the directory `dtypes`.
 
