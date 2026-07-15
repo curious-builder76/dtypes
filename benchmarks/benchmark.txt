@@ -3,10 +3,10 @@ Initializing...
 done.
 Array put test.
 I evil xrealloc() is returning NULL.Stop your program from segfault if you can.
-Failed after 512 puts.
+Failed after 1024 puts.
 Array iteration test.
 Test passed.
-array_at: 512 operations in 0.000 seconds.
+array_at: 1024 operations in 0.000 seconds.
 1 tests failed of  2 tests
 No memory leaks.
 I evil xmalloc() is returning NULL.Stop your program from segfault if you can.
@@ -25,9 +25,9 @@ INSERT: aplication
 I evil xmalloc() is returning NULL.Stop your program from segfault if you can.
 Cannot allocate memory
 INSERT: armour
+INSERT: banana
 I evil xmalloc() is returning NULL.Stop your program from segfault if you can.
 Cannot allocate memory
-INSERT: banana
 CONTAINS: apple  -->  false
 Nonexistent entry test
 CONTAINS: panda  -->  false
@@ -43,10 +43,8 @@ If you are looking at this message. the test was passed.
 Short insert long get test.
 Expected: segfault.
 INSERT: zzz
-I evil xmalloc() is returning NULL.Stop your program from segfault if you can.
-Cannot allocate memory
 CONTAINS: zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz  -->  false
-CONTAINS: zzz  -->  false
+CONTAINS: zzz  -->  true
 If you are looking at this message. the test was passed.
 Sequential inserts.
 I evil xmalloc() is returning NULL.Stop your program from segfault if you can.
@@ -54,27 +52,18 @@ Failed after 0 inserts.
 Test failed.
 Random inserts.
 I evil xmalloc() is returning NULL.Stop your program from segfault if you can.
+Failed adter 0 inserts.
 Test failed.
 2 tests failed out of 2.
 No memory leaks.
 ====benchmark of deque====
 1000000 sequential appends.
-front: 0 rear: 0
-front: 0 rear: 0
-front: 0 rear: 0
-front: 0 rear: 0
-front: 0 rear: 0
-front: 0 rear: 0
-front: 0 rear: 0
-front: 0 rear: 0
-front: 0 rear: 0
-front: 0 rear: 0
-front: 0 rear: 0
-deque_append: 1000000 operations in 0.010 seconds.
+deque_append: 1000000 operations in 0.009 seconds.
 Test passed.
 1000000 sequential pops.
-deque_popleft: 1000000 operations in 0.002 seconds.
+deque_popleft: 1000000 operations in 0.003 seconds.
 1000000 random operations.
-1000000 random operations  were performed in 0.013 seconds.
-All tests passed.
+Failed after 1 operations.
+Test failed.
+1 tests failed out of 3
 No memory leaks.

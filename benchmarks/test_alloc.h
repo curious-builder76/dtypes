@@ -19,7 +19,7 @@ uint64_t total_mem_freed=0;
 
 char hostile_enviroment=1;
 
-int null_frequency=2;
+int null_frequency=5;
 
 uint64_t malloc_called=0;
 uint64_t realloc_called=0;
