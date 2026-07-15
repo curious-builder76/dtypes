@@ -3,19 +3,18 @@ Initializing...
 done.
 Array put test.
 Test passed.
-array_put: 1000000 operations in 0.012 seconds.
+array_put: 1000000 operations in 0.005 seconds.
 Array iteration test.
 Test passed.
 array_at: 1000000 operations in 0.001 seconds.
 All tests passed.
 No memory leaks.
 ====benchmark of hashmap====
-hashmap is not null
 Key put test
-hashmap_put: 1000000 operations in 9.225 seconds
+hashmap_put: 1000000 operations in 2.189 seconds
 Test passed
 Key get test.
-hashmap_get: 1000000 operations in 0.419 seconds
+hashmap_get: 1000000 operations in 0.127 seconds
 Test passed.
 Busy page test.
 No busy pages were found
@@ -23,9 +22,9 @@ All tests passed.
 No memory leaks.
 ====benchmark of hashset====
 Key put test
-hashset_put: 1000000 operations in 8.684 seconds
+hashset_put: 1000000 operations in 2.078 seconds
 Key contains test
-hashset_contains: 1000000 operations in 0.411 seconds
+hashset_contains: 1000000 operations in 0.107 seconds
 Busy page test.
 Test passed.
 All tests passed.
@@ -33,11 +32,11 @@ No memory leaks.
 ====benchmark of lookup====
 Key put test.
 Test passed.
-1000000 operations in 1.764 seconds
+1000000 operations in 1.145 seconds
 Nonexistent key test.
 Test passed.
 Missing entries test.
-1000000 operations in 0.125 seconds
+1000000 operations in 0.059 seconds
 No missing entries were found.
 Test passed.
 All tests passed.
@@ -65,19 +64,19 @@ CONTAINS: zzz  -->  true
 If you are looking at this message. the test was passed.
 Sequential inserts.
 Test passed
-trie_insert: 1000000 operations in 0.290 seconds.
+trie_insert: 1000000 operations in 0.085 seconds.
 Random inserts.
 Test passed.
-trie_insert: 1000000 operations in 0.404 seconds.
+trie_insert: 1000000 operations in 0.210 seconds.
 All tests passed.
 No memory leaks.
 ====benchmark of deque====
 1000000 sequential appends.
-deque_append: 1000000 operations in 0.010 seconds.
+deque_append: 1000000 operations in 0.006 seconds.
 Test passed.
 1000000 sequential pops.
 deque_popleft: 1000000 operations in 0.002 seconds.
 1000000 random operations.
-1000000 random operations  were performed in 0.019 seconds.
+1000000 random operations  were performed in 0.012 seconds.
 All tests passed.
 No memory leaks.

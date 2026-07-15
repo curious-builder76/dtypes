@@ -7,7 +7,7 @@ run_benchmark(){
 	do
 		target="benchmarks/bench_${name}"
 		build="benchmarks/${name}_benchmark.c"
-		gcc  -ggdb  -I.. -Wall -Wextra -fsanitize=address,undefined    $build -L. -ldtypes -o $target
+		gcc -O2  -I.. -Wall -Wextra     $build -L. -ldtypes -o $target
 
 	done
 
@@ -24,7 +24,7 @@ run_benchmark(){
 
 
 main(){
-	gcc -Wall -Wextra -c -I.. *.c 
+	gcc -O2  -Wall -Wextra -c -I.. *.c 
 	ar rcs libdtypes.a *.o
 	rm *.o
 	[  -n "$BENCH"  ] && run_benchmark array hashmap hashset lookup trie deque

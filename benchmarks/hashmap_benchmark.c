@@ -19,11 +19,10 @@ void hashmap_benchmark(){
 			xfree
 			);
 	if(map==NULL){
-		perror("");
+		perror("hashmap_custom()");
 		return;
 	}
 	debug("====benchmark of hashmap====");
-	debug(map==NULL ? "hashmap is null." : "hashmap is not null");
         int times=1000000;
         int tests_failed=0;
 
