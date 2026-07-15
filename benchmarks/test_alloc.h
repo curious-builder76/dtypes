@@ -17,7 +17,7 @@ uint64_t total_mem_allocated=0;
 uint64_t total_mem_freed=0;
 
 
-char hostile_enviroment=1;
+char hostile_enviroment=0;
 
 int null_frequency=5;
 
@@ -25,7 +25,14 @@ uint64_t malloc_called=0;
 uint64_t realloc_called=0;
 uint64_t free_called=0;
 
+
+
 void* xmalloc(size_t size){
+	static char seeded=0;
+	if(!seeded){
+		seeded=1;
+		srand(time(0));
+	}
 	errno=0;
 	if( hostile_enviroment && rand()%null_frequency==0){
 		fprintf(stderr,"I evil xmalloc() is returning NULL."

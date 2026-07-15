@@ -106,7 +106,7 @@ int deque_grow(deque_t* deque){
 	deque->size=idx;
 	deque->free(deque->buff);
 	deque->buff=new_buff;
-	deque->capacity*=2;
+	deque->capacity*=2;	
 	return 0;
 }
 
@@ -151,11 +151,13 @@ void* deque_pop(deque_t* deque){
 
 int deque_appendleft(deque_t* deque,void* obj){
 	if(deque->size>=deque->capacity){
-		return 1;
+		if(deque_grow(deque)!=0){
+			return 1;
+		}
 	}
 	
 	size_t new_rear = deque->rear ? (deque->rear-1) : (deque->capacity-1);
-	uchar* location= deque->buff + (deque->rear*deque->element_size);
+	uchar* location= deque->buff + (new_rear*deque->element_size);
 	memcpy(location,obj,deque->element_size);
 	deque->rear=new_rear;
 	deque->size++;

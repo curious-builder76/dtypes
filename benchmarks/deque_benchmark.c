@@ -14,7 +14,7 @@
 
 void benchmark(){
 	deque_t* deque=NULL;
-	deque=deque_custom(sizeof(int),malloc,free);
+	deque=deque_custom(sizeof(int),xmalloc,xfree);
 	if(!deque){
 		perror("");
 		return;
@@ -67,45 +67,50 @@ void benchmark(){
 	srand(time(NULL));
 	debug("%d random operations.",times);
 	start=clock();
+	int value_expected;
+	int* value_ptr;
+
 	for(int i=0;i<times;i++){
 		failed=0;
 		switch (rand()%4){
 			case 0:
-				if(deque_append(deque,&i)!=0)
-					debug("Failed at append");
-				failed=1;
-				break;
-			case 1:
-				if(deque_appendleft(deque,&i)!=0)
-					debug("Failed at appendleft");
-				failed=1;
-				break;
-			case 2:
-				int i=random() & 7;
-				int* j;
 				if(deque_append(deque,&i)!=0){
 					debug("Failed at append");
 					failed=1;
 				}
+				break;
+			case 1:
+				if(deque_appendleft(deque,&i)!=0){
+					debug("Failed at appendleft");
+					failed=1;
+				}
+				break;
+			case 2:
+				value_expected=random() & 7;
+				if(deque_append(deque,&value_expected)!=0){
+					debug("Failed at append");
+					failed=1;
+				}
 				else{
-					debug("Failed at append and pop simultaneous.");
-					j=deque_pop(deque);
-					if(*j!=i)
+					value_ptr=deque_pop(deque);
+					if(*value_ptr!=value_expected){
+						debug("Failed at append and pop simultaneous.");
 						failed=1;
+					}
 				}
 				break;
 			case 3:
-				int* k;
-				int l=random() & 7;
-				if(deque_appendleft(deque,&l)){
+				value_expected=random() & 7 ;
+				if(deque_appendleft(deque,&value_expected)){
 					debug("Failed at appendleft");
 					failed=1;
 				}
 				else{
-					debug("Failed at appendleft and popleft simultaneous.");
-					k=deque_popleft(deque);
-					if(*k!=l)
+					value_ptr=deque_popleft(deque);
+					if(*value_ptr!=value_expected){
+						debug("Failed at appendleft and popleft simultaneous.");
 						failed=1;
+					}
 				}
 		}
 		if(failed){
