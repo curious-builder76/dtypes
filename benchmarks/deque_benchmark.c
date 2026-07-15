@@ -19,7 +19,7 @@ void benchmark(){
 		perror("");
 		return;
 	}
-	int times=10000;
+	int times=1000000;
 	clock_t start;
 	clock_t end;
 	double time_elapsed;
@@ -39,7 +39,7 @@ void benchmark(){
 	end=clock();
 	if(!failed){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
-		debug("deque_append: %d operations in %.6f seconds.",times,time_elapsed);
+		debug("deque_append: %d operations in %.3f seconds.",times,time_elapsed);
 		debug("Test passed.");
 	}else{
 		tests_failed++;
@@ -67,40 +67,63 @@ void benchmark(){
 	srand(time(NULL));
 	debug("%d random operations.",times);
 	start=clock();
-	failed=0;
 	for(int i=0;i<times;i++){
+		failed=0;
 		switch (rand()%4){
 			case 0:
-				if(deque_append(deque,&i))
-					failed=1;
+				if(deque_append(deque,&i)!=0)
+					debug("Failed at append");
+				failed=1;
 				break;
 			case 1:
-				if(deque_appendleft(deque,&i))
-					failed=1;
+				if(deque_appendleft(deque,&i)!=0)
+					debug("Failed at appendleft");
+				failed=1;
 				break;
 			case 2:
-				deque_pop(deque);
+				int i=random() & 7;
+				int* j;
+				if(deque_append(deque,&i)!=0){
+					debug("Failed at append");
+					failed=1;
+				}
+				else{
+					debug("Failed at append and pop simultaneous.");
+					j=deque_pop(deque);
+					if(*j!=i)
+						failed=1;
+				}
 				break;
 			case 3:
-				deque_popleft(deque);
-				break;
+				int* k;
+				int l=random() & 7;
+				if(deque_appendleft(deque,&l)){
+					debug("Failed at appendleft");
+					failed=1;
+				}
+				else{
+					debug("Failed at appendleft and popleft simultaneous.");
+					k=deque_popleft(deque);
+					if(*k!=l)
+						failed=1;
+				}
 		}
 		if(failed){
-			debug("Failed after %d operations.",i);
+			debug("Failed after %d operations.",i+1);
 			break;
 		}
 	}
 	end=clock();
 	if(!failed){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
-		debug("%d random operations  were performed in %.6f seconds.",times,time_elapsed);
+		debug("%d random operations  were performed in %.3f seconds.",times,time_elapsed);
 	}else{
 		tests_failed++;
 		debug("Test failed.");
 	}
 
 	deque_destroy(deque);
- 	if(tests_failed){
+	if(tests_failed){
 		debug("%d tests failed out of %d",tests_failed,total_tests);
 	}else
 		debug("All tests passed.");

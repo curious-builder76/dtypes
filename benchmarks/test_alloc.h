@@ -11,14 +11,30 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdint.h>
+#include<errno.h>
+
 uint64_t total_mem_allocated=0;
 uint64_t total_mem_freed=0;
+
+
+char hostile_enviroment=1;
+
+int null_frequency=2;
 
 uint64_t malloc_called=0;
 uint64_t realloc_called=0;
 uint64_t free_called=0;
 
 void* xmalloc(size_t size){
+	errno=0;
+	if( hostile_enviroment && rand()%null_frequency==0){
+		fprintf(stderr,"I evil xmalloc() is returning NULL."
+				"Stop your program from segfault if you can.\n"
+		       );
+		fflush(stderr);
+		errno=ENOMEM;
+		return NULL;
+	}
 	size_t* p=malloc(sizeof(size_t)+size);
 	if(!p){
 		return NULL;
@@ -43,6 +59,14 @@ void xfree(void* ptr){
 }
 
 void* xrealloc(void* ptr, size_t new_size){
+	errno=0;
+	if( hostile_enviroment && rand()%null_frequency==0){
+		fprintf(stderr,"I evil xrealloc() is returning NULL."
+				"Stop your program from segfault if you can.\n"
+		       );
+		errno=ENOMEM;
+		return NULL;
+	}
 	// If null return fresh memory.
 	if(!ptr){
 		return xmalloc(new_size);
@@ -57,7 +81,7 @@ void* xrealloc(void* ptr, size_t new_size){
 
 	// Store old size.
 	size_t old_size=*old_ptr;
-	
+
 	// Create new pointer.
 	size_t* new_ptr=realloc(old_ptr,new_size+sizeof(size_t));
 

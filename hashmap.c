@@ -211,6 +211,7 @@ int hashmap_grow(hashmap_t* map){
 			uint32_t hash=rec.hash;
 			uint32_t index=hash% new_tablesize;
 			mpage_push(pages+index,rec);
+			
 		}
 	}
 	while(old_tablesize){

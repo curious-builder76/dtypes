@@ -7,7 +7,8 @@ run_benchmark(){
 	do
 		target="benchmarks/bench_${name}"
 		build="benchmarks/${name}_benchmark.c"
-		gcc   -O2 -I.. -Wall -Wextra   $build -L. -ldtypes -o $target
+		gcc  -ggdb  -I.. -Wall -Wextra -fsanitize=address,undefined    $build -L. -ldtypes -o $target
+
 	done
 
 	for name in "$@"

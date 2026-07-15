@@ -104,9 +104,11 @@ int deque_grow(deque_t* deque){
 	}
 	deque->front=idx;
 	deque->rear=0;
+	deque->size=idx;
 	deque->free(deque->buff);
 	deque->buff=new_buff;
 	deque->capacity*=2;
+	fprintf(stderr,"front: %zu rear: %zu size: %zu capacity: %zu\n", deque->front,deque->rear,deque->size,deque->capacity);
 	return 0;
 }
 
