@@ -11,10 +11,10 @@ All tests passed.
 No memory leaks.
 ====benchmark of hashmap====
 Key put test
-hashmap_put: 1000000 operations in 2.202 seconds
+hashmap_put: 1000000 operations in 2.208 seconds
 Test passed
 Key get test.
-hashmap_get: 1000000 operations in 0.128 seconds
+hashmap_get: 1000000 operations in 0.130 seconds
 Test passed.
 Busy page test.
 No busy pages were found
@@ -24,7 +24,7 @@ No memory leaks.
 Key put test
 hashset_put: 1000000 operations in 2.080 seconds
 Key contains test
-hashset_contains: 1000000 operations in 0.112 seconds
+hashset_contains: 1000000 operations in 0.111 seconds
 Busy page test.
 Test passed.
 All tests passed.
@@ -32,7 +32,7 @@ No memory leaks.
 ====benchmark of lookup====
 Key put test.
 Test passed.
-1000000 operations in 1.778 seconds
+1000000 operations in 1.766 seconds
 Nonexistent key test.
 Test passed.
 Missing entries test.
@@ -64,9 +64,20 @@ CONTAINS: zzz  -->  true
 If you are looking at this message. the test was passed.
 Sequential inserts.
 Test passed
-trie_insert: 1000000 operations in 0.132 seconds.
+trie_insert: 1000000 operations in 0.131 seconds.
 Random inserts.
 Test passed.
-trie_insert: 1000000 operations in 0.248 seconds.
+trie_insert: 1000000 operations in 0.250 seconds.
 All tests passed.
+No memory leaks.
+====benchmark of deque====
+10000 sequential appends.
+deque_append: 10000 operations in 0.000055 seconds.
+Test passed.
+10000 sequential pops.
+Failed after 0 pops.
+Test failed.
+10000 random operations.
+10000 random operations  were performed in 0.000117 seconds.
+1 tests failed out of 3
 No memory leaks.

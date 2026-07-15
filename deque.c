@@ -50,7 +50,7 @@ deque_t* deque_custom(size_t element_size,void* (*xmalloc)(size_t), void (*xfree
 		return NULL;
 	deque->capacity=512;
 	size_t memory_required=element_size*deque->capacity;
-	uchar* buff=malloc(memory_required);
+	uchar* buff=xmalloc(memory_required);
 	if(!buff){
 		xfree(deque);
 		return NULL;
