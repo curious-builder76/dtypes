@@ -26,11 +26,11 @@
 
 
 
-int sequential_inserts(int times){
+trie_t* sequential_inserts(int times){
 	int ret_code=0;
 	trie_t* trie=trie_custom(xmalloc,xrealloc,xfree);
 	if(trie==NULL){
-		return 1;
+		return NULL;
 	}
 
 	for(int index=0;index<times;index++){
@@ -43,10 +43,33 @@ int sequential_inserts(int times){
 			break;
 		}
 	}
-	trie_destroy(trie);
-	return ret_code;
+	if(ret_code){
+		trie_destroy(trie);
+		return NULL;
+	}
+	return trie;
 }
 
+int random_lookups(trie_t* trie,int times){
+	if(!trie){
+		debug("Skipping random insertion test as sequential insertions failed.");
+		return 1;
+	}
+	for(int i=0;i<times;i++){
+		char ptr[32];
+		int value=random()%times;
+		sprintf(ptr,"value_%d",value);
+		if(!trie_contains(trie,ptr)){
+			debug(
+
+					"Failed after %d operations: "
+					"the value %d shall exist. But it doesn't",i,value
+			     );
+			return 1;
+		}
+	}
+	return 0;
+}
 int random_inserts(int times){
 	int ret_code=0;
 	trie_t* trie=trie_custom(xmalloc,xrealloc,xfree);
@@ -68,13 +91,14 @@ int random_inserts(int times){
 	trie_destroy(trie);
 	return ret_code;
 }
+
 void benchmark(){
 	debug("==== benchmark of trie.====");
-        trie_t* trie=trie_custom(
-                        xmalloc,
-                        xrealloc,
-                        xfree
-                        );
+	trie_t* trie=trie_custom(
+			xmalloc,
+			xrealloc,
+			xfree
+			);
 	if(!trie){
 		perror("");
 		return;
@@ -111,9 +135,9 @@ void benchmark(){
 	double time_elapsed;
 	int ret;
 	start=clock();
-	ret=sequential_inserts(times);
+	trie_t* trie2=sequential_inserts(times);
 	end=clock();
-	if(ret){
+	if(!trie2){
 		debug("Test failed.");
 		tests_failed++;
 	}else{
@@ -134,10 +158,23 @@ void benchmark(){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;	
 		debug("trie_insert: %d operations in %.3f seconds.",times,time_elapsed);
 	}
+	start=clock();
+	debug("Random lookups.");
+	if(random_lookups(trie2,times)!=0){
+		tests_failed++;
+	}else{
+		end=clock();
+		debug("Test passed.");
+		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
+		debug("trie_contains: %d operations in %.3f seconds.",times,time_elapsed);
+	}
+	if(trie2){
+		trie_destroy(trie2);
+	}
 	if(!tests_failed){
 		debug("All tests passed.");
 	}else{
-		debug("%d tests failed out of 2.",tests_failed);
+		debug("%d tests failed out of 3.",tests_failed);
 	}
 	memory_leak();
 
