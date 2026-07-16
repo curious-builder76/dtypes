@@ -21,7 +21,7 @@ typedef struct __bitset{
 
 // The following code is a bit messy and unreadable (apologies for that.);
 //
-// So it is documented instead of below.
+// So it is documented here instead of below.
 //
 // The code decleares a few functions as follws.
 //
@@ -48,7 +48,8 @@ typedef struct __bitset{
 //                     Returns zero upon success or a non zero number indicating 
 //                     failure (Out of Bounds operation.)
 // 
-// bitset_population(): Returns how many bits are set in the given bitset. 
+// bitset_population(): Returns how many bits are set in the given bitset.
+//
 // bitset_destroy() :  Releases the resources held by bitset. (the bitset becomes a dangling pointer
 //                     after that)
 //
