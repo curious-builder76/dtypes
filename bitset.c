@@ -49,10 +49,17 @@ typedef struct __bitset{
 //                     failure (Out of Bounds operation.)
 // 
 // bitset_population(): Returns how many bits are set in the given bitset.
-//
+// 
 // bitset_destroy() :  Releases the resources held by bitset. (the bitset becomes a dangling pointer
 //                     after that)
 //
+
+
+// Not implemented yet. (Commented out.)
+// bitset_find_first(): Returns the index where the first bit is set. (zero either indicates a failure or the zero-th bit set
+//
+// bitset_find_last(): Returns the index where the last bit is set.
+
 
 
 bitset_t* bitset_custom(size_t capacity, void* (*xmalloc)(size_t), void (*xfree)(void*)){
@@ -94,6 +101,35 @@ size_t bitset_population(bitset_t* set){
 	}
 	return count;
 }
+/*
+size_t bitset_find_first(bitset_t* set){
+
+	size_t index=0;
+	int ret;
+	for(;;index++){
+		ret=bitset_checkbit(set,index);
+		if(ret==-1)
+			return 0;
+		if(ret==1)
+			break;
+	}
+	return index;
+}
+
+size_t bitset_find_last(bitset_t* set){
+
+	size_t index=set->capacity;
+	int ret;
+	while(index){
+		index--;
+		ret=bitset_checkbit(set,index);
+		if(ret==1)
+			break;
+	}
+	return index;
+}
+
+*/
 
 void bitset_destroy(bitset_t* set){
 	set->free(set->bits);

@@ -16,7 +16,10 @@ int bitset_togglebit(bitset_t*, size_t );
 int bitset_readbit(bitset_t*, size_t );
 
 size_t bitset_population(bitset_t*, size_t);
-
+/*
+size_t bitset_find_first(bitset_t*);
+size_t bitset_find_last(bitset_t*);
+*/
 void bitset_destroy(bitset_t* );
 
 
