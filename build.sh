@@ -9,6 +9,7 @@ run_benchmark(){
 		build="benchmarks/${name}_benchmark.c"
 		gcc -O2  -I.. -Wall -Wextra     $build -L. -ldtypes -o $target
 
+
 	done
 
 	for name in "$@"
@@ -27,8 +28,9 @@ main(){
 	gcc -O2  -Wall -Wextra -c -I.. *.c 
 	ar rcs libdtypes.a *.o
 	rm *.o
-	[  -n "$BENCH"  ] && run_benchmark array hashmap hashset lookup trie deque
-	# [  -n "$BENCH"  ] && run_benchmark deque 
+	[  -n "$BENCH"  ] && run_benchmark array hashmap hashset lookup trie deque bitset
+
+	# [  -n "$BENCH"  ] && run_benchmark bitset
 }
 set -e
 main

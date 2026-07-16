@@ -63,7 +63,7 @@ typedef struct __bitset{
 
 
 bitset_t* bitset_custom(size_t capacity, void* (*xmalloc)(size_t), void (*xfree)(void*)){
-	size_t size_actual=capacity>>3;
+	size_t size_actual=(capacity+7)>>3;
 	if(!size_actual) return NULL;
 	bitset_t* set=xmalloc(sizeof(bitset_t));
 	if(!set)return NULL;
@@ -73,9 +73,9 @@ bitset_t* bitset_custom(size_t capacity, void* (*xmalloc)(size_t), void (*xfree)
 		xfree(set);
 		return NULL;
 	}
+	set->capacity=capacity;
 	memset(set->bits,0,size_actual);
 	set->free=xfree;
-	set->items_stored=0;
 	return set;
 }
 
@@ -87,7 +87,8 @@ bitset_t* bitset_new(size_t capacity){
 int bitset_checkbit(bitset_t* set,size_t index){
 	if(index>=set->capacity) return -1;
 	if((set->bits[index>>3] & (1<<(index & 7)))!=0) return 1;
-	else 0;
+	
+	return 0;
 }
 
 int bitset_readbit(bitset_t* set, size_t index){
@@ -97,7 +98,7 @@ int bitset_readbit(bitset_t* set, size_t index){
 size_t bitset_population(bitset_t* set){
 	size_t count=0;
 	for(size_t idx=0;idx<set->capacity;idx++){
-		count+= (size_t) bitset_checkbit(set);
+		count+= (size_t) bitset_checkbit(set,idx);
 	}
 	return count;
 }
