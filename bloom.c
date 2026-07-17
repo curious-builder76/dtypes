@@ -8,7 +8,7 @@
 
 typedef struct{
 	void (*free)(void*);
-	uint64_t (*hash_functions)[2](void*, size_t);
+	uint64_t (*hash_functions[2])(void*, size_t);
 	size_t capacity;
 	size_t element_size;
 	uint8_t bits[];
@@ -28,8 +28,9 @@ bloom_t* bloom_custom(size_t capacity,size_t element_size,uint64_t (*hash1)(void
 
 	bloom->element_size=element_size;
 	bloom->free=xfree;
-	bloom->hash_functions={ hash1, hash2} 
-	boom->capacity=size_actual;
+	bloom->hash_functions[0]=hash1;
+	bloom->hash_functions[1]=hash2 ;
+	bloom->capacity=size_actual;
 	return bloom;
 }
 
