@@ -218,8 +218,8 @@ int trie_insert(trie_t* root,char* buff){
 
 
 // Check for membership of string in trie.
-// returns zero if the string is not present
-// or returns a non zero number if present.
+// returns zero if the string is present
+// or returns a non zero number if not present.
 
 int trie_contains(trie_t* trie,char* buff){
 	if(*buff==0){
