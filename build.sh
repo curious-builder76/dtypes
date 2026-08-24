@@ -7,7 +7,7 @@ run_benchmark(){
 	do
 		target="benchmarks/bench_${name}"
 		build="benchmarks/${name}_benchmark.c"
-		gcc -O2  -I.. -Wall -Wextra     $build -L. -ldtypes -o $target
+		gcc -O2  -I.. -Wall -Wextra  $build -L. -ldtypes -o $target
 
 
 	done
@@ -28,10 +28,10 @@ main(){
 	gcc -O2 -pedantic  -Wall -Wextra -c -I.. *.c 
 	ar rcs libdtypes.a *.o
 	rm *.o
-	[  -n "$BENCH"  ] && run_benchmark array hashmap hashset lookup trie deque bitset
+	[  -n "$BENCH"  ] && run_benchmark array hashmap hashset lookup trie deque bitset ndarray
 
 	# [  -n "$BENCH"  ] && run_benchmark bitset
 }
-set -e
+set -ve
 main
 

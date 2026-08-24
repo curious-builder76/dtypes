@@ -93,7 +93,7 @@ array_t* ndarray_custom(void* (*xmalloc)(size_t), void (*xfree)(void*), size_t o
 	return array;
 }
 
-array_t* array_new(size_t obj_size,size_t ndims,...){
+array_t* ndarray_new(size_t obj_size,size_t ndims,...){
 	va_list dims;
 
 	va_start(dims,ndims);
