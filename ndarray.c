@@ -12,16 +12,14 @@ typedef struct __ndarray__{
 }ndarray_t;
 
 
-// For sake of "my" convinience.
 
-typedef ndarray_t array_t;
 
-size_t* get_dims(array_t* a){
-	return (size_t*)((char*)a + sizeof(array_t));
+size_t* get_dims(ndarray_t* a){
+	return (size_t*)((char*)a + sizeof(ndarray_t));
 }
 
 // Check out of bound dims
-int check_dims(array_t* a,va_list* indices){
+int check_dims(ndarray_t* a,va_list* indices){
 	char error=0;
 
 
@@ -39,13 +37,13 @@ int check_dims(array_t* a,va_list* indices){
 	return error;
 }
 
-int copy_dims(array_t* a,size_t ndims, va_list* dims){
-	size_t* array_dims=get_dims(a);
+int copy_dims(ndarray_t* a,size_t ndims, va_list* dims){
+	size_t* ndarray_dims=get_dims(a);
 
 	for(size_t idx=0;idx<ndims;idx++){
 		size_t dim=va_arg(*dims,size_t);
 		
-		array_dims[idx]=dim;
+		ndarray_dims[idx]=dim;
 	}
 	return 0;
 }
@@ -60,12 +58,12 @@ size_t prod_v(size_t n,va_list* dims){
 }
 
 
-array_t* ndarray_custom0(void* (*xmalloc)(size_t), void (*xfree)(void*), size_t obj_size,size_t ndims, va_list* dims){
+ndarray_t* ndarray_custom0(void* (*xmalloc)(size_t), void (*xfree)(void*), size_t obj_size,size_t ndims, va_list* dims){
 
 	size_t mem_required=prod_v(ndims,dims);
 
-	mem_required= sizeof(array_t) + sizeof(size_t)*ndims + obj_size*mem_required;
-	array_t* array=xmalloc(mem_required);
+	mem_required= sizeof(ndarray_t) + sizeof(size_t)*ndims + obj_size*mem_required;
+	ndarray_t* array=xmalloc(mem_required);
 	if(!array) return NULL;
 
 	memset(array,0,mem_required);
@@ -79,10 +77,10 @@ array_t* ndarray_custom0(void* (*xmalloc)(size_t), void (*xfree)(void*), size_t 
 
 }
 
-array_t* ndarray_custom(void* (*xmalloc)(size_t), void (*xfree)(void*), size_t obj_size, size_t ndims,...){
+ndarray_t* ndarray_custom(void* (*xmalloc)(size_t), void (*xfree)(void*), size_t obj_size, size_t ndims,...){
 	va_list dims;
 	va_start(dims,ndims);
-	array_t* array=ndarray_custom0(xmalloc, xfree, obj_size, ndims, &dims);
+	ndarray_t* array=ndarray_custom0(xmalloc, xfree, obj_size, ndims, &dims);
 	va_end(dims);
 	if(!array) return array;
 
@@ -93,11 +91,11 @@ array_t* ndarray_custom(void* (*xmalloc)(size_t), void (*xfree)(void*), size_t o
 	return array;
 }
 
-array_t* ndarray_new(size_t obj_size,size_t ndims,...){
+ndarray_t* ndarray_new(size_t obj_size,size_t ndims,...){
 	va_list dims;
 
 	va_start(dims,ndims);
-	array_t* array=ndarray_custom0(malloc,free,obj_size,ndims,&dims);
+	ndarray_t* array=ndarray_custom0(malloc,free,obj_size,ndims,&dims);
 	va_end(dims);
 
 	if(!array) return array;
@@ -115,20 +113,20 @@ void ndarray_destroy(ndarray_t* a){
 }
 
 
-void* ndarray_get0(array_t* array,size_t n,va_list* dims){
-	size_t* array_dims=get_dims(array);
+void* ndarray_get0(ndarray_t* array,size_t n,va_list* dims){
+	size_t* ndarray_dims=get_dims(array);
 
 	size_t idx=0;
-	size_t location=array_dims[idx++]*n;
+	size_t location=ndarray_dims[idx++]*n;
 
 	for(;idx<array->ndims;idx++){
 		size_t dim=va_arg(*dims,size_t);
-		location=location + dim*array_dims[idx];
+		location=location + dim*ndarray_dims[idx];
 	}
-	return ((char*)array+ sizeof(array_t) + sizeof(size_t)*array->ndims + location);
+	return ((char*)array+ sizeof(ndarray_t) + sizeof(size_t)*array->ndims + location);
 }
 
-void* ndarray_get(array_t* array,size_t n,...){
+void* ndarray_get(ndarray_t* array,size_t n,...){
 	va_list dims;
 
 	va_start(dims,n);
@@ -151,7 +149,7 @@ void* ndarray_get(array_t* array,size_t n,...){
 
 
 
-int ndarray_put(array_t* array,void* src, size_t n,...){
+int ndarray_put(ndarray_t* array,void* src, size_t n,...){
 	va_list dims;
 
 	va_start(dims,n);

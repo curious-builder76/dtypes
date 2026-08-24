@@ -1,3 +1,4 @@
+main
 ==== benchmark of array====
 Initializing...
 done.
@@ -11,10 +12,10 @@ All tests passed.
 No memory leaks.
 ====benchmark of hashmap====
 Key put test
-hashmap_put: 1000000 operations in 2.192 seconds
+hashmap_put: 1000000 operations in 2.225 seconds
 Test passed
 Key get test.
-hashmap_get: 1000000 operations in 0.122 seconds
+hashmap_get: 1000000 operations in 0.127 seconds
 Test passed.
 Busy page test.
 No busy pages were found
@@ -22,9 +23,9 @@ All tests passed.
 No memory leaks.
 ====benchmark of hashset====
 Key put test
-hashset_put: 1000000 operations in 2.078 seconds
+hashset_put: 1000000 operations in 2.091 seconds
 Key contains test
-hashset_contains: 1000000 operations in 0.108 seconds
+hashset_contains: 1000000 operations in 0.109 seconds
 Busy page test.
 Test passed.
 All tests passed.
@@ -32,11 +33,11 @@ No memory leaks.
 ====benchmark of lookup====
 Key put test.
 Test passed.
-1000000 operations in 1.143 seconds
+1000000 operations in 1.150 seconds
 Nonexistent key test.
 Test passed.
 Missing entries test.
-1000000 operations in 0.060 seconds
+1000000 operations in 0.055 seconds
 No missing entries were found.
 Test passed.
 All tests passed.
@@ -64,13 +65,13 @@ CONTAINS: zzz  -->  true
 If you are looking at this message. the test was passed.
 Sequential inserts.
 Test passed
-trie_insert: 1000000 operations in 0.070 seconds.
+trie_insert: 1000000 operations in 0.071 seconds.
 Random inserts.
 Test passed.
-trie_insert: 1000000 operations in 0.209 seconds.
+trie_insert: 1000000 operations in 0.221 seconds.
 Random lookups.
 Test passed.
-trie_contains: 1000000 operations in 0.239 seconds.
+trie_contains: 1000000 operations in 0.250 seconds.
 All tests passed.
 No memory leaks.
 ====benchmark of deque====
@@ -99,3 +100,20 @@ Test passed
 Test passed
 100000 random operations in 0.001 seconds
 All tests passed.
+====benchmark of ndarray====
+Array: 100 x 100 x 100
+Elements: 1000000
+Iterations: 10
+
+PUT
+  Time: 0.035958 seconds
+  Operations: 10000000
+  Rate: 278.10 M ops/sec
+
+GET
+  Time: 0.028293 seconds
+  Operations: 10000000
+  Rate: 353.44 M ops/sec
+
+Checksum: 8251155000000
+
