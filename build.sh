@@ -32,6 +32,6 @@ main(){
 
 	# [  -n "$BENCH"  ] && run_benchmark bitset
 }
-set -ve
+set -e
 main
 
