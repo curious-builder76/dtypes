@@ -30,7 +30,7 @@ main(){
 	rm *.o
 	[  -n "$BENCH"  ] && run_benchmark array hashmap hashset lookup trie deque bitset ndarray
 
-	# [  -n "$BENCH"  ] && run_benchmark bitset
+	# [  -n "$BENCH"  ] && run_benchmark ndarray
 }
 set -e
 main

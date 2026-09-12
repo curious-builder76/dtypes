@@ -47,8 +47,8 @@ int main(void)
 
 	/* Benchmark put */
 
+	volatile long long valid_checksum=0;
 	clock_t start = clock();
-
 	for (size_t iteration = 0;
 			iteration < ITERATIONS;
 			iteration++)
@@ -63,7 +63,7 @@ int main(void)
 						(int)(i * SIZE * SIZE +
 								j * SIZE +
 								k);
-
+					valid_checksum+=value;
 					ndarray_put(
 							array,
 							&value,
@@ -139,7 +139,10 @@ int main(void)
 	/* Prevent compiler from optimizing everything away */
 
 	printf("Checksum: %lld\n", sum);
-
+	printf("Expected: %lld\n", valid_checksum);
+	if(sum!=valid_checksum){
+		printf("FAILED!!!\n");
+	}
 	ndarray_destroy(array);
 
 	return 0;

@@ -12,11 +12,21 @@ typedef struct __ndarray__{
 }ndarray_t;
 
 
+/*
+ *   MEMORY  LAYOUT:
+ *  +----------------+---------+--------------------+----------------+
+ *  | array metadata | strides | dimensions (dims). | array elements | 
+ *  +----------------+---------+--------------------+----------------+
+*/
+size_t* get_strides(ndarray_t* a){
+	return (size_t*)((char*)a + sizeof(ndarray_t));
+}
 
 
 size_t* get_dims(ndarray_t* a){
-	return (size_t*)((char*)a + sizeof(ndarray_t));
+	return (size_t*)((char*)a + 2*sizeof(ndarray_t));
 }
+
 
 // Check out of bound dims
 int check_dims(ndarray_t* a,va_list* indices){
@@ -62,7 +72,7 @@ ndarray_t* ndarray_custom0(void* (*xmalloc)(size_t), void (*xfree)(void*), size_
 
 	size_t mem_required=prod_v(ndims,dims);
 
-	mem_required= sizeof(ndarray_t) + sizeof(size_t)*ndims + obj_size*mem_required;
+	mem_required= sizeof(ndarray_t) + 2*sizeof(size_t)*ndims + obj_size*mem_required;
 	ndarray_t* array=xmalloc(mem_required);
 	if(!array) return NULL;
 
@@ -77,6 +87,21 @@ ndarray_t* ndarray_custom0(void* (*xmalloc)(size_t), void (*xfree)(void*), size_
 
 }
 
+
+void create_strides(ndarray_t* array){
+	size_t* ndarray_dims=get_dims(array);
+	size_t* ndarray_strides=get_strides(array);
+	size_t n=array->ndims;
+
+	for(size_t stride_idx=0;stride_idx<n;stride_idx++){
+		size_t total=1;
+		for(size_t idx=0;idx<n-stride_idx;idx++){
+			total*= ndarray_dims[idx];
+		}
+		ndarray_strides[stride_idx]=total;
+	}
+}
+
 ndarray_t* ndarray_custom(void* (*xmalloc)(size_t), void (*xfree)(void*), size_t obj_size, size_t ndims,...){
 	va_list dims;
 	va_start(dims,ndims);
@@ -88,6 +113,7 @@ ndarray_t* ndarray_custom(void* (*xmalloc)(size_t), void (*xfree)(void*), size_t
 	copy_dims(array,ndims,&dims);
 	va_end(dims);
 
+	create_strides(array);
 	return array;
 }
 
@@ -104,6 +130,8 @@ ndarray_t* ndarray_new(size_t obj_size,size_t ndims,...){
 	copy_dims(array,ndims,&dims);
 	va_end(dims);
 
+	create_strides(array);
+
 	return array;
 }
 
@@ -113,17 +141,18 @@ void ndarray_destroy(ndarray_t* a){
 }
 
 
+
 void* ndarray_get0(ndarray_t* array,size_t n,va_list* dims){
-	size_t* ndarray_dims=get_dims(array);
+	size_t* ndarray_strides=get_strides(array);
 
 	size_t idx=0;
-	size_t location=ndarray_dims[idx++]*n;
+	size_t location=ndarray_strides[idx++]*n;
 
 	for(;idx<array->ndims;idx++){
 		size_t dim=va_arg(*dims,size_t);
-		location=location + dim*ndarray_dims[idx];
+		location=location + dim*ndarray_strides[idx];
 	}
-	return ((char*)array+ sizeof(ndarray_t) + sizeof(size_t)*array->ndims + location);
+	return ((char*)array+ sizeof(ndarray_t) + 2*sizeof(size_t)*array->ndims + location);
 }
 
 void* ndarray_get(ndarray_t* array,size_t n,...){
