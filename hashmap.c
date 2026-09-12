@@ -179,7 +179,7 @@ hashmap_t* hashmap_new(
 			key_size,
 			value_size,
 			hash_function,
-			memcmp,
+			compare,
 			malloc,
 			free
 			);
