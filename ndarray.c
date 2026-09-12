@@ -109,7 +109,7 @@ ndarray_t* ndarray_new(size_t obj_size,size_t ndims,...){
 
 void ndarray_destroy(ndarray_t* a){
 	if(!a)return;
-       	free(a);
+       	a->free(a);
 }
 
 

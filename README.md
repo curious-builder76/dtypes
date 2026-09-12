@@ -1,3 +1,7 @@
+
+# WARNING: DO NOT USE THIS LIBRARY, SOME SERIOUS ISSUES HAVE BEEN FOUND IN `ndarray` AND SOME OTHER FILES.
+# FIXES WON'T APPEAR ANY SOONER. THANK YOU;
+
 # A collection of simple data structures.
 
 A lightweight collection of generic data structures for C
