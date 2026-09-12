@@ -108,6 +108,7 @@ int main(void)
 			{
 				for (size_t k = 0; k < SIZE; k++)
 				{
+
 					int* value = ndarray_get(
 							array,
 							3,
@@ -115,7 +116,6 @@ int main(void)
 							j,
 							k
 							);
-
 					sum += *value;
 				}
 			}
