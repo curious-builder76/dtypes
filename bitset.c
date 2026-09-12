@@ -62,6 +62,9 @@ typedef struct __bitset{
 
 
 
+
+// capacity shall mean capacity in bits.
+
 bitset_t* bitset_custom(size_t capacity, void* (*xmalloc)(size_t), void (*xfree)(void*)){
 	size_t size_actual=(capacity+7)>>3;
 	if(!size_actual) return NULL;
