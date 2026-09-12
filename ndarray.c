@@ -91,14 +91,10 @@ ndarray_t* ndarray_custom0(void* (*xmalloc)(size_t), void (*xfree)(void*), size_
 void create_strides(ndarray_t* array){
 	size_t* ndarray_dims=get_dims(array);
 	size_t* ndarray_strides=get_strides(array);
-	size_t n=array->ndims;
-
-	for(size_t stride_idx=0;stride_idx<n;stride_idx++){
-		size_t total=1;
-		for(size_t idx=0;idx<n-stride_idx;idx++){
-			total*= ndarray_dims[idx];
-		}
-		ndarray_strides[stride_idx]=total;
+	size_t stride=1;
+	for(size_t i=array->ndims;i-- > 0 ;){
+		ndarray_strides[i]=stride;
+		stride*=ndarray_dims[i];
 	}
 }
 
@@ -152,7 +148,7 @@ void* ndarray_get0(ndarray_t* array,size_t n,va_list* dims){
 		size_t dim=va_arg(*dims,size_t);
 		location=location + dim*ndarray_strides[idx];
 	}
-	return ((char*)array+ sizeof(ndarray_t) + 2*sizeof(size_t)*array->ndims + location);
+	return ((char*)array+ sizeof(ndarray_t) + 2*sizeof(size_t)*array->ndims + location*array->obj_size);
 }
 
 void* ndarray_get(ndarray_t* array,size_t n,...){
