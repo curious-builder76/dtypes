@@ -1,6 +1,6 @@
 
 # WARNING: DO NOT USE THIS LIBRARY, SOME SERIOUS ISSUES HAVE BEEN FOUND IN `ndarray` AND SOME OTHER FILES.
-# FIXES WON'T APPEAR ANY SOONER. THANK YOU;
+# FIXES WON'T APPEAR ANY SOONER. THANK YOU FOR YOUR PATIENCE;
 
 # A collection of simple data structures.
 
@@ -224,6 +224,11 @@ and those systems may merely contain the ram required by this.
 - Requires dynamic memory allocation
 - Trade-offs speed with space.
 - Not thread safe.
+
+## API related note
+
+The function `<name>`\_oom isn't implemented for every data type.
+
 
 ## License
 
