@@ -24,7 +24,7 @@ size_t* get_strides(ndarray_t* a){
 
 
 size_t* get_dims(ndarray_t* a){
-	return (size_t*)((char*)a + 2*sizeof(ndarray_t));
+	return (size_t*)((char*)a + sizeof(ndarray_t)+ sizeof(size_t)*a->ndims);
 }
 
 
@@ -63,9 +63,9 @@ int copy_dims(ndarray_t* a,size_t ndims, va_list* dims){
 size_t prod_v(size_t n,va_list* dims){
 	size_t total=1;
 
-	for(;n;n--){
+	while(n--)
 		total*=va_arg(*dims,size_t);
-	}
+	
 	return total;
 }
 
