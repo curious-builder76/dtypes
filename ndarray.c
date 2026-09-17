@@ -47,6 +47,7 @@ int check_dims(ndarray_t* a,va_list* indices){
 	return error;
 }
 
+// COpy dimentions
 int copy_dims(ndarray_t* a,size_t ndims, va_list* dims){
 	size_t* ndarray_dims=get_dims(a);
 
@@ -57,7 +58,8 @@ int copy_dims(ndarray_t* a,size_t ndims, va_list* dims){
 	}
 	return 0;
 }
-
+//         __
+// Returns ||n=0,n=n {n}  from an pointer of variadic list
 size_t prod_v(size_t n,va_list* dims){
 	size_t total=1;
 
@@ -87,6 +89,7 @@ ndarray_t* ndarray_custom0(void* (*xmalloc)(size_t), void (*xfree)(void*), size_
 
 }
 
+// Calculate strides and copy it 
 
 void create_strides(ndarray_t* array){
 	size_t* ndarray_dims=get_dims(array);
