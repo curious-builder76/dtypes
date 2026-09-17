@@ -1,15 +1,6 @@
 #ifndef __LOOKUP_IMPL__
 #define __LOOKUP_IMPL__
 
-/*
- * Page based probablistic lookup table.
- */
-
-/*
- * Warning: This thing is not tested.
- * and is for educational purpose only. (unfortunately!).
- */
-
 #include<string.h>
 #include<stdlib.h>
 #include<stdint.h>

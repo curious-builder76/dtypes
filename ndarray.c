@@ -91,11 +91,19 @@ ndarray_t* ndarray_custom0(void* (*xmalloc)(size_t), void (*xfree)(void*), size_
 void create_strides(ndarray_t* array){
 	size_t* ndarray_dims=get_dims(array);
 	size_t* ndarray_strides=get_strides(array);
+	size_t n=array->ndims;
 	size_t stride=1;
-	for(size_t i=array->ndims;i-- > 0 ;){
-		ndarray_strides[i]=stride;
-		stride*=ndarray_dims[i];
+	while(n--){
+		ndarray_strides[n]=stride;
+		stride=ndarray_dims[n]*stride;
 	}
+
+	printf("Strides: ");
+	for(size_t idx=0;idx<array->ndims;idx++){
+		printf("%zu ",ndarray_strides[idx]);
+	}
+	puts("");
+
 }
 
 ndarray_t* ndarray_custom(void* (*xmalloc)(size_t), void (*xfree)(void*), size_t obj_size, size_t ndims,...){
