@@ -89,7 +89,7 @@ bitset_t* bitset_new(size_t capacity){
 
 int bitset_checkbit(bitset_t* set,size_t index){
 	if(index>=set->capacity) return -1;
-	if((set->bits[index>>3] & (1<<(index & 7)))!=0) return 1;
+	if((set->bits[index>>3] & (1u<<(index & 7)))!=0) return 1;
 	
 	return 0;
 }
