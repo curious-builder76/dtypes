@@ -10,9 +10,9 @@ typedef unsigned char uchar;
 
 typedef struct __array_struct{ 
 	char oom;
-	uint32_t element_size;
-	uint32_t capacity;
-	uint32_t used;
+	size_t element_size;
+	size_t capacity;
+	size_t used;
 	void* (*malloc)(size_t);
 	void* (*realloc)(void* , size_t);
 	void (*free)(void* );
@@ -23,14 +23,14 @@ typedef struct __array_struct{
 // Creates an new "custom" array.
 // Returns null upon failure.
 array_t* array_custom(
-		uint32_t element_size,
+		size_t element_size,
 		void* (*xmalloc)(size_t),
 		void* (*xrealloc)(void* , size_t),
 		void (*xfree)(void*)
 		)
 {
-	uint32_t capacity=512;
-	uint32_t mem_required=capacity*element_size;
+	size_t capacity=512;
+	size_t mem_required=capacity*element_size;
 	
 	uchar* elements=NULL;
 	array_t* array=NULL;
@@ -59,7 +59,7 @@ array_new_failed:
 
 // Wrapper of array_custom for ease of use.
 //
-array_t* array_new(uint32_t element_size){
+array_t* array_new(size_t element_size){
 	return array_custom( 
 			element_size,
 			malloc,
@@ -71,10 +71,10 @@ array_t* array_new(uint32_t element_size){
 // Grows the size of array.
 
 int array_grow(array_t* array){
-	uint32_t old_cap=array->capacity;
-	uint32_t new_capacity=old_cap*2;
+	size_t old_cap=array->capacity;
+	size_t new_capacity=old_cap*2;
 
-	uint32_t mem_required=new_capacity*array->element_size;
+	size_t mem_required=new_capacity*array->element_size;
 
 	uchar* new_mem=array->realloc(array->elements,mem_required);
 	if(new_mem==NULL){
@@ -88,7 +88,7 @@ int array_grow(array_t* array){
 
 // Returns the siize of array.
 
-uint32_t array_getsize(array_t* array){
+size_t array_getsize(array_t* array){
 	return array->used;
 }
 
@@ -99,7 +99,7 @@ int array_put(array_t* array,void* obj){
 		if(array_grow(array)!=0) 
 			return 1;
 	}
-	uint32_t ret_point=array->used*array->element_size;
+	size_t ret_point=array->used*array->element_size;
 	uchar* mem_pos=array->elements+ret_point;
 	memcpy(mem_pos,obj,array->element_size);
 	array->used++;
@@ -110,11 +110,11 @@ int array_put(array_t* array,void* obj){
 // Copies "element_size" bytes to array 
 // and returns 0 on success and a non zero number on error.
 
-int array_get(array_t* array,uint32_t pos,void* obj){
+int array_get(array_t* array,size_t pos,void* obj){
 	if(pos>=array->used){
 		return 1;
 	}
-	uint32_t cur_pos=pos*array->element_size;
+	size_t cur_pos=pos*array->element_size;
 	uchar* cursor=array->elements+cur_pos;
 	memcpy(obj,cursor,array->element_size);
 	return 0;
@@ -128,10 +128,10 @@ int array_get(array_t* array,uint32_t pos,void* obj){
 //
 // Useful for faster iterations
 
-void* array_at(array_t* array, uint32_t pos){
+void* array_at(array_t* array, size_t pos){
 	if(pos>=array->used)
 		return NULL;
-	uint32_t cur_pos=pos*array->element_size;
+	size_t cur_pos=pos*array->element_size;
 	return array->elements + cur_pos;
 }
 
