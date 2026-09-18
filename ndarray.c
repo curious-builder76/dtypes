@@ -101,11 +101,6 @@ void create_strides(ndarray_t* array){
 		stride=ndarray_dims[n]*stride;
 	}
 
-	printf("Strides: ");
-	for(size_t idx=0;idx<array->ndims;idx++){
-		printf("%zu ",ndarray_strides[idx]);
-	}
-	puts("");
 
 }
 
@@ -149,23 +144,22 @@ void ndarray_destroy(ndarray_t* a){
 
 
 
-void* ndarray_get0(ndarray_t* array,size_t n,va_list* dims){
+void* ndarray_get0(ndarray_t* array,va_list* dims){
 	size_t* ndarray_strides=get_strides(array);
 
-	size_t idx=0;
-	size_t location=ndarray_strides[idx++]*n;
+	size_t location=0;
 
-	for(;idx<array->ndims;idx++){
+	for(size_t idx=0;idx<array->ndims;idx++){
 		size_t dim=va_arg(*dims,size_t);
 		location=location + dim*ndarray_strides[idx];
 	}
 	return ((char*)array+ sizeof(ndarray_t) + 2*sizeof(size_t)*array->ndims + location*array->obj_size);
 }
 
-void* ndarray_get(ndarray_t* array,size_t n,...){
+void* ndarray_get(ndarray_t* array,...){
 	va_list dims;
 
-	va_start(dims,n);
+	va_start(dims,array);
 
 	int ret=check_dims(array,&dims);
 	
@@ -173,9 +167,9 @@ void* ndarray_get(ndarray_t* array,size_t n,...){
 
 	if(ret) return NULL;
 
-	va_start(dims,n);
+	va_start(dims,array);
 	
-	void* mem=ndarray_get0(array,n,&dims);
+	void* mem=ndarray_get0(array,&dims);
 	
 	va_end(dims);
 
@@ -185,10 +179,10 @@ void* ndarray_get(ndarray_t* array,size_t n,...){
 
 
 
-int ndarray_put(ndarray_t* array,void* src, size_t n,...){
+int ndarray_put(ndarray_t* array,void* src,...){
 	va_list dims;
 
-	va_start(dims,n);
+	va_start(dims,src);
 
 	int ret=check_dims(array,&dims);
 	
@@ -196,9 +190,9 @@ int ndarray_put(ndarray_t* array,void* src, size_t n,...){
 
 	if(ret) return 1;
 
-	va_start(dims,n);
+	va_start(dims,src);
 	
-	void* mem=ndarray_get0(array,n,&dims);
+	void* mem=ndarray_get0(array,&dims);
 	
 	va_end(dims);
 

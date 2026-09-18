@@ -67,7 +67,6 @@ int main(void)
 					ndarray_put(
 							array,
 							&value,
-							3,
 							i,
 							j,
 							k
@@ -111,7 +110,6 @@ int main(void)
 
 					int* value = ndarray_get(
 							array,
-							3,
 							i,
 							j,
 							k
