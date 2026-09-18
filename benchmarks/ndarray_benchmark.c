@@ -141,6 +141,9 @@ int main(void)
 	if(sum!=valid_checksum){
 		printf("FAILED!!!\n");
 	}
+	else{
+		printf("Passed.\n");
+	}
 	ndarray_destroy(array);
 
 	return 0;
