@@ -75,6 +75,7 @@ int node_grow(trie_t* trie,node_t* node){
 // Insert a string into the tree.
 
 int node_insert(trie_t* trie,node_t* node,char* buff){
+start:
 	if(node->used>=node->capacity){
 		if(node_grow(trie,node)!=0){
 			return 1;
@@ -94,7 +95,9 @@ int node_insert(trie_t* trie,node_t* node,char* buff){
 	for(uint8_t idx=0;idx<node->used;idx++){
 		node_t* child=node->nodes+idx;
 		if(child->node_value== *buff){
-			return node_insert(trie,child,buff+1);
+			node=child;
+			buff++;
+			goto start;
 		}
 	}
 	// node_push()
@@ -103,13 +106,16 @@ int node_insert(trie_t* trie,node_t* node,char* buff){
 		return 1;
 	}
 	node->used++;
-	return node_insert(trie,child,buff+1);
+	node=child;
+	buff++;
+	goto start;
 }
 
 
 // Returns zero if the node contains given "buff"
 // and  non zero if not present
-int node_contains(node_t* node,char* buff){	
+int node_contains(node_t* node,char* buff){
+start:
 	for(uint8_t idx=0;idx<node->used;idx++){
 		node_t* child=node->nodes+idx;
 		if(child->node_value!=*buff){
@@ -118,8 +124,9 @@ int node_contains(node_t* node,char* buff){
 		if(child->node_value=='\0'){
 			return 1;
 		}
-		return node_contains(child,buff+1);
-		
+		node=child;
+		buff++;
+		goto start;
 	}
 	return 0;
 }
