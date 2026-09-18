@@ -58,8 +58,7 @@ int copy_dims(ndarray_t* a,size_t ndims, va_list* dims){
 	}
 	return 0;
 }
-//         __
-// Returns ||n=0,n=n {n}  from an pointer of variadic list
+// Returns a1*a2*...*aN  from an pointer of variadic list
 size_t prod_v(size_t n,va_list* dims){
 	size_t total=1;
 
