@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <time.h>
 
-#include "bloom.h"
+#include "dtypes/bloom.h"
 
 #define CAPACITY    10000000
 #define ELEMENTS    1000000

@@ -13,5 +13,5 @@ bloom_t* bloom_custom(size_t ,size_t ,uint64_t (*)(void*, size_t), uint64_t (*)(
 bloom_t* bloom_new(size_t ,size_t , uint64_t (*)(void*, size_t), uint64_t (*)(void* , size_t));
 int bloom_add(bloom_t* ,void* ); 
 int bloom_contains(bloom_t* ,void* ); 
-
+void bloom_destroy(bloom_t*); 
 #endif

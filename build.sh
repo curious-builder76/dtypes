@@ -28,7 +28,7 @@ main(){
 	gcc -O2 -pedantic  -Wall -Wextra -c -I.. *.c 
 	ar rcs libdtypes.a *.o
 	rm *.o
-	[  -n "$BENCH"  ] && run_benchmark array hashmap hashset lookup trie deque bitset ndarray
+	[  -n "$BENCH"  ] && run_benchmark array hashmap hashset lookup trie deque bloom bitset ndarray
 
 	# [  -n "$BENCH"  ] && run_benchmark ndarray
 }
