@@ -25,7 +25,7 @@ bloom_t* bloom_custom(size_t capacity,size_t element_size,uint64_t (*hash1)(void
 	bloom_t* bloom=xmalloc(mem_required);
 	if(!bloom)
 		return NULL;
-
+	memset(bloom,0,mem_required);
 	bloom->element_size=element_size;
 	bloom->free=xfree;
 	bloom->hash_functions[0]=hash1;

@@ -11,10 +11,10 @@ All tests passed.
 No memory leaks.
 ====benchmark of hashmap====
 Key put test
-hashmap_put: 1000000 operations in 2.186 seconds
+hashmap_put: 1000000 operations in 2.190 seconds
 Test passed
 Key get test.
-hashmap_get: 1000000 operations in 0.124 seconds
+hashmap_get: 1000000 operations in 0.123 seconds
 Test passed.
 Busy page test.
 No busy pages were found
@@ -22,9 +22,9 @@ All tests passed.
 No memory leaks.
 ====benchmark of hashset====
 Key put test
-hashset_put: 1000000 operations in 2.071 seconds
+hashset_put: 1000000 operations in 2.083 seconds
 Key contains test
-hashset_contains: 1000000 operations in 0.105 seconds
+hashset_contains: 1000000 operations in 0.111 seconds
 Busy page test.
 Test passed.
 All tests passed.
@@ -32,7 +32,7 @@ No memory leaks.
 ====benchmark of lookup====
 Key put test.
 Test passed.
-1000000 operations in 1.140 seconds
+1000000 operations in 1.146 seconds
 Nonexistent key test.
 Test passed.
 Missing entries test.
@@ -67,7 +67,7 @@ Test passed
 trie_insert: 1000000 operations in 0.071 seconds.
 Random inserts.
 Test passed.
-trie_insert: 1000000 operations in 0.205 seconds.
+trie_insert: 1000000 operations in 0.206 seconds.
 Random lookups.
 Test passed.
 trie_contains: 1000000 operations in 0.239 seconds.
@@ -75,12 +75,12 @@ All tests passed.
 No memory leaks.
 ====benchmark of deque====
 1000000 sequential appends.
-deque_append: 1000000 operations in 0.006 seconds.
+deque_append: 1000000 operations in 0.005 seconds.
 Test passed.
 1000000 sequential pops.
 deque_popleft: 1000000 operations in 0.002 seconds.
 1000000 random operations.
-1000000 random operations  were performed in 0.012 seconds.
+1000000 random operations  were performed in 0.013 seconds.
 All tests passed.
 No memory leaks.
 ====benchmark of bitset====
@@ -105,15 +105,15 @@ Elements: 1000000
 Iterations: 10
 
 PUT
-  Time: 0.035110 seconds
+  Time: 0.038101 seconds
   Operations: 10000000
-  Rate: 284.82 M ops/sec
+  Rate: 262.46 M ops/sec
 
 GET
-  Time: 0.027397 seconds
+  Time: 0.032339 seconds
   Operations: 10000000
-  Rate: 365.00 M ops/sec
+  Rate: 309.22 M ops/sec
 
-Checksum: 5000490000000
+Checksum: 4999995000000
 Expected: 4999995000000
-FAILED!!!
+Passed.
