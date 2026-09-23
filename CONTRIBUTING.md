@@ -68,31 +68,31 @@ API Conventions
 dtypes aims to keep its APIs consistent across data structures.
 
 A typical data structure exposes functions following this pattern:
-
+```C
 *_custom()
 *_new()
 *_destroy()
 
 *_custom()
-
+```
 Used when the caller needs more control over configuration, including custom allocation and deallocation where supported.
 
-*_new()
+`*_new()`
 
 The simpler constructor intended for normal use.
 
-*_destroy()
+`*_destroy()`
 
 Releases resources owned by the data structure.
 
 When adding a new data structure, follow the existing naming conventions as closely as possible.
 
 For example:
-
+```C
 array_t *array_new(...);
 array_t *array_custom(...);
 void array_destroy(array_t *array);
-
+```
 Avoid introducing a completely different API style unless there is a strong reason to do so.
 
 Memory Management
