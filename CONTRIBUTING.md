@@ -72,7 +72,8 @@ A typical data structure exposes functions following this pattern:
 *_custom()
 *_new()
 *_destroy()
-
+```
+```text
 *_custom()
 ```
 Used when the caller needs more control over configuration, including custom allocation and deallocation where supported.
