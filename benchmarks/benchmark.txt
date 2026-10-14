@@ -1,46 +1,84 @@
+Architecture:                            x86_64
+CPU op-mode(s):                          32-bit, 64-bit
+Address sizes:                           48 bits physical, 48 bits virtual
+Byte Order:                              Little Endian
+CPU(s):                                  12
+On-line CPU(s) list:                     0-11
+Vendor ID:                               AuthenticAMD
+Model name:                              AMD Ryzen 5 9600X 6-Core Processor
 ==== benchmark of array====
 Initializing...
 done.
-Array put test.
 Test passed.
-array_put: 1000000 operations in 0.006 seconds.
-Array iteration test.
 Test passed.
-array_at: 1000000 operations in 0.001 seconds.
 All tests passed.
 No memory leaks.
+PUT
+  Time: 0.006042 seconds
+  Operations: 1000000
+  Rate: 165.51 M ops/sec
+
+ARRAY AT (iteration test)
+  Time: 0.000735 seconds
+  Operations: 1000000
+  Rate: 1360.54 M ops/sec
+
 ====benchmark of hashmap====
 Key put test
-hashmap_put: 1000000 operations in 2.190 seconds
 Test passed
 Key get test.
-hashmap_get: 1000000 operations in 0.123 seconds
 Test passed.
 Busy page test.
 No busy pages were found
 All tests passed.
 No memory leaks.
+PUT
+  Time: 2.197591 seconds
+  Operations: 1000000
+  Rate: 0.46 M ops/sec
+
+GET
+  Time: 0.125462 seconds
+  Operations: 1000000
+  Rate: 7.97 M ops/sec
+
 ====benchmark of hashset====
 Key put test
-hashset_put: 1000000 operations in 2.083 seconds
 Key contains test
-hashset_contains: 1000000 operations in 0.111 seconds
 Busy page test.
 Test passed.
 All tests passed.
 No memory leaks.
+PUT
+  Time: 2.076368 seconds
+  Operations: 1000000
+  Rate: 0.48 M ops/sec
+
+CONTAINS
+  Time: 0.108157 seconds
+  Operations: 1000000
+  Rate: 9.25 M ops/sec
+
 ====benchmark of lookup====
 Key put test.
 Test passed.
-1000000 operations in 1.146 seconds
 Nonexistent key test.
 Test passed.
 Missing entries test.
-1000000 operations in 0.059 seconds
 No missing entries were found.
 Test passed.
 All tests passed.
 No memory leaks.
+PUT
+  Time: 1.140865 seconds
+  Operations: 1000000
+  Rate: 0.88 M ops/sec
+
+GET
+  Time: 0.061339 seconds
+  Operations: 1000000
+  Rate: 16.30 M ops/sec
+
 ==== benchmark of trie.====
 INSERT: apple
 INSERT: aplication
@@ -51,68 +89,115 @@ Nonexistent entry test
 CONTAINS: panda  -->  false
 Existent entry test.
 CONTAINS: apple  -->  true
-Long insert short get test.
-Expected: segfault.
-INSERT: ppppppppppppppppppppppppppppppppppppp
-CONTAINS: ppp  -->  false
-If you are looking at this message. the test was passed.
-Short insert long get test.
-Expected: segfault.
-INSERT: zzz
-CONTAINS: zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz  -->  false
-CONTAINS: zzz  -->  true
-If you are looking at this message. the test was passed.
 Sequential inserts.
 Test passed
-trie_insert: 1000000 operations in 0.071 seconds.
 Random inserts.
 Test passed.
-trie_insert: 1000000 operations in 0.206 seconds.
 Random lookups.
 Test passed.
-trie_contains: 1000000 operations in 0.239 seconds.
 All tests passed.
 No memory leaks.
+INSERT (sequential)
+  Time: 0.071635 seconds
+  Operations: 1000000
+  Rate: 13.96 M ops/sec
+
+INSERT (random)
+  Time: 0.200421 seconds
+  Operations: 1000000
+  Rate: 4.99 M ops/sec
+
+CONTAINS (random)
+  Time: 0.240567 seconds
+  Operations: 1000000
+  Rate: 4.16 M ops/sec
+
 ====benchmark of deque====
 1000000 sequential appends.
-deque_append: 1000000 operations in 0.005 seconds.
 Test passed.
 1000000 sequential pops.
-deque_popleft: 1000000 operations in 0.002 seconds.
 1000000 random operations.
-1000000 random operations  were performed in 0.013 seconds.
 All tests passed.
 No memory leaks.
+APPEND
+  Time: 0.005946 seconds
+  Operations: 1000000
+  Rate: 168.18 M ops/sec
+
+POPLEFT
+  Time: 0.002097 seconds
+  Operations: 1000000
+  Rate: 476.87 M ops/sec
+
+RANDOM OPERATIONS
+  Time: 0.011809 seconds
+  Operations: 1000000
+  Rate: 84.68 M ops/sec
+
+==== benchmark of bloom filter ====
+Capacity: 10000000 bits
+Elements: 1000000
+Iterations: 10
+
+PUT
+  Time: 0.107581 seconds
+  Operations: 10000000
+  Rate: 92.95 M ops/sec
+
+GET (inserted)
+  Time: 0.101926 seconds
+  Operations: 10000000
+  Rate: 98.11 M ops/sec
+  Positive results: 10000000
+
+FALSE POSITIVE TEST
+  Time: 0.008072 seconds
+  Tested: 1000000
+  False positives: 25830
+  False-positive rate: 2.5830%
+
 ====benchmark of bitset====
 Nonexistent bit test.
 Test passed.
-setbit test
 Test passed
-100000 operations in 0.000 seconds
-checkbit test
 Test passed
-100000 operations in 0.000 seconds
-clear test
 Test passed
-100000 operations in 0.000 seconds
-100000 random operations
 Test passed
-100000 random operations in 0.001 seconds
 All tests passed.
+SETBIT
+  Time: 0.000149 seconds
+  Operations: 100000
+  Rate: 671.14 M ops/sec
+
+CHEKBIT
+  Time: 0.000148 seconds
+  Operations: 100000
+  Rate: 675.68 M ops/sec
+
+CLEARBIT
+  Time: 0.000148 seconds
+  Operations: 100000
+  Rate: 675.68 M ops/sec
+
+100000 random operations
+  Time: 0.001280 seconds
+  Operations: 100000
+  Rate: 78.12 M ops/sec
+
 ====benchmark of ndarray====
 Array: 100 x 100 x 100
 Elements: 1000000
 Iterations: 10
 
 PUT
-  Time: 0.038101 seconds
+  Time: 0.037976 seconds
   Operations: 10000000
-  Rate: 262.46 M ops/sec
+  Rate: 263.32 M ops/sec
 
 GET
-  Time: 0.032339 seconds
+  Time: 0.032250 seconds
   Operations: 10000000
-  Rate: 309.22 M ops/sec
+  Rate: 310.08 M ops/sec
 
 Checksum: 4999995000000
 Expected: 4999995000000
