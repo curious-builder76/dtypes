@@ -3,7 +3,7 @@
 #include<stdint.h>
 #include<string.h>
 #include<time.h>
-
+#include "print.h"
 #include "dtypes/bitset.h"
 
 #define debug(...) do{\
@@ -27,7 +27,6 @@
 	double time_elapsed;\
 	char failed=0;\
 	start=clock();\
-	debug(test_name);\
 	for(int i=0;i<times;i++){\
 		condition;\
 	}\
@@ -35,7 +34,7 @@
 	time_elapsed= (double)(end-start)/CLOCKS_PER_SEC;\
 	if(!failed){\
 		debug("Test passed");\
-		debug(FMT_STRING,(size_t)times, time_elapsed);\
+		print_benchmark(test_name,(size_t)times, time_elapsed);\
 	}\
 	else{\
 		debug("Test failed.");\
@@ -63,9 +62,9 @@ void benchmark(){
 	}else{
 		debug("Test passed.");
 	}
-	BENCHMARK("setbit test",CODE_BLOCK(bitset_setbit(bitset,i)), times, tests_failed);
-	BENCHMARK("checkbit test",CODE_BLOCK(bitset_checkbit(bitset,i)!=1), times, tests_failed);
-	BENCHMARK("clear test",CODE_BLOCK(bitset_clearbit(bitset,i)), times, tests_failed);
+	BENCHMARK("SETBIT",CODE_BLOCK(bitset_setbit(bitset,i)), times, tests_failed);
+	BENCHMARK("CHEKBIT",CODE_BLOCK(bitset_checkbit(bitset,i)!=1), times, tests_failed);
+	BENCHMARK("CLEARBIT",CODE_BLOCK(bitset_clearbit(bitset,i)), times, tests_failed);
 #undef CODE_BLOCK
 #undef FMT_STRING 
 #define FMT_STRING "%zu random operations in %.3f seconds"

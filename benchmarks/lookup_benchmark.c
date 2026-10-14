@@ -3,6 +3,7 @@
 #include<stdint.h>
 #include<time.h>
 
+#include "print.h"
 #include "test_alloc.h"
 #include "dtypes/lookup.h"
 
@@ -61,7 +62,7 @@ void benchmark(){
 	if(!broke){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
 		debug("Test passed.");
-		debug("%d operations in %.3f seconds",times,time_elapsed);
+		print_benchmark("PUT",times,time_elapsed);
 	} else{
 		debug("Test failed.");
 	}
@@ -109,7 +110,7 @@ void benchmark(){
 		debug("Out of %d entries %d entries were missing.",times,missing_entries);
 	}else{
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
-		debug("%d operations in %.3f seconds",times,time_elapsed);
+		print_benchmark("GET",times,time_elapsed);
 		debug("No missing entries were found.");
 		debug("Test passed.");
 	}

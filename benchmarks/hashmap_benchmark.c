@@ -7,6 +7,7 @@
 #define __HASHMAP_DEBUG
 #include "dtypes/hashmap.c"
 #include "test_alloc.h"
+#include "print.h"
 #include "dtypes/hash_function.h"
 void hashmap_benchmark(){
         hashmap_t* map;
@@ -45,7 +46,7 @@ void hashmap_benchmark(){
 	end=clock();
 	time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
 	if(tests_failed!=1){
-		debug("hashmap_put: %d operations in %.3f seconds",times,time_elapsed);
+		print_benchmark("PUT",times,time_elapsed);
 		debug("Test passed");
 	}
         debug("Key get test.");
@@ -69,7 +70,7 @@ void hashmap_benchmark(){
         if(key_not_found){
                 debug("Test failed.");
         }else{
-		debug("hashmap_get: %d operations in %.3f seconds",times,time_elapsed);
+		print_benchmark("GET",times,time_elapsed);
                 debug("Test passed.");
         }
         debug("Busy page test.");

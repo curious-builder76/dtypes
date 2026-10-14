@@ -6,7 +6,7 @@
 #include "dtypes/array.h"
 
 #include "test_alloc.h"
-
+#include "print.h"
 #define log(...) do {\
 	fprintf(stderr,__VA_ARGS__);\
 	fprintf(stderr,"\n");\
@@ -57,7 +57,6 @@ void benchmark(){
 	}
 	while(array==NULL);
 	
-	log("Array put test.");
 	start=clock();
 	for(uint32_t idx=0;idx<times;idx++){
 		if(array_put(array,digits+idx)!=0){
@@ -74,10 +73,10 @@ void benchmark(){
 	time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
 	if(!test_failed){
 		log("Test passed.");
-		log("array_put: %d operations in %.3f seconds.",times,time_elapsed);
+		print_benchmark("PUT", times, time_elapsed);
+
 	}
 	
-	log("Array iteration test.");
 
 	uint32_t size_estimated=array_getsize(array);
 	uint32_t size_actual=0;
@@ -95,7 +94,8 @@ void benchmark(){
 	}else{
 		time_elapsed= (double)(end-start)/CLOCKS_PER_SEC;
 		log("Test passed.");
-		log("array_at: %u operations in %.3f seconds.", size_estimated, time_elapsed);
+
+		print_benchmark("ARRAY AT (iteration test)", size_estimated, time_elapsed);
 	}
 
 	array_destroy(array);

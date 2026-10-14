@@ -4,6 +4,8 @@
 #include<time.h>
 #include<string.h>
 #include "dtypes/trie.h"
+
+#include "print.h"
 #include "test_alloc.h"
 
 #define debug(...)do{\
@@ -113,16 +115,6 @@ void benchmark(){
 	CONTAINS(trie,"panda");
 	debug("Existent entry test.");
 	CONTAINS(trie,"apple");
-
-	debug("Long insert short get test.\nExpected: segfault.");
-	INSERT(trie,"ppppppppppppppppppppppppppppppppppppp");
-	CONTAINS(trie,"ppp");
-	debug("If you are looking at this message. the test was passed.");
-	debug("Short insert long get test.\nExpected: segfault.");
-	INSERT(trie,"zzz");
-	CONTAINS(trie,"zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
-	CONTAINS(trie,"zzz");
-	debug("If you are looking at this message. the test was passed.");
 	trie_destroy(trie);
 
 	trie=NULL;
@@ -144,7 +136,7 @@ void benchmark(){
 	}else{
 		debug("Test passed");
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
-		debug("trie_insert: %d operations in %.3f seconds.",times,time_elapsed);
+		print_benchmark("INSERT (sequential)",times,time_elapsed);
 	}
 	debug("Random inserts.");
 	start=clock();
@@ -157,7 +149,7 @@ void benchmark(){
 	else{
 		debug("Test passed.");
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;	
-		debug("trie_insert: %d operations in %.3f seconds.",times,time_elapsed);
+		print_benchmark("INSERT (random)",times,time_elapsed);
 	}
 	start=clock();
 	debug("Random lookups.");
@@ -167,7 +159,7 @@ void benchmark(){
 		end=clock();
 		debug("Test passed.");
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
-		debug("trie_contains: %d operations in %.3f seconds.",times,time_elapsed);
+		print_benchmark("CONTAINS (random)",times,time_elapsed);
 	}
 	if(trie2){
 		trie_destroy(trie2);

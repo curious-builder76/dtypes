@@ -5,7 +5,7 @@
 
 #include "dtypes/deque.h"
 #include "test_alloc.h"
-
+#include "print.h"
 
 #define debug(...)do{\
 	fprintf(stderr,__VA_ARGS__);\
@@ -36,7 +36,7 @@ void benchmark(){
 	end=clock();
 	if(!failed){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
-		debug("deque_append: %d operations in %.3f seconds.",times,time_elapsed);
+		print_benchmark("APPEND",times,time_elapsed);
 		debug("Test passed.");
 	}else{
 		tests_failed++;
@@ -56,7 +56,7 @@ void benchmark(){
 	end=clock();
 	if(!failed){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
-		debug("deque_popleft: %d operations in %.3f seconds.",times,time_elapsed);
+		print_benchmark("POPLEFT",times,time_elapsed);
 	}else{
 		tests_failed++;
 		debug("Test failed.");
@@ -118,7 +118,7 @@ void benchmark(){
 	end=clock();
 	if(!failed){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
-		debug("%d random operations  were performed in %.3f seconds.",times,time_elapsed);
+		print_benchmark("RANDOM OPERATIONS",times,time_elapsed);
 	}else{
 		tests_failed++;
 		debug("Test failed.");
