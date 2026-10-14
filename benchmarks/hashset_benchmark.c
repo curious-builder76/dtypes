@@ -3,6 +3,7 @@
 #include<time.h>
 
 #define __HASHSET_DEBUG
+#include "print.h"
 #include "dtypes/hashset.c"
 #include "test_alloc.h"
 
@@ -46,7 +47,7 @@ void benchmark(){
 	end=clock();
 	if(!put_test_failed){
 		double time_elapsed= (double)(end-start)/CLOCKS_PER_SEC;
-		hashset_debug("hashset_put: %d operations in %.3f seconds",times,time_elapsed);
+		print_benchmark("PUT",times,time_elapsed);
 	}else{
 		hashset_debug("Test failed.");
 	}
@@ -68,7 +69,7 @@ void benchmark(){
 	end=clock();
 	if(!has_test_failed){
 		double time_elapsed= (double)(end-start)/CLOCKS_PER_SEC;
-		hashset_debug("hashset_contains: %d operations in %.3f seconds",times,time_elapsed);
+		print_benchmark("CONTAINS",times,time_elapsed);
 	}else{
 		hashset_debug("Test failed.");
 	}
