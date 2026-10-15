@@ -14,7 +14,7 @@ typedef struct __list{
 	size_t obj_size;
 	size_t used;
 	size_t cap;
-	size_t tail;
+	size_t tail_physical;
 	node_t* nodes;
 }list_t;
 
@@ -40,7 +40,6 @@ void list_destroy(list_t* l){
 	free(l);
 }
 
-// Under development: Dynamic growth not added
 static node_t* get_node_at(list_t* list,size_t idx){
 	if (idx>=list->used) return NULL;
 	node_t* curr=list->nodes;
@@ -51,16 +50,18 @@ static node_t* get_node_at(list_t* list,size_t idx){
 	}
 	return curr;
 }
+
+// This function will return a free node from the list
+// Under development: Dynamic growth not added
 static node_t* get_node(list_t* list){
 	size_t padding=sizeof(node_t)+list->obj_size;
-	node_t* tail=get_node_at(list,list->tail);
+	node_t* tail=(node_t*)((char*)list->nodes + (sizeof(node_t)+list->obj_size)*list->tail_physical);
 	char* mem= (char*)list->nodes;
 	for(size_t idx=0;idx<list->used;idx++){
 		node_t* node=(node_t*)(mem+padding*idx);
 		if(node->next==NULL_NODE && node!=tail){ return node;}
 	}
-	list->used++;
-	return (node_t*)(mem+padding*list->used);
+	return (node_t*)(mem+padding*(list->used++));
 }
 
 
@@ -70,9 +71,10 @@ void* list_get(list_t* list,size_t idx){
 }
 int list_put(list_t* list,size_t idx,void* obj){
 	char* mem=list_get(list,idx);
-	if(!mem){
+	if(!mem)
 		return 1; // Under development.
-	};
 	memcpy(mem,obj,list->obj_size);
 	return 0;
 }
+
+
