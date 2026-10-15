@@ -27,7 +27,10 @@ list_t* list_new(size_t obj_size){
 	if(!l) return l;
 	memset(l,0,sizeof *l);
 	node_t* nodes=malloc(mem_required);
-	if(!nodes){free(l); return NULL;}
+	if(!nodes){
+		free(l); 
+		return NULL;
+	}
 	memset(nodes,255,mem_required);
 	l->nodes=nodes;
 	l->cap=capacity;
@@ -41,7 +44,7 @@ void list_destroy(list_t* l){
 }
 
 static node_t* get_node_at(list_t* list,size_t idx){
-	if (idx>=list->used) return NULL;
+	if (idx>=list->cap) return NULL;
 	node_t* curr=list->nodes;
 	size_t padding=sizeof(node_t)+list->obj_size;
 	while(idx--){
@@ -54,8 +57,11 @@ static node_t* get_node_at(list_t* list,size_t idx){
 // This function will return a free node from the list
 // Under development: Dynamic growth not added
 static node_t* get_node(list_t* list){
+	if(list->used>=list->cap){
+		return NULL;
+	}
 	size_t padding=sizeof(node_t)+list->obj_size;
-	node_t* tail=(node_t*)((char*)list->nodes + (sizeof(node_t)+list->obj_size)*list->tail_physical);
+	node_t* tail=(node_t*)((char*)list->nodes + padding*list->tail_physical);
 	char* mem= (char*)list->nodes;
 	for(size_t idx=0;idx<list->used;idx++){
 		node_t* node=(node_t*)(mem+padding*idx);
@@ -69,11 +75,21 @@ void* list_get(list_t* list,size_t idx){
 	node_t* n=get_node_at(list,idx);
 	return n ? n->buff : NULL; // return null if not found.
 }
-int list_put(list_t* list,size_t idx,void* obj){
-	char* mem=list_get(list,idx);
-	if(!mem)
-		return 1; // Under development.
-	memcpy(mem,obj,list->obj_size);
+int list_append(list_t* list,size_t idx,void* obj){
+	size_t padding=sizeof(node_t)+list->obj_size;
+
+	node_t* tail= (node_t*)((char*)list->nodes+ (padding*list->tail_physical));
+
+	node_t* fresh_node=get_node(list);
+	if(!fresh_node){
+		return 1;
+	}
+	size_t distance= (size_t) (list->nodes - fresh_node);
+
+	tail->next=distance;
+
+	memcpy(fresh_node->buff,obj,list->obj_size);
+
 	return 0;
 }
 
