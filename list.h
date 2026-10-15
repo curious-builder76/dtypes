@@ -1,7 +1,7 @@
 #ifndef DTYPES_LIST_H
 
 #define DTYPES_LIST_H
-
+#include<stdint.h>
 struct __list;
 
 typedef struct __list list_t;

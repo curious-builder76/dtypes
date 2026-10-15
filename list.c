@@ -61,14 +61,14 @@ int list_grow(list_t* list){
 		return 1;
 	}
 
-	size_t padding= sizeof(node)+ obj_size;
+	size_t padding= sizeof(node_t)+ list->obj_size;
 	if(SIZE_MAX/padding <= new_cap) {
 		return 1;
 	}
 
 	size_t mem_required=padding*new_cap;
 
-	node_t* new_nodes=realloc(list->nodes,new_cap);
+	node_t* new_nodes=realloc(list->nodes,mem_required);
 	if(!new_nodes){
 		return 1;
 	}
@@ -84,9 +84,8 @@ static node_t* get_node(list_t* list){
 
 	size_t padding=sizeof(node_t)+list->obj_size;
 	node_t* tail=(node_t*)((char*)list->nodes + padding*list->tail_physical);
-	char* mem= (char*)list->nodes;
 	for(size_t idx=0;idx<list->used;idx++){
-		node_t* node=(node_t*)(mem+padding*idx);
+		node_t* node=(node_t*)((char*)list->nodes+padding*idx);
 		if(node->next==NULL_NODE && node!=tail){ return node;}
 	}
 	// Trying to be less RAM hungry
@@ -94,7 +93,7 @@ static node_t* get_node(list_t* list){
 	if(list_grow(list)!=0){
 		return NULL;
 	}
-	return (node_t*)(mem+padding*(list->used++));
+	return (node_t*)((char*)list->nodes+padding*(list->used++));
 }
 void* list_get(list_t* list,size_t idx){
 	node_t* n=get_node_at(list,idx);
@@ -103,7 +102,6 @@ void* list_get(list_t* list,size_t idx){
 int list_append(list_t* list,void* obj){
 	size_t padding=sizeof(node_t)+list->obj_size;
 
-	node_t* tail= (node_t*)((char*)list->nodes+ (padding*list->tail_physical));
 
 	node_t* fresh_node=get_node(list);
 	if(!fresh_node){
@@ -111,6 +109,7 @@ int list_append(list_t* list,void* obj){
 	}
 	size_t distance= (size_t) (list->nodes - fresh_node);
 
+	node_t* tail= (node_t*)((char*)list->nodes+ (padding*list->tail_physical));
 	tail->next=distance;
 
 	memcpy(fresh_node->buff,obj,list->obj_size);

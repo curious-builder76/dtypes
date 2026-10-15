@@ -11,7 +11,7 @@ SOURCES=$(wildcard *.c)
 
 OBJECTS=$(SOURCES:.c=.o)
 
-BENCH_NAMES=array hashmap hashset lookup trie deque bitset ndarray
+BENCH_NAMES=array hashmap hashset lookup trie deque bitset ndarray list
 
 BENCH_TARGETS= $(addprefix benchmarks/bench_,$(BENCH_NAMES))
 
