@@ -54,12 +54,34 @@ static node_t* get_node_at(list_t* list,size_t idx){
 	return curr;
 }
 
-// This function will return a free node from the list
-// Under development: Dynamic growth not added
-static node_t* get_node(list_t* list){
-	if(list->used>=list->cap){
-		return NULL;
+
+int list_grow(list_t* list){
+	size_t new_cap=list->cap*2;
+	if(new_cap < list->cap){
+		return 1;
 	}
+
+	size_t padding= sizeof(node)+ obj_size;
+	if(SIZE_MAX/padding <= new_cap) {
+		return 1;
+	}
+
+	size_t mem_required=padding*new_cap;
+
+	node_t* new_nodes=realloc(list->nodes,new_cap);
+	if(!new_nodes){
+		return 1;
+	}
+	list->cap=new_cap;
+	list->nodes=new_nodes;
+	return 0;
+}
+
+
+
+// This function will return a free node from the list or create new ones.
+static node_t* get_node(list_t* list){
+
 	size_t padding=sizeof(node_t)+list->obj_size;
 	node_t* tail=(node_t*)((char*)list->nodes + padding*list->tail_physical);
 	char* mem= (char*)list->nodes;
@@ -67,10 +89,13 @@ static node_t* get_node(list_t* list){
 		node_t* node=(node_t*)(mem+padding*idx);
 		if(node->next==NULL_NODE && node!=tail){ return node;}
 	}
+	// Trying to be less RAM hungry
+	//
+	if(list_grow(list)!=0){
+		return NULL;
+	}
 	return (node_t*)(mem+padding*(list->used++));
 }
-
-
 void* list_get(list_t* list,size_t idx){
 	node_t* n=get_node_at(list,idx);
 	return n ? n->buff : NULL; // return null if not found.
