@@ -100,7 +100,7 @@ void* list_get(list_t* list,size_t idx){
 	node_t* n=get_node_at(list,idx);
 	return n ? n->buff : NULL; // return null if not found.
 }
-int list_append(list_t* list,size_t idx,void* obj){
+int list_append(list_t* list,void* obj){
 	size_t padding=sizeof(node_t)+list->obj_size;
 
 	node_t* tail= (node_t*)((char*)list->nodes+ (padding*list->tail_physical));
