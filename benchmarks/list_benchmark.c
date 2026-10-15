@@ -66,7 +66,7 @@ int main(){
 		if( got==NULL ||  *got!=times-1){
 			tests_failed++;
 			puts("Test failed.");
-			if(!got) puts("Unexpected null return");
+			if(!got) puts("list get (access last element)Unexpected null return");
 			else{
 				printf("list get (access last element)\nExpected %zu got %zu\n",idx,*got);
 			}
