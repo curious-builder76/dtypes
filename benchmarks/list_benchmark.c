@@ -42,8 +42,12 @@ int main(){
 
 	for(size_t idx=0;idx<times;idx++){
 		size_t* got=list_get(list,idx);
-		if(*got!=idx){
+		if(got==NULL || *got!=idx){
 			puts("Test failed.");
+			if(!got){
+				printf("Expected %zu got null\n",idx);
+			}else
+				printf("Expected %zu got %zu\n",idx,*got);
 			tests_failed++;
 			failure_flag=1;
 			break;
@@ -60,6 +64,10 @@ int main(){
 		if( got==NULL ||  *got!=times-1){
 			tests_failed++;
 			puts("Test failed.");
+			if(!got) puts("Unexpected null return");
+			else{
+				printf("Expected %zu got %zu\n",idx,*got);
+			}
 			failure_flag=1;
 			break;
 		}
