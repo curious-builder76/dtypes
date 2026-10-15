@@ -10,6 +10,8 @@
 
 
 int main(){
+
+	puts("====benchmark of linked list====");
 	clock_t start;
 	clock_t end;
 	double time_elapsed;
@@ -45,9 +47,9 @@ int main(){
 		if(got==NULL || *got!=idx){
 			puts("Test failed.");
 			if(!got){
-				printf("Expected %zu got null\n",idx);
+				printf("list get(iteration)\nExpected %zu got null\n",idx);
 			}else
-				printf("Expected %zu got %zu\n",idx,*got);
+				printf("list get(iteration)\nExpected %zu got %zu\n",idx,*got);
 			tests_failed++;
 			failure_flag=1;
 			break;
@@ -66,7 +68,7 @@ int main(){
 			puts("Test failed.");
 			if(!got) puts("Unexpected null return");
 			else{
-				printf("Expected %zu got %zu\n",idx,*got);
+				printf("list get (access last element)\nExpected %zu got %zu\n",idx,*got);
 			}
 			failure_flag=1;
 			break;

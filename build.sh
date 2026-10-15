@@ -31,7 +31,7 @@ main(){
 
 	[  -n "$BENCH"  ] || exit 0
 	lscpu | head -n 8 2>&1 
-       	run_benchmark array hashmap hashset lookup trie deque bloom bitset ndarray
+       	run_benchmark array hashmap hashset lookup trie deque bloom bitset ndarray list
 
 	# [  -n "$BENCH"  ] && run_benchmark ndarray
 }
