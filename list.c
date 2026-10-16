@@ -107,13 +107,13 @@ int list_append(list_t* list,void* obj){
 	if(!fresh_node){
 		return 1;
 	}
-	size_t distance= (size_t) (list->nodes - fresh_node);
+	size_t distance= (size_t)fresh_node - (size_t)list->nodes;
 
 	node_t* tail= (node_t*)((char*)list->nodes+ (padding*list->tail_physical));
 	tail->next=distance;
 
 	memcpy(fresh_node->buff,obj,list->obj_size);
-
+	list->tail_physical=distance;
 	return 0;
 }
 

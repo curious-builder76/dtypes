@@ -30,7 +30,14 @@ int main(){
 		if(list_append(list,&idx)!=0){
 			puts("Test failed.");
 			failure_flag=1;
+			tests_failed++;
 			break;
+		}
+		size_t* got=list_get(list,idx);
+		if(got == NULL || *got!= idx){
+			printf("-");
+		}else{
+			printf("+");
 		}
 	}
 	end=clock();
@@ -38,10 +45,8 @@ int main(){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
 		print_benchmark("APPEND",times,time_elapsed);
 	}
-	list_destroy(list);
-	list=NULL;
-	list=list_new(sizeof(size_t));
 
+	start=clock();
 	for(size_t idx=0;idx<times;idx++){
 		size_t* got=list_get(list,idx);
 		if(got==NULL || *got!=idx){
@@ -61,6 +66,7 @@ int main(){
 		print_benchmark("GET (iteration)",times,time_elapsed);
 	}
 
+	start=clock();
 	for(size_t idx=0;idx<times;idx++){
 		size_t* got=list_get(list,times-1);
 		if( got==NULL ||  *got!=times-1){
