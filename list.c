@@ -1,7 +1,7 @@
 #include<string.h>
 #include<stdlib.h>
 #include<stdint.h>
-
+#include<stdio.h>
 #include "dtypes/list.h"
 #define NULL_NODE ((size_t)-1)
 
@@ -44,11 +44,13 @@ void list_destroy(list_t* l){
 }
 
 static node_t* get_node_at(list_t* list,size_t idx){
-	if (idx>=list->cap) return NULL;
+	if (idx>list->cap) return NULL;
 	node_t* curr=list->nodes;
 	size_t padding=sizeof(node_t)+list->obj_size;
 	while(idx--){
-		if(curr->next==NULL_NODE){ return NULL;}
+		if(curr->next==NULL_NODE){ 
+			return NULL;
+		}
 		curr= (node_t*)((char*)list->nodes + padding*curr->next);
 	}
 	return curr;
@@ -62,7 +64,7 @@ int list_grow(list_t* list){
 	}
 
 	size_t padding= sizeof(node_t)+ list->obj_size;
-	if(SIZE_MAX/padding <= new_cap) {
+	if(SIZE_MAX/padding < new_cap) {
 		return 1;
 	}
 
@@ -79,16 +81,19 @@ int list_grow(list_t* list){
 
 
 
-// This function will return a free node from the list or create new ones.
+// This function will return a free node from the list 
+// Incase the list is full it will create new ones and return it.
 static node_t* get_node(list_t* list){
 
 	size_t padding=sizeof(node_t)+list->obj_size;
 	node_t* tail=(node_t*)((char*)list->nodes + padding*list->tail_physical);
 	for(size_t idx=0;idx<list->used;idx++){
 		node_t* node=(node_t*)((char*)list->nodes+padding*idx);
-		if(node->next==NULL_NODE && node!=tail){ return node;}
+		if(node->next==NULL_NODE && node!=tail){ 
+			return node;
+		}
 	}
-	// Trying to be less RAM hungry
+	// Trying to be less resource hungry
 	//
 	if(list_grow(list)!=0){
 		return NULL;
@@ -107,11 +112,9 @@ int list_append(list_t* list,void* obj){
 	if(!fresh_node){
 		return 1;
 	}
-	size_t distance= (size_t)fresh_node - (size_t)list->nodes;
-
+	size_t distance= (size_t)((char*)fresh_node - (char*)list->nodes);
 	node_t* tail= (node_t*)((char*)list->nodes+ (padding*list->tail_physical));
-	tail->next=distance;
-
+	tail->next=distance/padding;
 	memcpy(fresh_node->buff,obj,list->obj_size);
 	list->tail_physical=distance;
 	return 0;
