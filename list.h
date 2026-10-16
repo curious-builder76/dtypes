@@ -11,4 +11,6 @@ void list_destroy(list_t* l);
 void* list_get(list_t* list,size_t idx);
 int list_append(list_t* list,void* obj);
 
+int debug_list(list_t* );
+
 #endif
