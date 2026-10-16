@@ -20,7 +20,7 @@ int main(){
 	int total_tests=3;
 	int failure_flag=0;
 
-	size_t times=1000;
+	size_t times=100000;
 	list_t* list=list_new(sizeof(size_t));
 	if(!list){
 		return 1;
@@ -79,7 +79,7 @@ int main(){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
 		print_benchmark("GET (access last element)",times,time_elapsed);
 	}
-	debug_list(list);
+	// debug_list(list);
 	list_destroy(list);
 	if(tests_failed){
 		printf("%d tests failed out of %d\n",tests_failed,total_tests);

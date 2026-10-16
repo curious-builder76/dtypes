@@ -10,7 +10,7 @@ int print_benchmark(char* name,size_t operations, double time_elapsed){
                         "%s\n"
                         "  Time: %.6f seconds\n"
                         "  Operations: %zu\n"
-                        "  Rate: %.2f M ops/sec\n\n",
+                        "  Rate: %.4f M ops/sec\n\n",
 			name,
                         time_elapsed,
                         operations,

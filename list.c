@@ -57,7 +57,7 @@ static node_t* get_node_at(list_t* list,size_t idx){
 
 
 int list_grow(list_t* list){
-	size_t new_cap= list->cap*2;
+	size_t new_cap= list->cap*4;
 	if(new_cap < list->cap){
 		return 1;
 	}
@@ -69,15 +69,13 @@ int list_grow(list_t* list){
 
 	size_t mem_required=padding*new_cap;
 
-	printf("Growing old= %zu new=%zu ...\n",list->cap,new_cap);
-	node_t* new_nodes=malloc(mem_required);
+	node_t* new_nodes=realloc(list->nodes,mem_required);
 	if(!new_nodes){
 		return 1;
 	}
-	memcpy(new_nodes,list->nodes,list->cap);
-	memset(new_nodes+list->cap,255,list->cap);
+
+	memset((char*)new_nodes+padding*list->cap, 255, padding*(new_cap-list->cap));
 	list->cap=new_cap;
-	free(list->nodes);
 	list->nodes=new_nodes;
 	return 0;
 }
@@ -137,7 +135,7 @@ int list_append(list_t* list,void* obj){
 }
 
 
-
+/*
 int debug_list(list_t* list){
 	node_t* curr=list->nodes;
 
@@ -165,3 +163,4 @@ int debug_list(list_t* list){
 	}
 	return 0;
 }
+*/
