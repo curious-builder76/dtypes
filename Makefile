@@ -27,7 +27,7 @@ $(TARGET): $(OBJECTS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 .PHONY: bench
-bench:  $(BENCH_TARGETS) $(OBJECTS)
+bench: build $(BENCH_TARGETS)
 
 .PHONY: purge
 purge: clean
