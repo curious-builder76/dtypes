@@ -6,7 +6,7 @@
 #define NULL_NODE ((size_t)-1)
 
 
-// This implementation of list is merely conventional linked list.
+// This implementation of list is barely conventional linked list.
 // 
 
 
