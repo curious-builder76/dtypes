@@ -7,8 +7,6 @@
 #include "dtypes/list.h"
 #include "print.h"
 
-
-
 int main(){
 
 	puts("====benchmark of linked list====");
@@ -62,6 +60,7 @@ int main(){
 	}
 
 	start=clock();
+
 	for(size_t idx=0;idx<times;idx++){
 		size_t* got=list_get(list,times-1);
 		if( got==NULL ||  *got!=times-1){
@@ -82,8 +81,8 @@ int main(){
 	}
 	start=clock();
 	for(size_t idx=times;idx!=0;idx--){
-		if(list_delete(list,0)!=0){
-			puts("Test failed.");
+		if(list_delete(list,idx-1)!=0){
+			printf("Test failed at %zu\n",idx);
 			failure_flag=1;
 			tests_failed++;
 			break;
@@ -92,10 +91,11 @@ int main(){
 	end=clock();
 	if(!failure_flag){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
-		print_benchmark("DELETE (root element continiously)",times,time_elapsed);
+		print_benchmark("DELETE (0th element)",times,time_elapsed);
 	}
-	
-	// debug_list(list);
+
+//	test_delete();
+//	debug_list(list);
 	list_destroy(list);
 	if(tests_failed){
 		printf("%d tests failed out of %d\n",tests_failed,total_tests);

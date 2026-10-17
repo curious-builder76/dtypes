@@ -23,6 +23,7 @@ typedef struct __list{
 	size_t cap;
 	size_t tail_physical;
 	int is_full;
+	size_t length;
 	size_t last_access_logical;
 	size_t last_access_physical;
 	node_t* nodes;
@@ -71,7 +72,7 @@ void list_destroy(list_t* l){
 // Note: this isn't idiot proof. and isn't meant for the public API
 static node_t* exploit_last_access(list_t* list,size_t idx){
 	size_t distance= idx - list->last_access_logical;
-	
+
 	size_t padding=sizeof(node_t)+ list->obj_size;
 
 	size_t physical_address=list->last_access_physical;
@@ -93,13 +94,13 @@ static node_t* exploit_last_access(list_t* list,size_t idx){
 
 // Logically traverse the list.
 static node_t* get_node_at(list_t* list,size_t idx){
-	if (idx>=list->used) return NULL;
+	if (idx>=list->length) return NULL;
 	node_t* curr=list->nodes;
-	
+
 	size_t padding=sizeof(node_t)+list->obj_size;
 	if(idx>=list->last_access_logical){
 		return exploit_last_access(list,idx);
-		
+
 	}
 	size_t physical_address=0;
 	size_t logical_address=0;
@@ -195,7 +196,7 @@ int list_append(list_t* list,void* obj){
 
 	list->tail_physical=tail->next;
 	memcpy(fresh_node->buff,obj,list->obj_size);
-
+	list->length++;
 	return 0;
 }
 
@@ -215,56 +216,43 @@ int list_update(list_t* list,size_t idx,void* obj){
 
 // Delete an item from list.
 //
-// Note: this is too trusty and has bugs.
-// Don't use this.
 int list_delete(list_t* list,size_t idx){
-	if(idx>=list->used){
+	if(idx>=list->length){
 		return 1;
 	}
 	size_t padding=sizeof(node_t)+list->obj_size;
 	if(idx==0){
 		node_t* next_node=get_node_at(list,1);
+		if(!next_node){
+			memset(list->nodes,255, padding);
+			list->length--;
+			return 0;
+		}
+
 		memmove(list->nodes,next_node,padding);
 		memset(next_node,255,padding);
 		list->is_full=0;
+		list->last_access_logical=0;
+		list->last_access_physical=0;
+		list->length--;
 		return 0;
 	}
-	// Note: this has bugs. BE AWARE.
 	node_t* prev=get_node_at(list,idx-1);
 	node_t* this_node=get_node_at(list,idx);
+	node_t* tail=(node_t*)((char*)list->nodes + list->tail_physical*padding);
+		
 	prev->next=this_node->next;
+
+	if(tail==this_node){
+
+		list->tail_physical=calculate_distance(list->nodes,prev,padding);
+	}
+
 	memset(this_node, 255, padding);
 	list->is_full=0;
+	list->last_access_logical=0;
+	list->last_access_physical=0;
+	list->length--;
 	return 0;
 }
 
-/*
-
-   int debug_list(list_t* list){
-   node_t* curr=list->nodes;
-
-   printf("Object size: %zu\n",list->obj_size);
-
-   size_t logical_address=0;
-   size_t physical_address=0;
-   size_t padding=sizeof(node_t)+list->obj_size;
-   for(size_t i=0;i<100;i++){
-
-   size_t* got=(size_t*)curr->buff;
-   printf("-----------\nLogical address: %zu\n"
-   "Physical address: %zu\n"
-   "Object stored: %zu\n",
-   logical_address,
-   physical_address,
- *got
- );
- if(curr->next==NULL_NODE){
- break;
- }
- logical_address++;
- physical_address=curr->next;
- curr= (node_t*)((char*)list->nodes + padding*physical_address);
- }
- return 0;
- }
- */
