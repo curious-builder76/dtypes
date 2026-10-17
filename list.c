@@ -199,32 +199,73 @@ int list_append(list_t* list,void* obj){
 	return 0;
 }
 
-/*
-int debug_list(list_t* list){
-	node_t* curr=list->nodes;
+// Update a item on list
+int list_put(list_t* list,size_t idx,void* obj){
+	node_t* node=get_node_at(list,idx);
 
-	printf("Object size: %zu\n",list->obj_size);
-
-	size_t logical_address=0;
-	size_t physical_address=0;
-	size_t padding=sizeof(node_t)+list->obj_size;
-	for(size_t i=0;i<100;i++){
-
-		size_t* got=(size_t*)curr->buff;
-		printf("-----------\nLogical address: %zu\n"
-				"Physical address: %zu\n"
-				"Object stored: %zu\n",
-				logical_address,
-				physical_address,
-				*got
-		      );
-		if(curr->next==NULL_NODE){
-			break;
-		}
-		logical_address++;
-		physical_address=curr->next;
-		curr= (node_t*)((char*)list->nodes + padding*physical_address);
-	}
+	if(!node) return 1;
+	memcpy(node->buff,obj,list->obj_size);
 	return 0;
 }
-*/
+
+// Similar of list_put()
+int list_update(list_t* list,size_t idx,void* obj){
+	return list_put(list,idx,obj);
+}
+
+// Delete an item from list.
+//
+// Note: this is too trusty and has bugs.
+// Don't use this.
+int list_delete(list_t* list,size_t idx){
+	if(idx>=list->used){
+		return 1;
+	}
+	size_t padding=sizeof(node_t)+list->obj_size;
+	if(idx==0){
+		node_t* next_node=get_node_at(list,1);
+		memmove(list->nodes,new_node,padding);
+		memset(new_node,255,padding);
+		list->is_full=0;
+		return 0;
+	}
+
+	// Note: this has bugs. BE AWARE.
+	node_t* prev=get_node_at(list,idx-1);
+	node_t* this_node=get_node_at(list,idx);
+	prev->next=this_node->next;
+	memset(this_node, 255, padding);
+	list->is_full=0;
+	return 0;
+}
+
+
+/*
+   int debug_list(list_t* list){
+   node_t* curr=list->nodes;
+
+   printf("Object size: %zu\n",list->obj_size);
+
+   size_t logical_address=0;
+   size_t physical_address=0;
+   size_t padding=sizeof(node_t)+list->obj_size;
+   for(size_t i=0;i<100;i++){
+
+   size_t* got=(size_t*)curr->buff;
+   printf("-----------\nLogical address: %zu\n"
+   "Physical address: %zu\n"
+   "Object stored: %zu\n",
+   logical_address,
+   physical_address,
+ *got
+ );
+ if(curr->next==NULL_NODE){
+ break;
+ }
+ logical_address++;
+ physical_address=curr->next;
+ curr= (node_t*)((char*)list->nodes + padding*physical_address);
+ }
+ return 0;
+ }
+ */
