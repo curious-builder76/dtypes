@@ -17,6 +17,9 @@ typedef struct{
 	char buff[];
 }node_t;
 typedef struct __list{
+	void* (*malloc)(size_t);
+	void* (*realloc)(void*, size_t);
+	void (*free)(void*);
 	size_t obj_size;
 	size_t used;
 	size_t cap;
@@ -28,29 +31,35 @@ typedef struct __list{
 }list_t;
 
 // Create a new list.
-list_t* list_new(size_t obj_size){
+list_t* list_custom(size_t obj_size, void* (*xmalloc)(size_t), void* (*xrealloc)(void*, size_t), void (*xfree)(void*) ){
 	size_t capacity=1024;
 	size_t mem_required=(sizeof(node_t)+obj_size)*capacity;
-	list_t* l=malloc(sizeof *l);
+	list_t* l=xmalloc(sizeof *l);
 	if(!l) return l;
 	memset(l,0,sizeof *l);
-	node_t* nodes=malloc(mem_required);
+	node_t* nodes=xmalloc(mem_required);
 	if(!nodes){
-		free(l); 
+		xfree(l); 
 		return NULL;
 	}
 	memset(nodes,255,mem_required);
 	l->nodes=nodes;
 	l->cap=capacity;
 	l->obj_size=obj_size;
+	l->malloc=xmalloc;
+	l->realloc=xrealloc;
+	l->free=xfree;
 	return l;
 }
 
+list_t* list_new(size_t obj_size){
+	return list_custom(obj_size,malloc,realloc,free);
+}
 // Destroy the list.
 void list_destroy(list_t* l){
 	if(!l) return ;
-	free(l->nodes);
-	free(l);
+	l->free(l->nodes);
+	l->free(l);
 }
 
 // Well. this won't hack your computer.
@@ -123,7 +132,7 @@ int list_grow(list_t* list){
 
 	size_t mem_required=padding*new_cap;
 
-	node_t* new_nodes=realloc(list->nodes,mem_required);
+	node_t* new_nodes=list->realloc(list->nodes,mem_required);
 	if(!new_nodes){
 		return 1;
 	}
