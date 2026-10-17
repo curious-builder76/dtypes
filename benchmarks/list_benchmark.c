@@ -95,7 +95,7 @@ int main(){
 		print_benchmark("DELETE (root element continiously)",times,time_elapsed);
 	}
 	
-	debug_list(list);
+	// debug_list(list);
 	list_destroy(list);
 	if(tests_failed){
 		printf("%d tests failed out of %d\n",tests_failed,total_tests);
