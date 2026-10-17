@@ -30,7 +30,7 @@ typedef struct __list{
 
 // Create a new list.
 list_t* list_custom(size_t obj_size, void* (*xmalloc)(size_t), void* (*xrealloc)(void*, size_t), void (*xfree)(void*) ){
-	size_t capacity=1024;
+	size_t capacity=8;
 	size_t mem_required=(sizeof(node_t)+obj_size)*capacity;
 	list_t* l=xmalloc(sizeof *l);
 	if(!l) return l;
@@ -174,18 +174,6 @@ void* list_get(list_t* list,size_t idx){
 	if(!node) return NULL;
 	return node->buff;
 }
-
-int list_put(list_t* list,size_t idx,void* obj){
-	node_t* n=list_get(list,idx);
-	if(!n) return 1;
-	memcpy(n->buff,obj,list->obj_size);
-	return 0;
-}
-
-int list_update(list_t* list,size_t idx,void* obj){
-	return list_put(list,idx,obj);
-}
-
 static size_t calculate_distance(void* a,void *b, size_t padding){
 	size_t distance= (size_t)((char*)b - (char*)a);
 
@@ -210,42 +198,6 @@ int list_append(list_t* list,void* obj){
 
 	return 0;
 }
-int list_delete(list_t* list,size_t idx){
-	if(idx>=list->used){
-		return 1;
-	}
-	size_t padding=sizeof(node_t)+list->obj_size;
-	if(idx==0){
-		// Well. a task full of hassle.
-		//
-		// Grab the root node;
-		node_t* root= list->nodes; 
-
-		if(root->next==NULL_NODE){
-			// There's only one item left.
-
-			// memset(list->nodes, 0xff, padding)
-			memset(list->nodes,255, padding);
-			return 0;
-		}
-		// Grab the node next to it.
-
-		node_t* next_node=get_node_at(list,1);
-
-		// Copy the next node to root.
-		memcpy(root,next_node, padding);
-
-		// Mark the next node free.
-		memset(new_node, 255, padding);
-
-		// All set.
-		return 0
-	}
-
-	return 1;
-
-}
-
 
 /*
 int debug_list(list_t* list){
