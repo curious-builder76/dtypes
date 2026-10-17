@@ -11,31 +11,31 @@ Initializing...
 done.
 Test passed.
 PUT
-  Time: 0.005479 seconds
+  Time: 0.005574 seconds
   Operations: 1000000
-  Rate: 182.5151 M ops/sec
+  Rate: 179.4044 M ops/sec
 
 Test passed.
 ARRAY AT (iteration test)
-  Time: 0.000741 seconds
+  Time: 0.000735 seconds
   Operations: 1000000
-  Rate: 1349.5277 M ops/sec
+  Rate: 1360.5442 M ops/sec
 
 All tests passed.
 No memory leaks.
 ====benchmark of hashmap====
 Key put test
 PUT
-  Time: 2.185018 seconds
+  Time: 2.184846 seconds
   Operations: 1000000
   Rate: 0.4577 M ops/sec
 
 Test passed
 Key get test.
 GET
-  Time: 0.121148 seconds
+  Time: 0.121645 seconds
   Operations: 1000000
-  Rate: 8.2544 M ops/sec
+  Rate: 8.2206 M ops/sec
 
 Test passed.
 Busy page test.
@@ -45,15 +45,15 @@ No memory leaks.
 ====benchmark of hashset====
 Key put test
 PUT
-  Time: 2.076240 seconds
+  Time: 2.075066 seconds
   Operations: 1000000
-  Rate: 0.4816 M ops/sec
+  Rate: 0.4819 M ops/sec
 
 Key contains test
 CONTAINS
-  Time: 0.107021 seconds
+  Time: 0.108061 seconds
   Operations: 1000000
-  Rate: 9.3440 M ops/sec
+  Rate: 9.2540 M ops/sec
 
 Busy page test.
 Test passed.
@@ -63,7 +63,7 @@ No memory leaks.
 Key put test.
 Test passed.
 PUT
-  Time: 1.141200 seconds
+  Time: 1.141110 seconds
   Operations: 1000000
   Rate: 0.8763 M ops/sec
 
@@ -71,9 +71,9 @@ Nonexistent key test.
 Test passed.
 Missing entries test.
 GET
-  Time: 0.052276 seconds
+  Time: 0.060640 seconds
   Operations: 1000000
-  Rate: 19.1292 M ops/sec
+  Rate: 16.4908 M ops/sec
 
 No missing entries were found.
 Test passed.
@@ -92,45 +92,45 @@ CONTAINS: apple  -->  true
 Sequential inserts.
 Test passed
 INSERT (sequential)
-  Time: 0.071064 seconds
+  Time: 0.072135 seconds
   Operations: 1000000
-  Rate: 14.0718 M ops/sec
+  Rate: 13.8629 M ops/sec
 
 Random inserts.
 Test passed.
 INSERT (random)
-  Time: 0.211405 seconds
+  Time: 0.212013 seconds
   Operations: 1000000
-  Rate: 4.7303 M ops/sec
+  Rate: 4.7167 M ops/sec
 
 Random lookups.
 Test passed.
 CONTAINS (random)
-  Time: 0.240287 seconds
+  Time: 0.240177 seconds
   Operations: 1000000
-  Rate: 4.1617 M ops/sec
+  Rate: 4.1636 M ops/sec
 
 All tests passed.
 No memory leaks.
 ====benchmark of deque====
 1000000 sequential appends.
 APPEND
-  Time: 0.005485 seconds
+  Time: 0.005781 seconds
   Operations: 1000000
-  Rate: 182.3154 M ops/sec
+  Rate: 172.9805 M ops/sec
 
 Test passed.
 1000000 sequential pops.
 POPLEFT
-  Time: 0.002051 seconds
+  Time: 0.002046 seconds
   Operations: 1000000
-  Rate: 487.5670 M ops/sec
+  Rate: 488.7586 M ops/sec
 
 1000000 random operations.
 RANDOM OPERATIONS
-  Time: 0.011611 seconds
+  Time: 0.012151 seconds
   Operations: 1000000
-  Rate: 86.1252 M ops/sec
+  Rate: 82.2978 M ops/sec
 
 All tests passed.
 No memory leaks.
@@ -140,18 +140,18 @@ Elements: 1000000
 Iterations: 10
 
 PUT
-  Time: 0.115438 seconds
+  Time: 0.107397 seconds
   Operations: 10000000
-  Rate: 86.63 M ops/sec
+  Rate: 93.11 M ops/sec
 
 GET (inserted)
-  Time: 0.110144 seconds
+  Time: 0.100363 seconds
   Operations: 10000000
-  Rate: 90.79 M ops/sec
+  Rate: 99.64 M ops/sec
   Positive results: 10000000
 
 FALSE POSITIVE TEST
-  Time: 0.008332 seconds
+  Time: 0.007981 seconds
   Tested: 1000000
   False positives: 25830
   False-positive rate: 2.5830%
@@ -161,27 +161,27 @@ Nonexistent bit test.
 Test passed.
 Test passed
 SETBIT
-  Time: 0.000152 seconds
+  Time: 0.000185 seconds
   Operations: 100000
-  Rate: 657.8947 M ops/sec
+  Rate: 540.5405 M ops/sec
 
 Test passed
 CHEKBIT
-  Time: 0.000077 seconds
+  Time: 0.000147 seconds
   Operations: 100000
-  Rate: 1298.7013 M ops/sec
+  Rate: 680.2721 M ops/sec
 
 Test passed
 CLEARBIT
-  Time: 0.000077 seconds
+  Time: 0.000147 seconds
   Operations: 100000
-  Rate: 1298.7013 M ops/sec
+  Rate: 680.2721 M ops/sec
 
 Test passed
 100000 random operations
-  Time: 0.001166 seconds
+  Time: 0.000924 seconds
   Operations: 100000
-  Rate: 85.7633 M ops/sec
+  Rate: 108.2251 M ops/sec
 
 All tests passed.
 ====benchmark of ndarray====
@@ -190,32 +190,37 @@ Elements: 1000000
 Iterations: 10
 
 PUT
-  Time: 0.040076 seconds
+  Time: 0.037857 seconds
   Operations: 10000000
-  Rate: 249.53 M ops/sec
+  Rate: 264.15 M ops/sec
 
 GET
-  Time: 0.032190 seconds
+  Time: 0.032339 seconds
   Operations: 10000000
-  Rate: 310.66 M ops/sec
+  Rate: 309.22 M ops/sec
 
 Checksum: 4999995000000
 Expected: 4999995000000
 Passed.
 ====benchmark of linked list====
 APPEND
-  Time: 0.000988 seconds
+  Time: 0.000657 seconds
   Operations: 100000
-  Rate: 101.2146 M ops/sec
+  Rate: 152.2070 M ops/sec
 
 GET (iteration)
-  Time: 0.000149 seconds
+  Time: 0.000397 seconds
   Operations: 100000
-  Rate: 671.1409 M ops/sec
+  Rate: 251.8892 M ops/sec
 
 GET (access last element)
-  Time: 0.000111 seconds
+  Time: 0.000229 seconds
   Operations: 100000
-  Rate: 900.9009 M ops/sec
+  Rate: 436.6812 M ops/sec
+
+DELETE (0th element)
+  Time: 7.331740 seconds
+  Operations: 100000
+  Rate: 0.0136 M ops/sec
 
 All tests passed.
