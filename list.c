@@ -229,7 +229,6 @@ int list_delete(list_t* list,size_t idx){
 		list->is_full=0;
 		return 0;
 	}
-
 	// Note: this has bugs. BE AWARE.
 	node_t* prev=get_node_at(list,idx-1);
 	node_t* this_node=get_node_at(list,idx);
