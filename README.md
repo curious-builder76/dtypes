@@ -34,7 +34,6 @@ cd dtypes
 BENCH=1 PURGE=1 ./build.sh
 
 ```
-
 The above commands will create a file `libdtypes.a`
 on the directory `dtypes`.
 
@@ -227,7 +226,8 @@ and those systems may merely contain the ram required by this.
 
 The function `<name>`\_oom isn't implemented for every data type.
 
-
+## Benchmarks
+Checkout [benchmark.txt](benchmarks/benchmark.txt) 
 ## License
 
 - Apache License, Version 2.0
