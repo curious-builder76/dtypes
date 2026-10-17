@@ -9,12 +9,14 @@ typedef struct{
 	size_t next;
 	char buff[];
 }node_t;
-
 typedef struct __list{
 	size_t obj_size;
 	size_t used;
 	size_t cap;
 	size_t tail_physical;
+	int is_full;
+	size_t last_access_logical;
+	size_t last_access_physical;
 	node_t* nodes;
 }list_t;
 
@@ -45,13 +47,24 @@ void list_destroy(list_t* l){
 static node_t* get_node_at(list_t* list,size_t idx){
 	if (idx>list->cap) return NULL;
 	node_t* curr=list->nodes;
+	
 	size_t padding=sizeof(node_t)+list->obj_size;
+	if(idx==list->last_access_logical){
+		return (node_t*)((char*)list->nodes+ padding*list->last_access_physical);
+		
+	}
+	size_t physical_address=0;
+	size_t logical_address=0;
 	while(idx--){
 		if(curr->next==NULL_NODE){ 
 			return NULL;
 		}
-		curr= (node_t*)((char*)list->nodes + padding*curr->next);
+		physical_address=curr->next;
+		logical_address++;
+		curr= (node_t*)((char*)list->nodes + padding*physical_address);
 	}
+	list->last_access_logical=logical_address;
+	list->last_access_physical=physical_address;
 	return curr;
 }
 
@@ -85,12 +98,10 @@ int list_grow(list_t* list){
 // This function will return a free node from the list 
 // Incase the list is full it will create new ones and return it.
 static node_t* get_node(list_t* list){
-	if(list->used>=list->cap){
-		if(list_grow(list)!=0){
-			return NULL;
-		}
-	}
 	size_t padding=sizeof(node_t)+list->obj_size;
+	if(list->is_full){
+		goto create_node;
+	}
 	node_t* tail=(node_t*)((char*)list->nodes + padding*list->tail_physical);
 	for(size_t idx=0;idx<list->used;idx++){
 		node_t* node=(node_t*)((char*)list->nodes+padding*idx);
@@ -98,16 +109,25 @@ static node_t* get_node(list_t* list){
 			return node;
 		}
 	}
-	
+	list->is_full=1;
+create_node:
+	if(list->used>=list->cap){
+		if(list_grow(list)!=0){
+			return NULL;
+		}
+	}
 	node_t* free_node=(node_t*)((char*)list->nodes+padding*list->used);
 	list->used++;
 	return free_node;
 }
 
 void* list_get(list_t* list,size_t idx){
-	node_t* n=get_node_at(list,idx);
-	return n ? n->buff : NULL; // return null if not found.
+	node_t* node=get_node_at(list,idx);
+	if(!node) return NULL;
+	return node->buff;
 }
+
+
 
 static size_t calculate_distance(void* a,void *b, size_t padding){
 	size_t distance= (size_t)((char*)b - (char*)a);
