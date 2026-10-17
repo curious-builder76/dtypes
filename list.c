@@ -240,7 +240,7 @@ int list_delete(list_t* list,size_t idx){
 }
 
 
-/*
+
    int debug_list(list_t* list){
    node_t* curr=list->nodes;
 
@@ -268,4 +268,4 @@ int list_delete(list_t* list,size_t idx){
  }
  return 0;
  }
- */
+ 

@@ -17,7 +17,7 @@ int main(){
 	double time_elapsed;
 
 	int tests_failed=0;
-	int total_tests=3;
+	int total_tests=4;
 	int failure_flag=0;
 
 	size_t times=100000;
@@ -34,6 +34,7 @@ int main(){
 			break;
 		}
 	}
+
 	end=clock();
 	if(!failure_flag){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
@@ -79,7 +80,22 @@ int main(){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
 		print_benchmark("GET (access last element)",times,time_elapsed);
 	}
-	// debug_list(list);
+	start=clock();
+	for(size_t idx=times;idx!=0;idx--){
+		if(list_delete(list,0)!=0){
+			puts("Test failed.");
+			failure_flag=1;
+			tests_failed++;
+			break;
+		}
+	}
+	end=clock();
+	if(!failure_flag){
+		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
+		print_benchmark("DELETE (root element continiously)",times,time_elapsed);
+	}
+	
+	debug_list(list);
 	list_destroy(list);
 	if(tests_failed){
 		printf("%d tests failed out of %d\n",tests_failed,total_tests);
