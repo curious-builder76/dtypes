@@ -224,8 +224,8 @@ int list_delete(list_t* list,size_t idx){
 	size_t padding=sizeof(node_t)+list->obj_size;
 	if(idx==0){
 		node_t* next_node=get_node_at(list,1);
-		memmove(list->nodes,new_node,padding);
-		memset(new_node,255,padding);
+		memmove(list->nodes,next_node,padding);
+		memset(next_node,255,padding);
 		list->is_full=0;
 		return 0;
 	}
