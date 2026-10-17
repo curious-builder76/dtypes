@@ -5,6 +5,13 @@
 #include "dtypes/list.h"
 #define NULL_NODE ((size_t)-1)
 
+
+// This implementation of list is merely conventional linked list.
+// 
+// Plus this doesn't supports the custom allocators 
+// (Sorry, for breaking the promise.)
+
+
 typedef struct{
 	size_t next;
 	char buff[];
@@ -20,7 +27,7 @@ typedef struct __list{
 	node_t* nodes;
 }list_t;
 
-
+// Create a new list.
 list_t* list_new(size_t obj_size){
 	size_t capacity=1024;
 	size_t mem_required=(sizeof(node_t)+obj_size)*capacity;
@@ -38,19 +45,53 @@ list_t* list_new(size_t obj_size){
 	l->obj_size=obj_size;
 	return l;
 }
+
+// Destroy the list.
 void list_destroy(list_t* l){
 	if(!l) return ;
 	free(l->nodes);
 	free(l);
 }
 
+// Well. this won't hack your computer.
+//
+// this just takes advantage of recorded last access.
+//
+// as we have a contigious allocation and we are iterating over
+// a linked list. this will calculate the  distance and traverse
+// them only... rather than traversing the whole linked list which
+// is slower.
+// Note: this isn't idiot proof. and isn't meant for the public API
+static node_t* exploit_last_access(list_t* list,size_t idx){
+	size_t distance= idx - list->last_access_logical;
+	
+	size_t padding=sizeof(node_t)+ list->obj_size;
+
+	size_t physical_address=list->last_access_physical;
+	size_t logical_address=list->last_access_logical;
+
+	node_t* curr= (node_t*)((char*)list->nodes + padding*physical_address);
+	while(distance--){
+		if(curr->next==NULL_NODE){
+			return NULL;
+		}
+		physical_address=curr->next;
+		logical_address++;
+		curr= (node_t*)((char*)list->nodes + padding*physical_address);
+	}
+	list->last_access_logical=logical_address;
+	list->last_access_physical=physical_address;
+	return curr;
+}
+
+// Logically traverse the list.
 static node_t* get_node_at(list_t* list,size_t idx){
 	if (idx>list->cap) return NULL;
 	node_t* curr=list->nodes;
 	
 	size_t padding=sizeof(node_t)+list->obj_size;
-	if(idx==list->last_access_logical){
-		return (node_t*)((char*)list->nodes+ padding*list->last_access_physical);
+	if(idx>=list->last_access_logical){
+		return exploit_last_access(list,idx);
 		
 	}
 	size_t physical_address=0;
