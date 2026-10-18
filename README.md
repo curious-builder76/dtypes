@@ -226,7 +226,12 @@ and those systems may merely contain the ram required by this.
 
 The function `<name>`\_oom isn't implemented for every data type.
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md "A small and honest lecture about how can others contribute to this repostory")
+
 ## Benchmarks
+
 Checkout [benchmark/benchmark.txt](benchmarks/benchmark.txt "Benchmarked on author's  machine") 
 ## License
 
