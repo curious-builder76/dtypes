@@ -27,7 +27,7 @@ it is getting difficult for me to find all the bugs and fix them one by one.
 
 And I seriously need  contribution to maintain this well.
 
-This was never meant for the peoduction usage... but can be if you wish to contribute. this can mean for the prod usage.
+This was never meant for the production usage... but can be if you wish to contribute. this can mean for the production usage.
 
 
 This repository is simple as fuck.
