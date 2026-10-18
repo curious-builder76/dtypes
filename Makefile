@@ -1,7 +1,7 @@
 
 CC=gcc
 
-CFLAGS=-Wall -Wextra -I.. -O3 -fomit-frame-pointer -march=native  
+CFLAGS=-Wall -Wextra -I..  -ggdb
 
 LIBS=-L. -ldtypes 
 

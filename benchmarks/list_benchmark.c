@@ -7,6 +7,106 @@
 #include "dtypes/list.h"
 #include "print.h"
 
+int test_delete(){
+	list_t* list=list_new(sizeof(size_t));
+	if(!list){
+		perror("list_new()");
+		return 1;
+	}
+	for(size_t i=0;i<10;i++){
+		if(list_append(list,&i)!=0){
+			printf("Appending items failed.\n");
+			return 1;
+		}
+	}
+	puts("----Before deleting----");
+	for(size_t idx=0;idx<10;idx++){
+		size_t* got=list_get(list,idx);
+		if(got!=NULL){
+			printf("| %zu ",*got);
+		}
+	}
+	puts("");
+	for(size_t k=0;k<10;k++){
+		puts("\nDeleting 9th item.");
+		if(list_delete(list,9)!=0){
+			puts("Failed to delete\n");
+			list_destroy(list);
+			return 1;
+		}
+		puts("----After deleting----");
+		for(size_t idx=0;;idx++){
+			size_t* got=list_get(list,idx);
+			if(got!=NULL){
+				printf("| %zu ",*got);
+			}else{
+				break;
+			}
+		}
+		printf("\n----Before appending %zu----\n",k);
+		for(size_t idx=0;;idx++){
+			size_t* got=list_get(list,idx);
+			if(got!=NULL){
+				printf("| %zu ",*got);
+			}else{
+				break;
+			}
+		}
+		if(list_append(list,&k)!=0){
+			printf("Failed to append.");
+		}
+		printf("\n----After appending %zu----\n",k);
+		for(size_t idx=0;;idx++){
+			size_t* got=list_get(list,idx);
+			if(got!=NULL){
+				printf("| %zu ",*got);
+			}else{
+				break;
+			}
+		}
+	}
+	puts("");
+	size_t delete_idx=1;
+	for(size_t i=0;i<10;i++){
+		puts("----Before deleting----");
+		for(size_t idx=0;idx<10;idx++){
+			size_t* got=list_get(list,idx);
+			if(got!=NULL){
+				printf("| %zu ",*got);
+			}
+			else{
+				break;
+			}
+		}
+
+		if(list_delete(list,delete_idx)!=0){
+			printf("\nFailed to delete item: %zu\n",delete_idx);
+			debug_list(list);
+			puts("---------");
+			list_destroy(list);
+			return 1;
+		}
+
+		puts("");
+		puts("----After deleting----");
+		for(size_t idx=0;;idx++){
+			size_t* got=list_get(list,idx);
+			if(got!=NULL){
+				printf("| %zu ",*got);
+			}else{
+				break;
+
+			}
+		}
+		puts("");
+
+	}
+	list_destroy(list);
+	return 0;
+}
+
+
+
 int main(){
 
 	puts("====benchmark of linked list====");
@@ -81,7 +181,7 @@ int main(){
 	}
 	start=clock();
 	for(size_t idx=times;idx!=0;idx--){
-		if(list_delete(list,2)!=0){
+		if(list_delete(list,0)!=0){
 			printf("Test failed at %zu\n",idx);
 			failure_flag=1;
 			tests_failed++;
@@ -91,11 +191,11 @@ int main(){
 	end=clock();
 	if(!failure_flag){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
-		print_benchmark("DELETE (2nd item)",times,time_elapsed);
+		print_benchmark("DELETE (0th element)",times,time_elapsed);
 	}
 
-//	test_delete();
-//	debug_list(list);
+	test_delete();
+	debug_list(list);
 	list_destroy(list);
 	if(tests_failed){
 		printf("%d tests failed out of %d\n",tests_failed,total_tests);

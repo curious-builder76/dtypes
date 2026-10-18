@@ -257,3 +257,30 @@ int list_delete(list_t* list,size_t idx){
 	list->length--;
 	return 0;
 }
+
+int debug_list(list_t* list){
+        node_t* curr=list->nodes;
+
+        printf("Object size: %zu\n",list->obj_size);
+
+        size_t logical_address=0;
+        size_t physical_address=0;
+        size_t padding=sizeof(node_t)+list->obj_size;
+        for(size_t i=0;i<list->used;i++){
+
+                size_t* got=(size_t*)curr->buff;
+                printf("-----------\nLogical address: %zu\n"
+                                "Physical address: %zu\n"
+                                "Object stored: %zu\n",
+                                logical_address,
+                                physical_address,
+                                *got
+                      );
+		logical_address++;
+		physical_address=curr->next;
+		if(physical_address==NULL_NODE)
+			break;
+                curr= (node_t*)((char*)list->nodes +padding*physical_address);
+        }
+        return 0;
+}
