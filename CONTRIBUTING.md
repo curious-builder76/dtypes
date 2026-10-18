@@ -123,6 +123,10 @@ if someone passed `NULL` to the parameter `xmalloc`, now only C compiler and God
 
 how will a `NULL` pointer allocates memory.
 
-To sum up: The `*_custom` function gives total control of the data structure to the caller so 
+To sum up this section: The `*_custom` function gives total control of the data structure to the caller so 
 
 that they can trigger a segfault in 10 way(s) :joy:. 
+
+#### Thank you for reading this lecture. I wish that you will contribute to this repository someday.
+#### or use it in your personal projects (please don't use it in production without fixing the existing bugs,
+#### otherwise, your boss or senior may hate you).
