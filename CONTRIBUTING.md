@@ -127,6 +127,10 @@ To sum up this section: The `*_custom` function gives total control of the data 
 
 that they can trigger a segfault in 10 way(s) :joy:. 
 
+And if you wish to add such a data structures instead of creating 10 diffrent functions for 10 diffrent
+
+support; Please compress them to one.
+
 #### Thank you for reading this lecture. I wish that you will contribute to this repository someday.
 #### or use it in your personal projects (please don't use it in production without fixing the existing bugs,
 #### otherwise, your boss or senior may hate you).
