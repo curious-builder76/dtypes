@@ -227,7 +227,7 @@ and those systems may merely contain the ram required by this.
 The function `<name>`\_oom isn't implemented for every data type.
 
 ## Benchmarks
-Checkout [benchmark.txt](benchmarks/benchmark.txt "Benchmarked on author's  machine") 
+Checkout [benchmark/benchmark.txt](benchmarks/benchmark.txt "Benchmarked on author's  machine") 
 ## License
 
-- Apache License, Version 2.0
+- [Apache License, Version 2.0]( LICENSE )
