@@ -13,9 +13,9 @@ this repostory. This repository was re-created due to sensitive data leaks. (Yea
 
 You can call this a piece of hobby code if you wish to.
 
-This repository was meant to provide a collection  of common data structures used in day to day programing so that C programmers don't have to 
+This repository was meant to provide a collection  of common data structures used in day to day programing 
 
-roam repository to repository in search of a new data structure.
+so that C programmers don't have to roam repository to repository in search of a new data structure.
 
 And I admit that this code base has some serious issues and was never meant for the production i.e. (the [hashmap](hashmap.c "Source file of hashmap.c in this repo") vulnerable to hash flooding).
 
