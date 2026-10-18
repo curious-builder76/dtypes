@@ -1,0 +1,183 @@
+rm -f *.o
+rm -f benchmarks/bench_*
+gcc -Wall -Wextra -I..  -ggdb -c array.c -o array.o
+gcc -Wall -Wextra -I..  -ggdb -c bitset.c -o bitset.o
+gcc -Wall -Wextra -I..  -ggdb -c bloom.c -o bloom.o
+gcc -Wall -Wextra -I..  -ggdb -c deque.c -o deque.o
+gcc -Wall -Wextra -I..  -ggdb -c hash_function.c -o hash_function.o
+gcc -Wall -Wextra -I..  -ggdb -c hashmap.c -o hashmap.o
+gcc -Wall -Wextra -I..  -ggdb -c hashset.c -o hashset.o
+gcc -Wall -Wextra -I..  -ggdb -c list.c -o list.o
+gcc -Wall -Wextra -I..  -ggdb -c lookup.c -o lookup.o
+gcc -Wall -Wextra -I..  -ggdb -c ndarray.c -o ndarray.o
+gcc -Wall -Wextra -I..  -ggdb -c trie.c -o trie.o
+ar rcs libdtypes.a array.o bitset.o bloom.o deque.o hash_function.o hashmap.o hashset.o list.o lookup.o ndarray.o trie.o
+gcc -Wall -Wextra -I..  -ggdb  benchmarks/list_benchmark.c -L. -ldtypes  -o benchmarks/bench_list
+benchmarks/bench_list
+====benchmark of linked list====
+APPEND
+  Time: 0.001262 seconds
+  Operations: 100000
+  Rate: 79.2393 M ops/sec
+
+GET (iteration)
+  Time: 0.001268 seconds
+  Operations: 100000
+  Rate: 78.8644 M ops/sec
+
+GET (access last element)
+  Time: 0.000605 seconds
+  Operations: 100000
+  Rate: 165.2893 M ops/sec
+
+DELETE (0th element)
+  Time: 0.000860 seconds
+  Operations: 100000
+  Rate: 116.2791 M ops/sec
+
+----Before deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
+
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 0----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 0----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 0 
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 1----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 1----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 1 
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 2----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 2----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 2 
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 3----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 3----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 3 
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 4----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 4----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 4 
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 5----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 5----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 5 
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 6----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 6----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 6 
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 7----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 7----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 7 
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 8----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 8----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 8 
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 9----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 9----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
+----Before deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
+----After deleting----
+| 0 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
+----Before deleting----
+| 0 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
+----After deleting----
+| 0 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
+----Before deleting----
+| 0 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
+----After deleting----
+| 0 | 4 | 5 | 6 | 7 | 8 | 9 
+----Before deleting----
+| 0 | 4 | 5 | 6 | 7 | 8 | 9 
+----After deleting----
+| 0 | 5 | 6 | 7 | 8 | 9 
+----Before deleting----
+| 0 | 5 | 6 | 7 | 8 | 9 
+----After deleting----
+| 0 | 6 | 7 | 8 | 9 
+----Before deleting----
+| 0 | 6 | 7 | 8 | 9 
+----After deleting----
+| 0 | 7 | 8 | 9 
+----Before deleting----
+| 0 | 7 | 8 | 9 
+----After deleting----
+| 0 | 8 | 9 
+----Before deleting----
+| 0 | 8 | 9 
+----After deleting----
+| 0 | 9 
+----Before deleting----
+| 0 | 9 
+----After deleting----
+| 0 
+----Before deleting----
+| 0 
+Failed to delete item: 1
+Object size: 8
+-----------
+Logical address: 0
+Physical address: 0
+Object stored: 0
+---------
+| 0 | 1 | 999997 | 999998 | 999999 
+Object size: 8
+-----------
+Logical address: 0
+Physical address: 0
+Object stored: 0
+-----------
+Logical address: 1
+Physical address: 1
+Object stored: 1
+-----------
+Logical address: 2
+Physical address: 999997
+Object stored: 999997
+-----------
+Logical address: 3
+Physical address: 999998
+Object stored: 999998
+-----------
+Logical address: 4
+Physical address: 999999
+Object stored: 999999
+Object size: 8
+-----------
+Logical address: 0
+Physical address: 0
+Object stored: 18446744073709551615
+All tests passed.

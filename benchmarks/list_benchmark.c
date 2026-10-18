@@ -106,6 +106,50 @@ int test_delete(){
 }
 
 
+int test_list(){
+	list_t* list=list_new(sizeof(size_t));
+	if(!list) return 1;
+
+	// append items from 0 to 999999
+	// So the list shall look like
+	// | 0 | 1 | 2 | 3 | ... | 99999 |
+	for(size_t idx=0;idx<1000000;idx++){
+		if(list_append(list,&idx)!=0){
+			printf("Failed to append item %zu\n",idx);
+		}
+	}
+	// If append is working correct then this shall too.
+	for(size_t idx=0;idx<1000000;idx++){
+		size_t* got=list_get(list,idx);
+		if(got !=NULL && *got!=idx){
+			printf("Append is broken.");
+			list_destroy(list);
+			return 1;
+		}
+	}
+	// This is python equivalent of
+	// for i in range(999995):
+	//   del list[i]
+	for(size_t idx=0;idx<999995;idx++){
+		if(list_delete(list,2)!=0){
+			printf("Failed to delete 2nd item.");
+		}
+	}
+	for(size_t idx=0;;idx++){
+		size_t* got=list_get(list,idx);
+		if(got!=NULL){
+			printf("| %zu ",*got);
+		}else{
+			break;
+
+		}
+	}
+
+	puts("");
+	debug_list(list);
+	list_destroy(list);
+	return 0;
+}
 
 int main(){
 
@@ -195,6 +239,7 @@ int main(){
 	}
 
 	test_delete();
+	test_list();
 	debug_list(list);
 	list_destroy(list);
 	if(tests_failed){
