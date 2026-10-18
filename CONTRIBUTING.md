@@ -121,7 +121,7 @@ The `*_custom` function doesn't gives a fuck
 
 if someone passed `NULL` to the parameter `xmalloc`, now only C compiler and God knows
 
-how will a `NULL` pointer allocates memory.
+how will a `NULL` pointer allocate memory.
 
 To sum up this section: The `*_custom` function gives total control of the data structure to the caller so 
 
