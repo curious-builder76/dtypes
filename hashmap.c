@@ -23,7 +23,6 @@ typedef struct __hashmap_struct{
 	size_t value_size;
 	uint64_t (*hash_function)(void* ,  size_t, void* ); 
 	void* (*malloc)(size_t);
-	void* (*realloc)(void*, size_t);
 	void (*free)(void*);
 	int (*compare)(const void*, const void* , size_t  );
 	void* user_data;
@@ -40,6 +39,13 @@ static bucket_t* get_bucket0(hashmap_t* map,size_t idx){
 
 	return (bucket_t*)((char*)map->table + bucket_size*idx);
 }
+
+
+static uint64_t default_hash_function(char* key, size_t size, void* user_data){
+	(void)user_data;
+	return djb_hash(key, size);
+}
+
 hashmap_t* hashmap_custom(size_t table_size,size_t bucket_capacity,size_t key_size, size_t value_size,
 		uint64_t (*hash_function)(void*, size_t, void* ),
 		int (*compare)(const void*, const void* ,size_t),
@@ -83,6 +89,16 @@ hashmap_t* hashmap_custom(size_t table_size,size_t bucket_capacity,size_t key_si
 	return map;
 
 }
+
+hashmap_t* hashmap_new(size_t key_size, size_t value_size){
+	return hashmap_custom( 8, 64, 
+			key_size, value_size, 
+			default_hash_function, 
+			memcmp, malloc, free,
+			NULL);
+
+}
+
 void* hashmap_get_data(hashmap_t* map,void* key){
 	uint64_t hash=map->hash_function(key,map->key_size,map->user_data);
 
@@ -95,7 +111,9 @@ void* hashmap_get_data(hashmap_t* map,void* key){
 	for(size_t idx=0; idx< bucket->used; idx++){
 		size_t distance= sizeof(bucket_t) + record_size*idx;
 		record_t* record= (record_t*)((char*)bucket + distance);
-		// printf("hash=%lu key=%s value=%s map->compare(my_key, requested_key, map->key_size)=%d\n",record->hash,key,value,map->compare(record->data,key,map->key_size));
+		// printf("hash=%lu key=%s value=%s" 
+		// "map->compare(my_key, requested_key, map->key_size)=%d\n",
+		// record->hash,key,value,map->compare(record->data,key,map->key_size));
 		if(record->hash==hash && map->compare(record->data, key, map->key_size)==0){
 			return record->data;
 		}
