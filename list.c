@@ -215,27 +215,22 @@ int list_update(list_t* list,size_t idx,void* obj){
 }
 
 
-
 // Delete an item from list.
-//
+
+
 int list_delete(list_t* list,size_t idx){
 	if(idx>=list->length){
 		return 1;
 	}
-	// Bugs exist.
 	size_t padding=sizeof(node_t)+list->obj_size;
 	if(idx==0){
 		node_t* next_node=get_node_at(list,1);
 		if(!next_node){
-			// Case:
-			// | 0 | end 
 			memset(list->nodes,255, padding);
 			list->length--;
 			return 0;
 		}
 
-		// Case: 
-		// | 0 | 1 | ... | end 
 		memmove(list->nodes,next_node,padding);
 		memset(next_node,255,padding);
 		list->is_full=0;
@@ -247,39 +242,23 @@ int list_delete(list_t* list,size_t idx){
 	node_t* prev=get_node_at(list,idx-1);
 	node_t* this_node=get_node_at(list,idx);
 	node_t* tail=(node_t*)((char*)list->nodes + list->tail_physical*padding);
+		
+	prev->next=this_node->next;
 
-	if(this_node!=tail){
-		// Middle part.
-		//
-		// Case:
-		// | 0 | 1 | ... | prev | this_node | ... | end
-		prev->next=this_node->next;
-		memset(tail, 255, padding);
-		list->length--;
-		return 0;
+	if(tail==this_node){
+
+		list->tail_physical=calculate_distance(list->nodes,prev,padding);
 	}
-	if(list->length==2){
-		// Only head and tail exist.
-		// Case:
-		// | 0 (head) | ... | 1 (tail)  | 
-		memset(tail, 255, padding);
-		list->nodes->next=NULL_NODE;
-		list->length--;
-		list->last_access_logical=0;
-		list->last_access_physical=0;
-		return 0;
-	}
-	// Case:
-	// | 0 | ... | 2 | ... | 0xfff (tail)
-	//
-	printf("Operation at tail.");
-	memmove(this_node,prev, padding);
-	this_node->next=NULL_NODE;
+
+	memset(this_node, 255, padding);
+	list->is_full=0;
+	list->last_access_logical=0;
+	list->last_access_physical=0;
 	list->length--;
-
 	return 0;
 }
 
+/*
 int debug_list(list_t* list){
         node_t* curr=list->nodes;
 
@@ -305,4 +284,4 @@ int debug_list(list_t* list){
                 curr= (node_t*)((char*)list->nodes +padding*physical_address);
         }
         return 0;
-}
+}*/

@@ -7,24 +7,46 @@
 #include "dtypes/hashset.c"
 #include "test_alloc.h"
 
+void* prepare_data(size_t times, size_t input_size){
+	size_t mem_required=times*input_size;
 
+	char* memory=malloc(mem_required);
+	if(!memory){
+		return NULL;
+	}
+	memset(memory,0,mem_required);
+	size_t pos=0;
+	for(size_t idx=0;idx<times;idx++){
+		char* ptr=memory+pos;
+		sprintf(ptr,"key_%zu",idx);
+		pos+=input_size;
+	}
+
+	return memory;
+}
 void benchmark(){
 
 	hashset_debug("====benchmark of hashset====");
-	char key[32];
+	size_t key_size=32;
 	hashset_t* set;
 	do{
 		set=hashset_custom(
 			512,
-			sizeof(key),
+			key_size,
 			NULL,
 			memcmp,
 			xmalloc,
 			xfree
 			);
 	}
-	while(set==NULL);	
+	while(set==NULL);
 	int times=5000000;
+	char* data=prepare_data(times,key_size);
+	if(!data){
+		hashset_destroy(set);
+		printf("Failed to prepare data\n");
+		return;
+	}
 
 	int tests_failed=0;
 	
@@ -34,8 +56,7 @@ void benchmark(){
 	hashset_debug("Key put test");
 	start=clock();
 	for(int i=0;i<times;i++){
-		memset(key,0,sizeof(key));
-		sprintf(key,"key_%d",i);
+		char* key=data + key_size*i;
 		int ret=hashset_put(set,key);
 		if(ret!=0){
 			hashset_debug("Failed after %d keys",i);
@@ -57,8 +78,7 @@ void benchmark(){
 	hashset_debug("Key contains test");
 	start=clock();
 	for(int i=0;i<times;i++){
-		memset(key,0,sizeof(key));
-		sprintf(key,"key_%d",i);
+		char* key=data+ i*key_size;
 		int ret=hashset_contains(set,key);
 		if(!ret){
 			hashset_debug("Failed after %d keys",i);

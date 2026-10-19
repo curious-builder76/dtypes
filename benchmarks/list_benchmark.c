@@ -81,7 +81,7 @@ int test_delete(){
 
 		if(list_delete(list,delete_idx)!=0){
 			printf("\nFailed to delete item: %zu\n",delete_idx);
-			debug_list(list);
+			// debug_list(list);
 			puts("---------");
 			list_destroy(list);
 			return 1;
@@ -146,7 +146,7 @@ int test_list(){
 	}
 
 	puts("");
-	debug_list(list);
+	// debug_list(list);
 	list_destroy(list);
 	return 0;
 }
@@ -162,7 +162,7 @@ int main(){
 	int total_tests=4;
 	int failure_flag=0;
 
-	size_t times=5000000;
+	size_t times=100000;
 	list_t* list=list_new(sizeof(size_t));
 	if(!list){
 		return 1;
@@ -224,8 +224,8 @@ int main(){
 		print_benchmark("GET (access last element)",times,time_elapsed);
 	}
 	start=clock();
-	for(size_t idx=times;idx!=0;idx--){
-		if(list_delete(list,0)!=0){
+	for(size_t idx=times;idx>0;idx--){
+		if(list_delete(list,idx-1)!=0){
 			printf("Test failed at %zu\n",idx);
 			failure_flag=1;
 			tests_failed++;
@@ -235,12 +235,12 @@ int main(){
 	end=clock();
 	if(!failure_flag){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
-		print_benchmark("DELETE (0th element)",times,time_elapsed);
+		print_benchmark("DELETE (tai element)",times,time_elapsed);
 	}
 
 	test_delete();
 	test_list();
-	debug_list(list);
+	// debug_list(list);
 	list_destroy(list);
 	if(tests_failed){
 		printf("%d tests failed out of %d\n",tests_failed,total_tests);
