@@ -73,17 +73,17 @@ void benchmark(){
 	}else{
 		hashset_debug("Test failed.");
 	}
-	int busy_pages=0;
+	size_t busy_pages=0;
 	hashset_debug("Busy page test.");
-	for(uint32_t idx=0;idx<set->table_size;idx++){
+	for(size_t idx=0;idx<set->table_size;idx++){
 		spage_t* page=set->pages+idx;
 		if(page->used>=page->capacity){
-			hashset_debug("Page: %u is busy page.",idx);
+			hashset_debug("Page: %zu is busy page.",idx);
 			busy_pages++;
 		}
 	}
 	if(busy_pages){
-		hashset_debug("Found %u busy pages out of %u pages",busy_pages,set->table_size);
+		hashset_debug("Found %zu busy pages out of %zu pages",busy_pages,set->table_size);
 		tests_failed++;
 	}else{
 		hashset_debug("Test passed.");

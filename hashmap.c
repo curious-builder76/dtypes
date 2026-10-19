@@ -1,347 +1,263 @@
-#ifndef __HASHMAP_IMPL
-
-#define __HASHMAP_IMPL
-
-#include<stdlib.h>
-#include<string.h>
 #include<stdint.h>
-
-#ifdef __HASHMAP_DEBUG
-
+#include<string.h>
+#include<stdlib.h>
 #include<stdio.h>
-
-#define debug(...) do{\
-	fprintf(stderr,__VA_ARGS__);\
-	fprintf(stderr,"\n");\
-}while(0)
-#else
-#define debug(...)
-#endif
-
-
 #include "dtypes/hashmap.h"
 
-#include "dtypes/hash_function.h"
-
-
-/*
- * A generic page based hashmap which is friendlier to CPU cache
- * for general purpose.
- */
-
-
-/*
- * mrecord_t and mpage_t are bound structures of 
- * hashmap_t and are internally managed by 
- * hashmap_* functions.
- */
 
 typedef struct{
-	uint32_t hash; // cached hash.
-	char* key;
-	char* value;
-}mrecord_t;
+	uint64_t hash;
+	unsigned char data[];
+}record_t;
 
 typedef struct{
-	uint32_t used;
-	uint32_t capacity;
-	mrecord_t* records;
-}mpage_t;
+	size_t used;
+	size_t min_hash_seen;
+	size_t max_hash_seen;
+}bucket_t;
 
 typedef struct __hashmap_struct{
-	char oom;
-	uint32_t table_size;
-	uint32_t key_size;
-	uint32_t value_size;
-	uint32_t page_size;
+	size_t bucket_capacity;
+	size_t table_size;
+	size_t key_size;
+	size_t value_size;
+	uint64_t (*hash_function)(void* ,  size_t, void* ); 
 	void* (*malloc)(size_t);
+	void* (*realloc)(void*, size_t);
 	void (*free)(void*);
-	int (*compare)(const void*,const void*, size_t);
-	uint32_t (*hash)(void* , uint32_t);
-	mpage_t* pages;
+	int (*compare)(const void*, const void* , size_t  );
+	void* user_data;
+	bucket_t* table;
 }hashmap_t;
 
-//
-// Memory Ownership Note:
-// Everything passed to hashmap gets
-// copied in it and hashmap owns it 
-// for it's life time.
 
+static bucket_t* get_bucket0(hashmap_t* map,size_t idx){
+	size_t block_size=map->key_size+ map->value_size;
 
-void* hashmap_memdup(hashmap_t* map,void* src,uint32_t size){
-	void* dst=map->malloc(size);
-	if(dst!=NULL)
-		memcpy(dst,src,size);
-	return dst;
+	size_t record_size= sizeof(record_t) + block_size;
+
+	size_t bucket_size= sizeof(bucket_t) + record_size*map->bucket_capacity;
+
+	return (bucket_t*)((char*)map->table + bucket_size*idx);
 }
-
-// Initialize a page.
-
-int mpage_init(hashmap_t* map,mpage_t* page,uint32_t capacity){
-	mrecord_t* records=map->malloc(sizeof(mrecord_t)*capacity);
-	if(records==NULL)
-		return 1;
-	page->records=records;
-	page->used=0;
-	page->capacity=capacity;
-	return 0;
-}
-
-// Push an object to the page.
-// Returns a non zero number upon failure.
-//
-
-int mpage_push(mpage_t* page,mrecord_t rec){
-	if(page->used>=page->capacity){
-		debug("Failed to push record with hash %u",rec.hash);
-		return -1;
-	}
-	page->records[page->used++]=rec;
-	return 0;
-}
-
-
-// Free the resources acquired by page.
-
-void mpage_destroy(hashmap_t* map,mpage_t* page){
-	map->free(page->records);
-	page->records=NULL;
-}
-
-// hashmap_custom allows an user to
-// fine tune a hashmap as much possible by the API.
-
-hashmap_t* hashmap_custom(
-		uint32_t page_size,
-		uint32_t key_size,
-		uint32_t value_size,
-		uint32_t (*hash_function)(void* ,uint32_t),
-		int (*compare)(const void*, const void*,size_t),
+hashmap_t* hashmap_custom(size_t table_size,size_t bucket_capacity,size_t key_size, size_t value_size,
+		uint64_t (*hash_function)(void*, size_t, void* ),
+		int (*compare)(const void*, const void* ,size_t),
 		void* (*xmalloc)(size_t),
-		void (*xfree)(void*)
-		)
+		void (*xfree)(void*),
+		void* user_data)
+
+
 {
-	hashmap_t* map=NULL;
-	mpage_t* pages=NULL;
-	
-	map=xmalloc(sizeof(hashmap_t));
-	if(map==NULL)
-		goto hashmap_custom_failed;
-	map->page_size=page_size;
+	hashmap_t* map=xmalloc(sizeof(hashmap_t));
+	if(!map)
+		return NULL;
+
+	memset(map, 0, sizeof *map);
+	size_t block_size= key_size+ value_size;
+
+	size_t record_size= sizeof(record_t)+ block_size;
+
+	size_t bucket_size= sizeof(bucket_t) + record_size * bucket_capacity;
+
+	size_t total_memory=bucket_size*table_size;
+
+	bucket_t* table= xmalloc(total_memory);
+
+	if(!table){
+		xfree(map);
+		return NULL;
+	}
+	memset(table,0, total_memory);
+
+	map->bucket_capacity=bucket_capacity;
+	map->table_size=table_size;
 	map->key_size=key_size;
 	map->value_size=value_size;
 	map->malloc=xmalloc;
 	map->free=xfree;
-	if(hash_function==NULL)
-		hash_function=djb_hash;
-	map->hash=hash_function;
 	map->compare=compare;
-	
-	map->table_size=512;
-
-	pages=xmalloc(sizeof(mpage_t)*map->table_size);
-	if(pages==NULL)
-		goto hashmap_custom_failed;
-
-	map->pages=pages;
-
-	for(uint32_t idx=0;idx<map->table_size;idx++){
-		if(mpage_init(map,pages+idx,page_size)==0)
-			continue;
-		while(idx>0){
-			idx--;
-			mpage_destroy(map,pages+idx);
-		}
-		goto hashmap_custom_failed;
-	}
+	map->user_data=user_data;
+	map->hash_function=hash_function;
+	map->table=table;
 	return map;
-hashmap_custom_failed:
-	if(pages!=NULL)
-		xfree(pages);
-	if(map!=NULL)
-		xfree(map);
-	return NULL;
+
 }
-//
-// hashmap_new is built in the top of 
-// hashmap_custom which is made for ease of use.
-hashmap_t* hashmap_new(
-		uint32_t page_size,
-		uint32_t key_size,
-		uint32_t value_size,
-		uint32_t (*hash_function)(void* , uint32_t),
-		int (*compare)(const void*, const void* ,size_t )
-		)
-{
-	compare=compare ? compare : memcmp;
-	return hashmap_custom(
-			page_size,
-			key_size,
-			value_size,
-			hash_function,
-			compare,
-			malloc,
-			free
-			);
-}
+void* hashmap_get_data(hashmap_t* map,void* key){
+	uint64_t hash=map->hash_function(key,map->key_size,map->user_data);
 
-// Increase the capacity of hashmap by doubling it's key size.
-// and also redistribute it's records based on the new size.
+	size_t bucket_idx= (size_t)hash % map->table_size;
+	// printf("hashmap_get(): I am looking for: %zu, (as per hash) %lu\n",bucket_idx,hash); 
+	size_t record_size= sizeof(record_t)+ map->key_size+ map->value_size;
 
-int hashmap_grow(hashmap_t* map){
-	map->oom=1; // Assume guilty unless proven innocent.
-	uint32_t old_tablesize=map->table_size;
-	uint32_t new_tablesize=old_tablesize*2;
-	mpage_t* pages=map->malloc(sizeof(mpage_t)*new_tablesize);
-	mpage_t* old_pages=map->pages;
-	if(pages==NULL){
-		return 1;
-	}
-	for(uint32_t idx=0;idx<new_tablesize;idx++){
-		if(mpage_init(map,pages+idx,map->page_size)==0)
-			continue;
-		while(idx>0){
-			idx--;
-			mpage_destroy(map,pages+idx);
-		}
-		goto hashmap_grow_failed;
-	}
-	for(uint32_t idx=0;idx<old_tablesize;idx++){
-		mpage_t* old_page=map->pages+idx;
-		for(uint32_t j=0;j<old_page->used;j++){
-			mrecord_t rec=old_page->records[j];
-			uint32_t hash=rec.hash;
-			uint32_t index=hash% new_tablesize;
-			mpage_push(pages+index,rec);
-			
-		}
-	}
-	while(old_tablesize){
-		old_tablesize--;
-		mpage_destroy(map,old_pages+old_tablesize);
-	}
-	map->free(old_pages);
-	map->pages=pages;
-	map->table_size=new_tablesize;
-	map->oom=0;
-	return 0;
-hashmap_grow_failed:
-	if(pages!=NULL)
-		map->free(pages);
-	return 1;
-}
+	bucket_t* bucket=get_bucket0(map,bucket_idx);
 
-// Return a non zero number if the last operation was failed because of OOM (Out of memory).
-int hashmap_oom(hashmap_t* map){
-	return (int) map->oom;
-}
-
-// Returns a non zero number if the given hashmap
-// has a page 90% full.
-
-int hashmap_has_hot_page(hashmap_t* map){
-	for(uint32_t idx=0;idx<map->table_size;idx++){
-		mpage_t* page=map->pages+idx;
-		double load_factor= (double) page->used / (double) page->capacity;
-		if (load_factor>=0.9)
-			return 1;
-	}
-	return 0;
-}
-
-// Returns the corresponding value assigned to key if found.
-// Or returns null. 
-void* hashmap_get(hashmap_t* map,void* key){
-	uint32_t hash=map->hash(key,map->key_size);
-	uint32_t index= hash % map->table_size;
-	mpage_t* page=map->pages+index;
-	for(uint32_t idx=0;idx<page->used;idx++){
-		mrecord_t* rec=page->records+idx;
-		if(rec->hash==hash && map->compare(key,rec->key,map->key_size)==0){
-			return rec->value;
+	for(size_t idx=0; idx< bucket->used; idx++){
+		size_t distance= sizeof(bucket_t) + record_size*idx;
+		record_t* record= (record_t*)((char*)bucket + distance);
+		// printf("hash=%lu key=%s value=%s map->compare(my_key, requested_key, map->key_size)=%d\n",record->hash,key,value,map->compare(record->data,key,map->key_size));
+		if(record->hash==hash && map->compare(record->data, key, map->key_size)==0){
+			return record->data;
 		}
 	}
 	return NULL;
 }
 
-// Assigns value to key inside the given hashmap.
-// Or update it's value if a key already exists.
+void* hashmap_get(hashmap_t* map, void* key){
+	char* data= hashmap_get_data(map,key);
+	if(!data) return NULL;
 
-int hashmap_put(hashmap_t* map,void* key,void* value){
-	if(hashmap_has_hot_page(map)){
-		if(hashmap_grow(map)!=0)
-			return 1;
-	}
-	char* ret_value=hashmap_get(map,key);
-	if(ret_value!=NULL){
-		memcpy(ret_value,value,map->value_size);
-		return 0;
-	}
-	key=hashmap_memdup(map,key,map->key_size);
-	value=hashmap_memdup(map,value,map->value_size);
-	if(key==NULL || value==NULL)
-		goto hashmap_put_failed;
-	uint32_t hash=map->hash(key,map->key_size);
-	mrecord_t record={
-		hash,
-		key,
-		value
-	};
-	uint32_t index= hash % map->table_size;
-
-	mpage_t* page=map->pages+index;
-	if(mpage_push(page,record)!=0)
-		goto hashmap_put_failed;
-	return 0;
-hashmap_put_failed:
-	if(key!=NULL)
-		map->free(key);
-	if(value!=NULL)
-		map->free(value);
-	return 1;
+	return data+map->key_size;
 }
 
-// Delete a key from hashmap.
 
-int hashmap_delete(hashmap_t* map,void* key){
-	uint32_t hash= map->hash(key,map->key_size);
-	uint32_t index= hash % map->table_size;
-	mpage_t* page=map->pages+index;
-	char found=0;
-	uint32_t idx=0;
-	for(;idx<page->used;idx++){
-		mrecord_t* rec=page->records+idx;
-		if(rec->hash==hash && map->compare(rec->key,key,map->key_size)==0){
-			found=1;
-			break;
+
+int hashmap_put0(hashmap_t* map, void* key,void* value){
+
+	uint64_t hash=map->hash_function(key,map->key_size,map->user_data);
+
+	size_t casted_hash= (size_t) hash;
+
+	size_t bucket_idx= casted_hash % map->table_size;
+
+	size_t record_size= sizeof(record_t) + map->key_size + map->value_size;
+
+	bucket_t* bucket= get_bucket0(map, bucket_idx);
+
+	if(bucket->used>=map->bucket_capacity){
+		return 1;
+	}
+
+	size_t min_hash=bucket->min_hash_seen;
+	size_t max_hash=bucket->max_hash_seen;
+
+	// This fellow techinque works on the belief that 
+	// if a hash function  say H(x) returns 10x 
+	// then in future it will also return 10X for the object x
+	//
+	// If 10x is less than min or more than max, means we have never seen that
+	//
+	// this comes handy when the table is too big and empty.
+	//
+	//
+	// So it skips the hard work and takes a short cut. that's it. :-)
+	//
+	//
+	//
+	if( min_hash > casted_hash){
+		// printf("Yes, this dumb optimization works. (min_hash hit)!\n");
+		min_hash=casted_hash;
+		goto insert_new;
+	}
+	if( max_hash < casted_hash){
+		// printf("Yes, this dumb optimization works.(max_hash hit)!\n");
+		max_hash=casted_hash;
+		goto insert_new;
+	}
+
+	for(size_t idx=0;idx<bucket->used;idx++){
+		size_t distance=sizeof(bucket_t) + record_size*idx;
+
+		record_t* record= (record_t*)((char*)bucket + distance);
+
+		if(record->hash==hash && 0==map->compare(key, record->data, map->key_size)){
+			// Overwrite.
+			memcpy(record->data+map->key_size, value, map->value_size);
+			return 0;
 		}
 	}
-	if(!found)
-		return 1;
-	mrecord_t* tmp=page->records+idx;
-	map->free(tmp->key);
-	map->free(tmp->value);
-	page->records[idx]=page->records[page->used-1];
-	page->used--;
+
+insert_new:
+	// Insert a new one.
+	bucket->max_hash_seen=max_hash;
+	bucket->min_hash_seen=min_hash;
+	size_t distance= sizeof(bucket_t) + record_size*bucket->used;
+	bucket->used++;
+	record_t* record = (record_t*)((char*)bucket + distance);
+	record->hash=hash;
+	memcpy(record->data, key, map->key_size);
+	memcpy(record->data+map->key_size, value, map->value_size);
 	return 0;
 }
 
-// Release the resourses aquired by hashmap.
+int hashmap_grow(hashmap_t* map,size_t new_size){
 
+	hashmap_t* map2 = hashmap_custom(
+			new_size, map->bucket_capacity, 
+			map->key_size, map->value_size, map->hash_function,
+			map->compare, map->malloc, map->free,
+			map->user_data);
+	if(!map2){
+		return 1;
+	}
+
+	size_t record_size= sizeof(record_t) + map->key_size + map->value_size;
+
+	for(size_t idx=0;idx<map->table_size; idx++){
+		bucket_t* bucket=get_bucket0(map,idx);
+		for(size_t bucket_idx=0;bucket_idx<bucket->used;bucket_idx++){
+			record_t* record = (record_t*)((char*)bucket + sizeof(bucket_t) + record_size* bucket_idx);
+			unsigned char* key= record->data;
+			unsigned char* value= key + map->key_size;
+			if(hashmap_put0(map2,key,value)!=0){
+				hashmap_destroy(map2);
+				return 1;
+			}
+		}
+	}
+	map->free(map->table);
+	memcpy(map, map2, sizeof(hashmap_t));
+	map2->free(map2);
+	return 0;
+}
+
+
+int hashmap_put(hashmap_t* map, void* key, void* value){
+	for(size_t idx=0;idx<5;idx++){
+		if(hashmap_put0(map, key, value)==0){
+			return 0;
+		}
+		if(hashmap_grow(map, map->table_size*2)!=0){
+			return 1;
+		}
+	}
+	return 1;
+}
 void hashmap_destroy(hashmap_t* map){
-	while(map->table_size){
-		map->table_size--;
-		mpage_t* page=map->pages+map->table_size;
-		for(uint32_t idx=0;idx<page->used;idx++){
-			mrecord_t* rec=page->records+idx;
-			map->free(rec->key);
-			map->free(rec->value);
-		}
-		mpage_destroy(map,page);
-	}
-	map->free(map->pages);
+	if(!map) return;
+
+	map->free(map->table);
 	map->free(map);
 }
+/*
+void* debug_hashmap(hashmap_t* map){
+	printf("Hashmap metadata: \n"
+			"Key size: %zu\n"
+			"Value size: %zu\n"
+			"Table size: %zu\n"
+			"Bucket capacity(fixed till life time): %zu\n"
+			"---------------------------------------\n",
+			map->key_size,
+			map->value_size,
+			map->table_size,
+			map->bucket_capacity
+			);
+	size_t record_size= sizeof(record_t)+ map->key_size+ map->value_size;
+	for(size_t bucket_idx=0;bucket_idx<map->table_size; bucket_idx++){
+		bucket_t* bucket=get_bucket0(map,bucket_idx);
+		printf("bucket %zu: \n",bucket_idx);
+		for(size_t idx=0; idx< bucket->used; idx++){
+			size_t distance= sizeof(bucket_t) + record_size*idx;
+			record_t* record= (record_t*)((char*)bucket + distance);
+			unsigned char* key= record->data;
+			unsigned char* value= key + map->key_size;
+			printf(" key=%s | value=%s |",key,value);
+		}
+		puts("\n-----------------------------------------");
 
 
-#endif
+	}
+	return NULL;
+}
+*/
+

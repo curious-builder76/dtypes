@@ -27,7 +27,7 @@
 // srecord_t is a record containing a cached hash of
 // it's record.
 typedef struct{
-	uint32_t hash;
+	uint64_t hash;
 	char* record;
 }srecord_t;
 
@@ -35,8 +35,8 @@ typedef struct{
 // capacity of "capacity" throughout it's lifetime.
 
 typedef struct{
-	uint32_t used;
-	uint32_t capacity;
+	size_t used;
+	size_t capacity;
 	srecord_t* records;
 }spage_t;
 
@@ -45,14 +45,14 @@ typedef struct{
 //
 typedef struct{
 	char oom;
-	uint32_t table_size;
-	uint32_t page_size;
-	uint32_t element_size;
+	size_t table_size;
+	size_t page_size;
+	size_t element_size;
 
 	void* (*malloc)(size_t);
 	void (*free)(void*);
 	int (*cmp)(const void* , const void*, size_t );
-	uint32_t (*hash)(void*, uint32_t);
+	uint64_t (*hash)(void*, uint64_t);
 	
 	spage_t* pages;
 }hashset_t;
@@ -64,7 +64,7 @@ typedef struct{
 
 
 
-void* hashset_memdup(hashset_t* set,void* buff,uint32_t size){
+void* hashset_memdup(hashset_t* set,void* buff,size_t size){
         char* memptr=set->malloc(size);
         if(memptr==NULL)
                 return NULL;
@@ -75,7 +75,7 @@ void* hashset_memdup(hashset_t* set,void* buff,uint32_t size){
 
 // Initialze a page.
 
-int spage_init(hashset_t* set,spage_t* page,uint32_t capacity){
+int spage_init(hashset_t* set,spage_t* page,size_t capacity){
 	srecord_t* records=set->malloc(sizeof(srecord_t)*capacity);
 	if(records==NULL)
 		return 1;
@@ -90,7 +90,7 @@ int spage_init(hashset_t* set,spage_t* page,uint32_t capacity){
 
 int spage_push(spage_t* page,srecord_t record){
        if(page->used>=page->capacity){
-	       hashset_debug("Failed to push record with hash %u",record.hash);
+	       hashset_debug("Failed to push record with hash %lu",record.hash);
 	       return 1;
        }
        page->records[page->used++]=record;
@@ -110,9 +110,9 @@ void spage_destroy(hashset_t* set,spage_t* page){
 // and much more fine tuning
 
 hashset_t* hashset_custom(
-		uint32_t page_size,
-		uint32_t element_size,
-		uint32_t (*hash_function)(void*,uint32_t),
+		size_t page_size,
+		size_t element_size,
+		uint64_t (*hash_function)(void*,uint64_t),
 		int (*compare)(const void* , const void*, size_t ),
 		void* (*xmalloc)(size_t),
 		void (*xfree)(void*)
@@ -139,7 +139,7 @@ hashset_t* hashset_custom(
 	if(pages==NULL)
 
 		goto hashset_custom_failed;
-	for(uint32_t idx=0;idx<set->table_size;idx++){
+	for(size_t idx=0;idx<set->table_size;idx++){
 		if(spage_init(set,pages+idx,page_size)==0)
 			continue;
 		while(idx--){
@@ -162,9 +162,9 @@ hashset_custom_failed:
 // on the top of hashset_custom.
 
 hashset_t* hashset_new(
-		uint32_t page_size,
-		uint32_t element_size,
-		uint32_t (*hash_function)(void*, uint32_t),
+		size_t page_size,
+		size_t element_size,
+		uint64_t (*hash_function)(void*, uint64_t),
 		int (*compare)(const void* ,const void*, size_t)
 		)
 {
@@ -184,7 +184,7 @@ hashset_t* hashset_new(
 // the given hashset
 
 int hashset_has_busy_page(hashset_t* set){
-        for(uint32_t i=0;i<set->table_size;i++){
+        for(size_t i=0;i<set->table_size;i++){
                 spage_t* page=set->pages+i;
                 double load_factor= (double) page->used / (double) page->capacity;
                 if(load_factor>=0.9)
@@ -198,24 +198,24 @@ int hashset_has_busy_page(hashset_t* set){
 
 int hashset_grow(hashset_t* set){
 	set->oom=1;
-        uint32_t old_capacity=set->table_size;
-        uint32_t new_capacity=old_capacity*2;
+        size_t old_capacity=set->table_size;
+        size_t new_capacity=old_capacity*2;
         spage_t* old_pages=set->pages;
 
         spage_t* new_pages=set->malloc(sizeof(spage_t)*new_capacity);
         if(new_pages==NULL)
                 goto hashset_grow_failed;
-        for(uint32_t idx=0;idx<new_capacity;idx++){
+        for(size_t idx=0;idx<new_capacity;idx++){
                 if(spage_init(set,new_pages+idx,set->page_size)==0)
                         continue;
                 goto hashset_grow_failed;
         }
-        for(uint32_t i=0;i<old_capacity;i++){
+        for(size_t i=0;i<old_capacity;i++){
                 spage_t* old_page=old_pages+i;
-                for(uint32_t j=0;j<old_page->used;j++){
+                for(size_t j=0;j<old_page->used;j++){
 			srecord_t rec=old_page->records[j];
-                        uint32_t hash=rec.hash;
-                        uint32_t index=hash%new_capacity;
+                        uint64_t hash=rec.hash;
+                        uint64_t index=hash%new_capacity;
                         spage_t* new_page=new_pages+index;
                         if(spage_push(new_page,rec)!=0){
 				goto hashset_grow_failed;
@@ -258,8 +258,8 @@ int hashset_put(hashset_t* set,void* obj){
 	if(objdup==NULL)
 		return 1;
 
-        uint32_t hash=set->hash(obj,set->element_size);
-        uint32_t index=hash % set->table_size;
+        uint64_t hash=set->hash(obj,set->element_size);
+        uint64_t index=hash % set->table_size;
         spage_t* page=set->pages+index;
 
 	srecord_t rec={
@@ -278,12 +278,12 @@ int hashset_put(hashset_t* set,void* obj){
 //  and compare operator.
 
 int hashset_contains(hashset_t* set,void* obj){
-        uint32_t hash=set->hash(obj,set->element_size);
-        uint32_t index=hash % set->table_size;
+        uint64_t hash=set->hash(obj,set->element_size);
+        uint64_t index=hash % set->table_size;
 
         spage_t* page=set->pages+index;
 
-        for(uint32_t idx=0;idx<page->used;idx++){
+        for(size_t idx=0;idx<page->used;idx++){
 		srecord_t* rec=page->records+idx;
 		if(rec->hash==hash && set->cmp(obj,rec->record,set->element_size)==0)
 			return 1;
@@ -295,7 +295,7 @@ void hashset_destroy(hashset_t* set){
 	while(set->table_size){
 		set->table_size--;
 		spage_t* page=set->pages+set->table_size;
-		for(uint32_t idx=0;idx<page->used;idx++){
+		for(size_t idx=0;idx<page->used;idx++){
 			srecord_t* rec=page->records+idx;
 			set->free(rec->record);
 		}

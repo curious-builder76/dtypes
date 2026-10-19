@@ -22,9 +22,9 @@
 // lookup_* and lpage_* functions.
 
 typedef struct{
-	uint32_t used;
-	uint32_t capacity;
-	uint32_t* hashes;
+	size_t used;
+	size_t capacity;
+	uint64_t* hashes;
 }lpage_t;
 
 
@@ -36,12 +36,12 @@ typedef struct{
 
 typedef struct __lookup_struct{
 	char oom;
-	uint32_t (*hash)(void*, uint32_t);
+	uint64_t (*hash)(void*, uint64_t);
 	void* (*malloc)(size_t);
 	void (*free)(void*);
-	uint32_t page_size;
-	uint32_t element_size;
-	uint32_t table_size;
+	size_t page_size;
+	size_t element_size;
+	size_t table_size;
 	lpage_t* pages;
 }lookup_t;
 
@@ -49,9 +49,9 @@ typedef struct __lookup_struct{
 
 // Initialize a page
 
-int lpage_init(lookup_t* look,lpage_t* lpage,uint32_t capacity){
-	uint32_t* hashes=NULL;
-	hashes=look->malloc(sizeof(uint32_t)*capacity);
+int lpage_init(lookup_t* look,lpage_t* lpage,size_t capacity){
+	uint64_t* hashes=NULL;
+	hashes=look->malloc(sizeof(uint64_t)*capacity);
 	if(hashes==NULL)
 		goto lpage_new_failed;
 	lpage->used=0;
@@ -70,8 +70,8 @@ lpage_new_failed:
 // return zero upon failure or else a non zero
 // on sucess.
 
-int lpage_has(lpage_t* page,uint32_t hash){
-	for(uint32_t idx=0;idx<page->used;idx++){
+int lpage_has(lpage_t* page,uint64_t hash){
+	for(size_t idx=0;idx<page->used;idx++){
 		if(page->hashes[idx]==hash){
 			return 1;
 		}
@@ -85,7 +85,7 @@ int lpage_has(lpage_t* page,uint32_t hash){
 // a non zero integer indicating 
 // failure.
 
-int lpage_push(lpage_t* page,uint32_t hash){
+int lpage_push(lpage_t* page,uint64_t hash){
 	if(page->used>=page->capacity)
 		return 1;
 	if(lpage_has(page,hash)){
@@ -105,9 +105,9 @@ void lpage_destroy(lookup_t* look,lpage_t* page){
 // as much allowed by the API.
 
 lookup_t*  lookup_custom(
-		uint32_t element_size,
-		uint32_t page_size,
-		uint32_t (*hash_function)(void*, uint32_t),
+		size_t element_size,
+		size_t page_size,
+		uint64_t (*hash_function)(void*, uint64_t),
 		void* (*xmalloc)(size_t),
 		void (*xfree)(void*)
 		)
@@ -129,7 +129,7 @@ lookup_t*  lookup_custom(
 	if(pages==NULL)
 		goto lookup_new_failed;
 	look->pages=pages;
-	uint32_t i=0;
+	size_t i=0;
 	for(;i<look->table_size;i++){
 		if(lpage_init(look,look->pages+i,page_size)==0)
 			continue;
@@ -153,9 +153,9 @@ lookup_new_failed:
 // Uses default functions 
 
 lookup_t* lookup_new(
-		uint32_t element_size,
-		uint32_t page_size,
-		uint32_t (*hash_function)(void*, uint32_t)
+		size_t element_size,
+		size_t page_size,
+		uint64_t (*hash_function)(void*, uint64_t)
 		)
 {
 	return lookup_custom(
@@ -171,7 +171,7 @@ lookup_t* lookup_new(
 // "lookup" is 90% full or zero otherwise.
 //
 int lookup_has_hot_bucket(lookup_t* look){
-	for(uint32_t i=0;i<look->table_size;i++){
+	for(size_t i=0;i<look->table_size;i++){
 		lpage_t* page=look->pages+i;
 		double load_factor= (double) page->used / (double) page->capacity;
 		if(load_factor>=0.9)
@@ -184,14 +184,14 @@ int lookup_has_hot_bucket(lookup_t* look){
 // and re-distributing it's hashes.
 int lookup_grow(lookup_t* look){
 	look->oom=1;
-	uint32_t old_capacity=look->table_size;
-	uint32_t new_capacity=old_capacity*2;
+	size_t old_capacity=look->table_size;
+	size_t new_capacity=old_capacity*2;
 	lpage_t* old_pages=look->pages;
 	
 	lpage_t* new_pages=look->malloc(sizeof(lpage_t)*new_capacity);
 	if(new_pages==NULL)
 		goto lookup_grow_failed;
-	for(uint32_t idx=0;idx<new_capacity;idx++){
+	for(size_t idx=0;idx<new_capacity;idx++){
 		if(lpage_init(look,new_pages+idx,look->page_size)==0)
 			continue;
 		while(idx--){
@@ -199,11 +199,11 @@ int lookup_grow(lookup_t* look){
 		}
 		goto lookup_grow_failed;
 	}
-	for(uint32_t i=0;i<old_capacity;i++){
+	for(size_t i=0;i<old_capacity;i++){
 		lpage_t* old_page=old_pages+i;
-		for(uint32_t j=0;j<old_page->used;j++){
-			uint32_t hash=old_page->hashes[j];
-			uint32_t index=hash%new_capacity;
+		for(size_t j=0;j<old_page->used;j++){
+			uint64_t hash=old_page->hashes[j];
+			uint64_t index=hash%new_capacity;
 			lpage_t* new_page=new_pages+index;
 			lpage_push(new_page,hash);
 		}
@@ -236,8 +236,8 @@ int lookup_add(lookup_t* look,void* obj){
 		if(lookup_grow(look)!=0)
 			return 1;
 
-	uint32_t hash=look->hash(obj,look->element_size);
-	uint32_t index=hash % look->table_size;
+	uint64_t hash=look->hash(obj,look->element_size);
+	uint64_t index=hash % look->table_size;
 	lpage_t* page=look->pages+index;
 	return lpage_push(page,hash);
 }
@@ -247,8 +247,8 @@ int lookup_add(lookup_t* look,void* obj){
 // provided hash function or zero otherwise.
 
 int lookup_contains(lookup_t* look,void* obj){
-	uint32_t hash=look->hash(obj,look->element_size);
-	uint32_t index=hash % look->table_size;
+	uint64_t hash=look->hash(obj,look->element_size);
+	uint64_t index=hash % look->table_size;
 
 	lpage_t* page=look->pages+index;
 

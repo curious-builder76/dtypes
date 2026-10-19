@@ -28,7 +28,7 @@ typedef struct __hashset_struct hashset_t;
 hashset_t* hashset_custom(
 		uint32_t page_size,
 		uint32_t element_size,
-		uint32_t (*hash_function)(void*,uint32_t),
+		uint32_t (*hash_function)(void*, size_t),
 		int (*compare)(const void* , const void*, size_t ),
 		void* (*xmalloc)(size_t),
 		void (*xfree)(void*)

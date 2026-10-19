@@ -12,7 +12,7 @@ typedef struct __lookup_struct lookup_t;
 lookup_t*  lookup_custom(
 		uint32_t element_size,
 		uint32_t page_size,
-		uint32_t (*hash_function)(void*, uint32_t),
+		uint32_t (*hash_function)(void*, size_t),
 		void* (*xmalloc)(size_t),
 		void (*xfree)(void*)
 		);
@@ -20,7 +20,7 @@ lookup_t*  lookup_custom(
 lookup_t* lookup_new(
 		uint32_t element_size,
 		uint32_t page_size,
-		uint32_t (*hash_function)(void*, uint32_t)
+		uint32_t (*hash_function)(void*, size_t)
 		);
 
 
