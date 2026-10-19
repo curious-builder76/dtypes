@@ -122,7 +122,7 @@ void benchmark(){
 	debug("Sequential inserts.");
 
 	int tests_failed=0;
-	int times=1000000;
+	int times=5000000;
 	clock_t start;
 	clock_t end;
 	double time_elapsed;

@@ -21,7 +21,7 @@ typedef struct{
 
 void benchmark(){
 	log("==== benchmark of array====");
-	uint32_t times=1000000;
+	uint32_t times=5000000;
 	
 	digit_t* digits=malloc(sizeof(digit_t)*times);
 	if(digits==NULL){

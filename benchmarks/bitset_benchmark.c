@@ -46,8 +46,8 @@
 
 void benchmark(){
 	debug("====benchmark of bitset====");
-	// Create an bitset of 10000 bits
-	int times=100000;
+	// Create an bitset of 5000000 bits
+	int times=5000000;
 	bitset_t* bitset;
 	do{
 		bitset=bitset_new(times);
@@ -76,7 +76,8 @@ void benchmark(){
 		perror("bitset_new()");
 		return;
 	}
-	BENCHMARK("100000 random operations",
+	BENCHMARK("5000000 random operations",
+
 			CODE_BLOCK(
 				switch(random() % 3){
 				case 0:

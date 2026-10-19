@@ -34,7 +34,7 @@ void benchmark(){
 	debug("Key put test.");
 	int broke=0;
 	int tests_failed=0;
-	int times=1000000;
+	int times=5000000;
 	int inner_loop_iterates=100;
 	int outer_loop_iterates=times/inner_loop_iterates;
 	clock_t start;

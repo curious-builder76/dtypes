@@ -11,49 +11,72 @@ Initializing...
 done.
 Test passed.
 PUT
-  Time: 0.005574 seconds
-  Operations: 1000000
-  Rate: 179.4044 M ops/sec
+  Time: 0.025748 seconds
+  Operations: 5000000
+  Rate: 194.1898 M ops/sec
 
 Test passed.
 ARRAY AT (iteration test)
-  Time: 0.000735 seconds
-  Operations: 1000000
-  Rate: 1360.5442 M ops/sec
+  Time: 0.003667 seconds
+  Operations: 5000000
+  Rate: 1363.5124 M ops/sec
 
 All tests passed.
 No memory leaks.
 ====benchmark of hashmap====
 Key put test
+Initial table size: 1024
+Key size: 32
+Value size: 32
+Bucket capacity (lifetime constant): 64
 PUT
-  Time: 2.184846 seconds
-  Operations: 1000000
-  Rate: 0.4577 M ops/sec
+  Time: 1.159738 seconds
+  Operations: 5000000
+  Rate: 4.3113 M ops/sec
 
 Test passed
 Key get test.
 GET
-  Time: 0.121645 seconds
-  Operations: 1000000
-  Rate: 8.2206 M ops/sec
+  Time: 0.725892 seconds
+  Operations: 5000000
+  Rate: 6.8881 M ops/sec
 
 Test passed.
-Busy page test.
-No busy pages were found
+All tests passed.
+No memory leaks.
+====benchmark of hashmap (comparable to tidwall)====
+Key put test
+Initial table size: 1024
+Key size: 4
+Value size: 4
+Bucket capacity (lifetime constant): 64
+PUT
+  Time: 0.395095 seconds
+  Operations: 5000000
+  Rate: 12.6552 M ops/sec
+
+Test passed
+Key get test.
+GET
+  Time: 0.181768 seconds
+  Operations: 5000000
+  Rate: 27.5076 M ops/sec
+
+Test passed.
 All tests passed.
 No memory leaks.
 ====benchmark of hashset====
 Key put test
 PUT
-  Time: 2.075066 seconds
-  Operations: 1000000
-  Rate: 0.4819 M ops/sec
+  Time: 40.724371 seconds
+  Operations: 5000000
+  Rate: 0.1228 M ops/sec
 
 Key contains test
 CONTAINS
-  Time: 0.108061 seconds
-  Operations: 1000000
-  Rate: 9.2540 M ops/sec
+  Time: 0.732160 seconds
+  Operations: 5000000
+  Rate: 6.8291 M ops/sec
 
 Busy page test.
 Test passed.
@@ -63,17 +86,17 @@ No memory leaks.
 Key put test.
 Test passed.
 PUT
-  Time: 1.141110 seconds
-  Operations: 1000000
-  Rate: 0.8763 M ops/sec
+  Time: 7.466879 seconds
+  Operations: 5000000
+  Rate: 0.6696 M ops/sec
 
 Nonexistent key test.
 Test passed.
 Missing entries test.
 GET
-  Time: 0.060640 seconds
-  Operations: 1000000
-  Rate: 16.4908 M ops/sec
+  Time: 0.344734 seconds
+  Operations: 5000000
+  Rate: 14.5039 M ops/sec
 
 No missing entries were found.
 Test passed.
@@ -92,45 +115,45 @@ CONTAINS: apple  -->  true
 Sequential inserts.
 Test passed
 INSERT (sequential)
-  Time: 0.072135 seconds
-  Operations: 1000000
-  Rate: 13.8629 M ops/sec
+  Time: 0.362506 seconds
+  Operations: 5000000
+  Rate: 13.7929 M ops/sec
 
 Random inserts.
 Test passed.
 INSERT (random)
-  Time: 0.212013 seconds
-  Operations: 1000000
-  Rate: 4.7167 M ops/sec
+  Time: 1.722036 seconds
+  Operations: 5000000
+  Rate: 2.9035 M ops/sec
 
 Random lookups.
 Test passed.
 CONTAINS (random)
-  Time: 0.240177 seconds
-  Operations: 1000000
-  Rate: 4.1636 M ops/sec
+  Time: 1.667301 seconds
+  Operations: 5000000
+  Rate: 2.9989 M ops/sec
 
 All tests passed.
 No memory leaks.
 ====benchmark of deque====
-1000000 sequential appends.
+5000000 sequential appends.
 APPEND
-  Time: 0.005781 seconds
-  Operations: 1000000
-  Rate: 172.9805 M ops/sec
+  Time: 0.032294 seconds
+  Operations: 5000000
+  Rate: 154.8275 M ops/sec
 
 Test passed.
-1000000 sequential pops.
+5000000 sequential pops.
 POPLEFT
-  Time: 0.002046 seconds
-  Operations: 1000000
-  Rate: 488.7586 M ops/sec
+  Time: 0.010159 seconds
+  Operations: 5000000
+  Rate: 492.1744 M ops/sec
 
-1000000 random operations.
+5000000 random operations.
 RANDOM OPERATIONS
-  Time: 0.012151 seconds
-  Operations: 1000000
-  Rate: 82.2978 M ops/sec
+  Time: 0.060257 seconds
+  Operations: 5000000
+  Rate: 82.9779 M ops/sec
 
 All tests passed.
 No memory leaks.
@@ -140,18 +163,18 @@ Elements: 1000000
 Iterations: 10
 
 PUT
-  Time: 0.107397 seconds
+  Time: 0.109483 seconds
   Operations: 10000000
-  Rate: 93.11 M ops/sec
+  Rate: 91.34 M ops/sec
 
 GET (inserted)
-  Time: 0.100363 seconds
+  Time: 0.102449 seconds
   Operations: 10000000
-  Rate: 99.64 M ops/sec
+  Rate: 97.61 M ops/sec
   Positive results: 10000000
 
 FALSE POSITIVE TEST
-  Time: 0.007981 seconds
+  Time: 0.008105 seconds
   Tested: 1000000
   False positives: 25830
   False-positive rate: 2.5830%
@@ -161,27 +184,27 @@ Nonexistent bit test.
 Test passed.
 Test passed
 SETBIT
-  Time: 0.000185 seconds
-  Operations: 100000
-  Rate: 540.5405 M ops/sec
+  Time: 0.005330 seconds
+  Operations: 5000000
+  Rate: 938.0863 M ops/sec
 
 Test passed
 CHEKBIT
-  Time: 0.000147 seconds
-  Operations: 100000
-  Rate: 680.2721 M ops/sec
+  Time: 0.003733 seconds
+  Operations: 5000000
+  Rate: 1339.4053 M ops/sec
 
 Test passed
 CLEARBIT
-  Time: 0.000147 seconds
-  Operations: 100000
-  Rate: 680.2721 M ops/sec
+  Time: 0.003776 seconds
+  Operations: 5000000
+  Rate: 1324.1525 M ops/sec
 
 Test passed
-100000 random operations
-  Time: 0.000924 seconds
-  Operations: 100000
-  Rate: 108.2251 M ops/sec
+5000000 random operations
+  Time: 0.043107 seconds
+  Operations: 5000000
+  Rate: 115.9904 M ops/sec
 
 All tests passed.
 ====benchmark of ndarray====
@@ -190,37 +213,186 @@ Elements: 1000000
 Iterations: 10
 
 PUT
-  Time: 0.037857 seconds
+  Time: 0.038260 seconds
   Operations: 10000000
-  Rate: 264.15 M ops/sec
+  Rate: 261.37 M ops/sec
 
 GET
-  Time: 0.032339 seconds
+  Time: 0.032887 seconds
   Operations: 10000000
-  Rate: 309.22 M ops/sec
+  Rate: 304.07 M ops/sec
 
 Checksum: 4999995000000
 Expected: 4999995000000
 Passed.
 ====benchmark of linked list====
 APPEND
-  Time: 0.000657 seconds
-  Operations: 100000
-  Rate: 152.2070 M ops/sec
+  Time: 0.025265 seconds
+  Operations: 5000000
+  Rate: 197.9022 M ops/sec
 
 GET (iteration)
-  Time: 0.000397 seconds
-  Operations: 100000
-  Rate: 251.8892 M ops/sec
+  Time: 0.009370 seconds
+  Operations: 5000000
+  Rate: 533.6179 M ops/sec
 
 GET (access last element)
-  Time: 0.000229 seconds
-  Operations: 100000
-  Rate: 436.6812 M ops/sec
+  Time: 0.008370 seconds
+  Operations: 5000000
+  Rate: 597.3716 M ops/sec
 
 DELETE (0th element)
-  Time: 7.331740 seconds
-  Operations: 100000
-  Rate: 0.0136 M ops/sec
+  Time: 0.019037 seconds
+  Operations: 5000000
+  Rate: 262.6464 M ops/sec
 
+----Before deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
+
+Deleting 9th item.
+Operation at tail.----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 0----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 0----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 8 
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 1----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 1----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 18446744073709551615 
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 2----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 2----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 18446744073709551615 
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 3----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 3----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 18446744073709551615 
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 4----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 4----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 18446744073709551615 
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 5----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 5----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 18446744073709551615 
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 6----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 6----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 18446744073709551615 
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 7----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 7----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 18446744073709551615 
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 8----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 8----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 18446744073709551615 
+Deleting 9th item.
+----After deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----Before appending 9----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
+----After appending 9----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 18446744073709551615 
+----Before deleting----
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 18446744073709551615 
+----After deleting----
+| 0 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 18446744073709551615 
+----Before deleting----
+| 0 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 18446744073709551615 
+----After deleting----
+| 0 | 3 | 4 | 5 | 6 | 7 | 8 | 18446744073709551615 
+----Before deleting----
+| 0 | 3 | 4 | 5 | 6 | 7 | 8 | 18446744073709551615 
+----After deleting----
+| 0 | 4 | 5 | 6 | 7 | 8 | 18446744073709551615 
+----Before deleting----
+| 0 | 4 | 5 | 6 | 7 | 8 | 18446744073709551615 
+----After deleting----
+| 0 | 5 | 6 | 7 | 8 | 18446744073709551615 
+----Before deleting----
+| 0 | 5 | 6 | 7 | 8 | 18446744073709551615 
+----After deleting----
+| 0 | 6 | 7 | 8 | 18446744073709551615 
+----Before deleting----
+| 0 | 6 | 7 | 8 | 18446744073709551615 
+----After deleting----
+| 0 | 7 | 8 | 18446744073709551615 
+----Before deleting----
+| 0 | 7 | 8 | 18446744073709551615 
+----After deleting----
+| 0 | 8 | 18446744073709551615 
+----Before deleting----
+| 0 | 8 | 18446744073709551615 
+----After deleting----
+| 0 | 18446744073709551615 
+----Before deleting----
+| 0 | 18446744073709551615 
+----After deleting----
+| 0 
+----Before deleting----
+| 0 
+Failed to delete item: 1
+Object size: 8
+-----------
+Logical address: 0
+Physical address: 0
+Object stored: 0
+-----------
+Logical address: 1
+Physical address: 19
+Object stored: 18446744073709551615
+---------
+| 0 | 1 | 999997 | 999998 | 18446744073709551615 
+Object size: 8
+-----------
+Logical address: 0
+Physical address: 0
+Object stored: 0
+-----------
+Logical address: 1
+Physical address: 1
+Object stored: 1
+-----------
+Logical address: 2
+Physical address: 999997
+Object stored: 999997
+-----------
+Logical address: 3
+Physical address: 999998
+Object stored: 999998
+-----------
+Logical address: 4
+Physical address: 999999
+Object stored: 18446744073709551615
+Object size: 8
+-----------
+Logical address: 0
+Physical address: 0
+Object stored: 18446744073709551615
 All tests passed.

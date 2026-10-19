@@ -162,7 +162,7 @@ int main(){
 	int total_tests=4;
 	int failure_flag=0;
 
-	size_t times=100000;
+	size_t times=5000000;
 	list_t* list=list_new(sizeof(size_t));
 	if(!list){
 		return 1;

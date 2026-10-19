@@ -24,7 +24,7 @@ void benchmark(){
 			);
 	}
 	while(set==NULL);	
-	int times=1000000;
+	int times=5000000;
 
 	int tests_failed=0;
 	

@@ -16,7 +16,7 @@ void benchmark(){
 	deque_t* deque=NULL;
 	while(!deque)
 		deque=deque_custom(sizeof(int),xmalloc,xfree);
-	int times=1000000;
+	int times=5000000;
 	clock_t start;
 	clock_t end;
 	double time_elapsed;
