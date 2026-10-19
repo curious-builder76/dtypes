@@ -82,17 +82,13 @@ Example:
 
 
 int main(){
-    uint32_t page_size=512; // Page size is the size allocated to one "page" of the map. 
-                            // Even if you don't understand what a "page" is;
-                            // Just understand that the smaller the page size. the faster the 
-                            // lookups and the slower the "put" operations.
 
     uint32_t key_size=6;   // The hashmap was intended to be generic. so it allows
                            // diffrent sized key value pairs, 
                            // here "key_size" and "value_size" are used for demonstration.
                            // but you are supposed to use sizeof(key) and sizeof(value)
     uint32_t value_size=6;
-    hashmap_t* map=hashmap_new( page_size, key_size, value_size, NULL, memcmp);
+    hashmap_t* map=hashmap_new(key_size, value_size);
     if(!map){
         perror("");
         return 1;

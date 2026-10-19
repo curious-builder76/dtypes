@@ -25,8 +25,8 @@ hashmap_t* hashmap_custom(size_t table_size,size_t bucket_capacity,size_t key_si
 		void (*xfree)(void*),
 		void* user_data);
 hashmap_t* hashmap_new(
-		size_t page_size,
-		size_t key_size
+		size_t key_size,
+		size_t value_size
 		);
 
 int hashmap_oom(hashmap_t* map);
