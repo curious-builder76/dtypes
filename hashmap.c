@@ -3,7 +3,7 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include "dtypes/hashmap.h"
-
+#include "dtypes/hash_function.h"
 
 typedef struct{
 	uint64_t hash;
@@ -42,7 +42,7 @@ static bucket_t* get_bucket0(hashmap_t* map,size_t idx){
 }
 
 
-static uint64_t default_hash_function(char* key, size_t size, void* user_data){
+static uint64_t default_hash_function(void* key, size_t size, void* user_data){
 	(void)user_data;
 	return djb_hash(key, size);
 }
@@ -219,7 +219,7 @@ int hashmap_delete(hashmap_t* map, void* key){
 	record_t* record;
 	for(;idx<bucket->used;idx++){
 		record= (record_t*)((char*)bucket + sizeof(bucket_t) + record_size*idx);
-		if(record->hash==hash && map->comare(record->buff, key, map->key_size)==0){
+		if(record->hash==hash && map->compare(record->data, key, map->key_size)==0){
 			found=1;
 			break;
 		}
@@ -266,7 +266,7 @@ int hashmap_grow(hashmap_t* map,size_t new_size){
 }
 
 int hashmap_oom(hashmap_t* map){
-	return map->oom;
+	return map->oom_flag;
 }
 
 int hashmap_put(hashmap_t* map, void* key, void* value){
