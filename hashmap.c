@@ -21,6 +21,7 @@ typedef struct __hashmap_struct{
 	size_t table_size;
 	size_t key_size;
 	size_t value_size;
+	int oom_flag;
 	uint64_t (*hash_function)(void* ,  size_t, void* ); 
 	void* (*malloc)(size_t);
 	void (*free)(void*);
@@ -198,6 +199,41 @@ insert_new:
 	return 0;
 }
 
+int hashmap_delete(hashmap_t* map, void* key){
+	uint64_t hash=map->hash_function(key, map->key_size, map->user_data);
+
+	size_t hash_casted=(size_t)hash;
+
+	size_t bucket_idx= hash % map->table_size;
+
+	size_t record_size=sizeof(record_t) + map->key_size + map->value_size;
+
+	bucket_t* bucket=get_bucket0(map,bucket_idx);
+
+	if(!bucket->used) return 1;
+	
+	if(bucket->min_hash_seen > hash_casted || bucket->max_hash_seen < hash_casted)
+		return 1;
+	size_t idx=0;
+	char found=0;
+	record_t* record;
+	for(;idx<bucket->used;idx++){
+		record= (record_t*)((char*)bucket + sizeof(bucket_t) + record_size*idx);
+		if(record->hash==hash && map->comare(record->buff, key, map->key_size)==0){
+			found=1;
+			break;
+		}
+	}
+	if(!found) return 1;
+
+	record_t* last_record=(record_t*)((char*)bucket + bucket->used-1);
+	memmove(record, last_record, record_size);
+	bucket->used--;
+
+	return 0;
+
+}
+
 int hashmap_grow(hashmap_t* map,size_t new_size){
 
 	hashmap_t* map2 = hashmap_custom(
@@ -229,8 +265,12 @@ int hashmap_grow(hashmap_t* map,size_t new_size){
 	return 0;
 }
 
+int hashmap_oom(hashmap_t* map){
+	return map->oom;
+}
 
 int hashmap_put(hashmap_t* map, void* key, void* value){
+	map->oom_flag=0;
 	for(size_t idx=0;idx<5;idx++){
 		if(hashmap_put0(map, key, value)==0){
 			return 0;
@@ -239,6 +279,7 @@ int hashmap_put(hashmap_t* map, void* key, void* value){
 			return 1;
 		}
 	}
+	map->oom_flag=1;
 	return 1;
 }
 void hashmap_destroy(hashmap_t* map){
