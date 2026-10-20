@@ -105,9 +105,11 @@ Does it happen? if yes follow the last step.
 
 #### 3.
 
-Open a pull request explaining what is the bug
+Open a pull request explaining what is the bug with the code 
 
-Which additions or removal of code will fix it.
+that reproduces that specific bug found;
+
+along with the solution i.e which additions or removal of code will fix it.
 
 Please note: If it is a very serious vulnerablity rather than a bug
 
