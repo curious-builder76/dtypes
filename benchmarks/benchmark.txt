@@ -11,15 +11,15 @@ Initializing...
 done.
 Test passed.
 PUT
-  Time: 0.026264 seconds
+  Time: 0.025760 seconds
   Operations: 5000000
-  Rate: 190.3747 M ops/sec
+  Rate: 194.0994 M ops/sec
 
 Test passed.
 ARRAY AT (iteration test)
-  Time: 0.003716 seconds
+  Time: 0.003679 seconds
   Operations: 5000000
-  Rate: 1345.5328 M ops/sec
+  Rate: 1359.0650 M ops/sec
 
 All tests passed.
 No memory leaks.
@@ -30,16 +30,16 @@ Key size: 32
 Value size: 32
 Bucket capacity (lifetime constant): 64
 PUT
-  Time: 1.164138 seconds
+  Time: 1.161794 seconds
   Operations: 5000000
-  Rate: 4.2950 M ops/sec
+  Rate: 4.3037 M ops/sec
 
 Test passed
 Key get test.
 GET
-  Time: 0.723184 seconds
+  Time: 0.726683 seconds
   Operations: 5000000
-  Rate: 6.9139 M ops/sec
+  Rate: 6.8806 M ops/sec
 
 Test passed.
 All tests passed.
@@ -52,52 +52,53 @@ Value size: 4
 Murmur hash seed (constant seed): 1792419563
 Bucket capacity (lifetime constant): 64
 PUT
-  Time: 0.663181 seconds
+  Time: 0.666252 seconds
   Operations: 5000000
-  Rate: 7.5394 M ops/sec
+  Rate: 7.5047 M ops/sec
 
 Test passed
 Key get test.
 GET
-  Time: 0.464296 seconds
+  Time: 0.464943 seconds
   Operations: 5000000
-  Rate: 10.7690 M ops/sec
+  Rate: 10.7540 M ops/sec
 
 Test passed.
 All tests passed.
 No memory leaks.
 ====benchmark of hashset====
 Key put test
+Initial table size: 8
+Object size: 32
+Bucket capacity (lifetime constant): 64
+Hash function(default): djb hash
 PUT
-  Time: 40.525565 seconds
+  Time: 0.952424 seconds
   Operations: 5000000
-  Rate: 0.1234 M ops/sec
+  Rate: 5.2498 M ops/sec
 
 Key contains test
 CONTAINS
-  Time: 0.633952 seconds
+  Time: 0.653650 seconds
   Operations: 5000000
-  Rate: 7.8870 M ops/sec
+  Rate: 7.6494 M ops/sec
 
-Busy page test.
-Test passed.
-All tests passed.
 No memory leaks.
 ====benchmark of lookup====
 Key put test.
 Test passed.
 PUT
-  Time: 0.096049 seconds
+  Time: 0.094530 seconds
   Operations: 5000000
-  Rate: 52.0568 M ops/sec
+  Rate: 52.8933 M ops/sec
 
 Nonexistent key test.
 Test passed.
 Missing entries test.
 GET
-  Time: 0.082363 seconds
+  Time: 0.082666 seconds
   Operations: 5000000
-  Rate: 60.7069 M ops/sec
+  Rate: 60.4844 M ops/sec
 
 No missing entries were found.
 Test passed.
@@ -116,45 +117,45 @@ CONTAINS: apple  -->  true
 Sequential inserts.
 Test passed
 INSERT (sequential)
-  Time: 0.364319 seconds
+  Time: 0.359051 seconds
   Operations: 5000000
-  Rate: 13.7242 M ops/sec
+  Rate: 13.9256 M ops/sec
 
 Random inserts.
 Test passed.
 INSERT (random)
-  Time: 1.707573 seconds
+  Time: 1.685124 seconds
   Operations: 5000000
-  Rate: 2.9281 M ops/sec
+  Rate: 2.9671 M ops/sec
 
 Random lookups.
 Test passed.
 CONTAINS (random)
-  Time: 1.715161 seconds
+  Time: 1.689424 seconds
   Operations: 5000000
-  Rate: 2.9152 M ops/sec
+  Rate: 2.9596 M ops/sec
 
 All tests passed.
 No memory leaks.
 ====benchmark of deque====
 5000000 sequential appends.
 APPEND
-  Time: 0.032513 seconds
+  Time: 0.031766 seconds
   Operations: 5000000
-  Rate: 153.7846 M ops/sec
+  Rate: 157.4010 M ops/sec
 
 Test passed.
 5000000 sequential pops.
 POPLEFT
-  Time: 0.010195 seconds
+  Time: 0.010112 seconds
   Operations: 5000000
-  Rate: 490.4365 M ops/sec
+  Rate: 494.4620 M ops/sec
 
 5000000 random operations.
 RANDOM OPERATIONS
-  Time: 0.060060 seconds
+  Time: 0.057629 seconds
   Operations: 5000000
-  Rate: 83.2501 M ops/sec
+  Rate: 86.7619 M ops/sec
 
 All tests passed.
 No memory leaks.
@@ -164,18 +165,18 @@ Elements: 1000000
 Iterations: 10
 
 PUT
-  Time: 0.107072 seconds
+  Time: 0.113271 seconds
   Operations: 10000000
-  Rate: 93.39 M ops/sec
+  Rate: 88.28 M ops/sec
 
 GET (inserted)
-  Time: 0.100582 seconds
+  Time: 0.108997 seconds
   Operations: 10000000
-  Rate: 99.42 M ops/sec
+  Rate: 91.75 M ops/sec
   Positive results: 10000000
 
 FALSE POSITIVE TEST
-  Time: 0.007990 seconds
+  Time: 0.008158 seconds
   Tested: 1000000
   False positives: 25830
   False-positive rate: 2.5830%
@@ -185,27 +186,27 @@ Nonexistent bit test.
 Test passed.
 Test passed
 SETBIT
-  Time: 0.004804 seconds
+  Time: 0.005165 seconds
   Operations: 5000000
-  Rate: 1040.7993 M ops/sec
+  Rate: 968.0542 M ops/sec
 
 Test passed
 CHEKBIT
-  Time: 0.003694 seconds
+  Time: 0.003711 seconds
   Operations: 5000000
-  Rate: 1353.5463 M ops/sec
+  Rate: 1347.3457 M ops/sec
 
 Test passed
 CLEARBIT
-  Time: 0.003732 seconds
+  Time: 0.003733 seconds
   Operations: 5000000
-  Rate: 1339.7642 M ops/sec
+  Rate: 1339.4053 M ops/sec
 
 Test passed
 5000000 random operations
-  Time: 0.042626 seconds
+  Time: 0.042704 seconds
   Operations: 5000000
-  Rate: 117.2993 M ops/sec
+  Rate: 117.0851 M ops/sec
 
 All tests passed.
 ====benchmark of ndarray====
@@ -214,151 +215,37 @@ Elements: 1000000
 Iterations: 10
 
 PUT
-  Time: 0.038099 seconds
+  Time: 0.037591 seconds
   Operations: 10000000
-  Rate: 262.47 M ops/sec
+  Rate: 266.02 M ops/sec
 
 GET
-  Time: 0.032363 seconds
+  Time: 0.032374 seconds
   Operations: 10000000
-  Rate: 308.99 M ops/sec
+  Rate: 308.89 M ops/sec
 
 Checksum: 4999995000000
 Expected: 4999995000000
 Passed.
 ====benchmark of linked list====
 APPEND
-  Time: 0.000632 seconds
+  Time: 0.000550 seconds
   Operations: 100000
-  Rate: 158.2278 M ops/sec
+  Rate: 181.8182 M ops/sec
 
 GET (iteration)
-  Time: 0.000202 seconds
+  Time: 0.000185 seconds
   Operations: 100000
-  Rate: 495.0495 M ops/sec
+  Rate: 540.5405 M ops/sec
 
 GET (access last element)
-  Time: 0.000183 seconds
+  Time: 0.000186 seconds
   Operations: 100000
-  Rate: 546.4481 M ops/sec
+  Rate: 537.6344 M ops/sec
 
-DELETE (tai element)
-  Time: 7.328697 seconds
+DELETE (root)
+  Time: 0.000665 seconds
   Operations: 100000
-  Rate: 0.0136 M ops/sec
+  Rate: 150.3759 M ops/sec
 
-----Before deleting----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
-
-Deleting 9th item.
-----After deleting----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----Before appending 0----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----After appending 0----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 0 
-Deleting 9th item.
-----After deleting----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----Before appending 1----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----After appending 1----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 1 
-Deleting 9th item.
-----After deleting----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----Before appending 2----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----After appending 2----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 2 
-Deleting 9th item.
-----After deleting----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----Before appending 3----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----After appending 3----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 3 
-Deleting 9th item.
-----After deleting----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----Before appending 4----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----After appending 4----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 4 
-Deleting 9th item.
-----After deleting----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----Before appending 5----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----After appending 5----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 5 
-Deleting 9th item.
-----After deleting----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----Before appending 6----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----After appending 6----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 6 
-Deleting 9th item.
-----After deleting----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----Before appending 7----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----After appending 7----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 7 
-Deleting 9th item.
-----After deleting----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----Before appending 8----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----After appending 8----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 8 
-Deleting 9th item.
-----After deleting----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----Before appending 9----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
-----After appending 9----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
-----Before deleting----
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
-----After deleting----
-| 0 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
-----Before deleting----
-| 0 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
-----After deleting----
-| 0 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
-----Before deleting----
-| 0 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
-----After deleting----
-| 0 | 4 | 5 | 6 | 7 | 8 | 9 
-----Before deleting----
-| 0 | 4 | 5 | 6 | 7 | 8 | 9 
-----After deleting----
-| 0 | 5 | 6 | 7 | 8 | 9 
-----Before deleting----
-| 0 | 5 | 6 | 7 | 8 | 9 
-----After deleting----
-| 0 | 6 | 7 | 8 | 9 
-----Before deleting----
-| 0 | 6 | 7 | 8 | 9 
-----After deleting----
-| 0 | 7 | 8 | 9 
-----Before deleting----
-| 0 | 7 | 8 | 9 
-----After deleting----
-| 0 | 8 | 9 
-----Before deleting----
-| 0 | 8 | 9 
-----After deleting----
-| 0 | 9 
-----Before deleting----
-| 0 | 9 
-----After deleting----
-| 0 
-----Before deleting----
-| 0 
-Failed to delete item: 1
----------
-| 0 | 1 | 999997 | 999998 | 999999 
 All tests passed.
