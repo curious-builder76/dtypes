@@ -4,13 +4,6 @@ Thank you for your intrest in dtypes.
 
 Let's keep this simple, small, human and a little honest.
 
-
-If you are going to judge it by how many stars it has or how many commits this has;
-
-please don't. this repository had approximately more than 100 commits before the re-creation of
-
-this repostory. This repository was re-created due to sensitive data leaks. (Yeah it's my fault.)
-
 You can call this a piece of hobby code if you wish to.
 
 This repository was meant to provide a collection  of common data structures used in day to day programing 
