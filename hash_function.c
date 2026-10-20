@@ -13,6 +13,18 @@ uint64_t djb_hash(void* obj,size_t size){
         return hash;
 }
 
+
+
+// The below hash functions were copied and adapted from 
+// repository
+//
+// https://github.com/tidwall/hashmap.c/blob/master/hashmap.c
+// 
+// 
+//
+
+
+
 //-----------------------------------------------------------------------------
 // MurmurHash3 was written by Austin Appleby, and is placed in the public
 // domain. The author hereby disclaims copyright to this source code.
@@ -89,3 +101,225 @@ static uint64_t MM86128(const void *key, const int len, uint32_t seed) {
 uint64_t murmur_hash(const void* data, size_t len, void* seed){
 	return MM86128(data, len, *(uint32_t*)seed);
 }
+
+
+
+// -----------------------------------------------------------------------------
+// SipHash reference C implementation
+//
+// Copyright (c) 2012-2016 Jean-Philippe Aumasson
+// <jeanphilippe.aumasson@gmail.com>
+// Copyright (c) 2012-2014 Daniel J. Bernstein <djb@cr.yp.to>
+//
+// To the extent possible under law, the author(s) have dedicated all copyright
+// and related and neighboring rights to this software to the public domain
+// worldwide. This software is distributed without any warranty.
+//
+// You should have received a copy of the CC0 Public Domain Dedication along
+// with this software. If not, see
+// <http://creativecommons.org/publicdomain/zero/1.0/>.
+//
+// default: SipHash-2-4
+//-----------------------------------------------------------------------------
+static uint64_t SIP64(const uint8_t *in, const size_t inlen, uint64_t seed0,
+    uint64_t seed1) 
+{
+#define U8TO64_LE(p) \
+    {  (((uint64_t)((p)[0])) | ((uint64_t)((p)[1]) << 8) | \
+        ((uint64_t)((p)[2]) << 16) | ((uint64_t)((p)[3]) << 24) | \
+        ((uint64_t)((p)[4]) << 32) | ((uint64_t)((p)[5]) << 40) | \
+        ((uint64_t)((p)[6]) << 48) | ((uint64_t)((p)[7]) << 56)) }
+#define U64TO8_LE(p, v) \
+    { U32TO8_LE((p), (uint32_t)((v))); \
+      U32TO8_LE((p) + 4, (uint32_t)((v) >> 32)); }
+#define U32TO8_LE(p, v) \
+    { (p)[0] = (uint8_t)((v)); \
+      (p)[1] = (uint8_t)((v) >> 8); \
+      (p)[2] = (uint8_t)((v) >> 16); \
+      (p)[3] = (uint8_t)((v) >> 24); }
+#define ROTL(x, b) (uint64_t)(((x) << (b)) | ((x) >> (64 - (b))))
+#define SIPROUND \
+    { v0 += v1; v1 = ROTL(v1, 13); \
+      v1 ^= v0; v0 = ROTL(v0, 32); \
+      v2 += v3; v3 = ROTL(v3, 16); \
+      v3 ^= v2; \
+      v0 += v3; v3 = ROTL(v3, 21); \
+      v3 ^= v0; \
+      v2 += v1; v1 = ROTL(v1, 17); \
+      v1 ^= v2; v2 = ROTL(v2, 32); }
+    uint64_t k0 = U8TO64_LE((uint8_t*)&seed0);
+    uint64_t k1 = U8TO64_LE((uint8_t*)&seed1);
+    uint64_t v3 = UINT64_C(0x7465646279746573) ^ k1;
+    uint64_t v2 = UINT64_C(0x6c7967656e657261) ^ k0;
+    uint64_t v1 = UINT64_C(0x646f72616e646f6d) ^ k1;
+    uint64_t v0 = UINT64_C(0x736f6d6570736575) ^ k0;
+    const uint8_t *end = in + inlen - (inlen % sizeof(uint64_t));
+    for (; in != end; in += 8) {
+        uint64_t m = U8TO64_LE(in);
+        v3 ^= m;
+        SIPROUND; SIPROUND;
+        v0 ^= m;
+    }
+    const int left = inlen & 7;
+    uint64_t b = ((uint64_t)inlen) << 56;
+    switch (left) {
+    case 7: b |= ((uint64_t)in[6]) << 48; /* fall through */
+    case 6: b |= ((uint64_t)in[5]) << 40; /* fall through */
+    case 5: b |= ((uint64_t)in[4]) << 32; /* fall through */
+    case 4: b |= ((uint64_t)in[3]) << 24; /* fall through */
+    case 3: b |= ((uint64_t)in[2]) << 16; /* fall through */
+    case 2: b |= ((uint64_t)in[1]) << 8; /* fall through */
+    case 1: b |= ((uint64_t)in[0]); break;
+    case 0: break;
+    }
+    v3 ^= b;
+    SIPROUND; SIPROUND;
+    v0 ^= b;
+    v2 ^= 0xff;
+    SIPROUND; SIPROUND; SIPROUND; SIPROUND;
+    b = v0 ^ v1 ^ v2 ^ v3;
+    uint64_t out = 0;
+    U64TO8_LE((uint8_t*)&out, b);
+    return out;
+}
+
+uint64_t sip_hash(const void* data, size_t len, void* user_data){
+	sip64_t* data=(sip64_t*)user_data;
+	return SIP64((uint8_t*)data, len, data->seed0, data->seed1);
+}
+
+
+//-----------------------------------------------------------------------------
+// xxHash Library
+// Copyright (c) 2012-2021 Yann Collet
+// All rights reserved.
+// 
+// BSD 2-Clause License (https://www.opensource.org/licenses/bsd-license.php)
+//
+// xxHash3
+//-----------------------------------------------------------------------------
+#define XXH_PRIME_1 11400714785074694791ULL
+#define XXH_PRIME_2 14029467366897019727ULL
+#define XXH_PRIME_3 1609587929392839161ULL
+#define XXH_PRIME_4 9650029242287828579ULL
+#define XXH_PRIME_5 2870177450012600261ULL
+
+static uint64_t XXH_read64(const void* memptr) {
+    uint64_t val;
+    memcpy(&val, memptr, sizeof(val));
+    return val;
+}
+
+static uint32_t XXH_read32(const void* memptr) {
+    uint32_t val;
+    memcpy(&val, memptr, sizeof(val));
+    return val;
+}
+
+static uint64_t XXH_rotl64(uint64_t x, int r) {
+    return (x << r) | (x >> (64 - r));
+}
+
+static uint64_t xxh3(const void* data, size_t len, uint64_t seed) {
+    const uint8_t* p = (const uint8_t*)data;
+    const uint8_t* const end = p + len;
+    uint64_t h64;
+
+    if (len >= 32) {
+        const uint8_t* const limit = end - 32;
+        uint64_t v1 = seed + XXH_PRIME_1 + XXH_PRIME_2;
+        uint64_t v2 = seed + XXH_PRIME_2;
+        uint64_t v3 = seed + 0;
+        uint64_t v4 = seed - XXH_PRIME_1;
+
+        do {
+            v1 += XXH_read64(p) * XXH_PRIME_2;
+            v1 = XXH_rotl64(v1, 31);
+            v1 *= XXH_PRIME_1;
+
+            v2 += XXH_read64(p + 8) * XXH_PRIME_2;
+            v2 = XXH_rotl64(v2, 31);
+            v2 *= XXH_PRIME_1;
+
+            v3 += XXH_read64(p + 16) * XXH_PRIME_2;
+            v3 = XXH_rotl64(v3, 31);
+            v3 *= XXH_PRIME_1;
+
+            v4 += XXH_read64(p + 24) * XXH_PRIME_2;
+            v4 = XXH_rotl64(v4, 31);
+            v4 *= XXH_PRIME_1;
+
+            p += 32;
+        } while (p <= limit);
+
+        h64 = XXH_rotl64(v1, 1) + XXH_rotl64(v2, 7) + XXH_rotl64(v3, 12) + 
+            XXH_rotl64(v4, 18);
+
+        v1 *= XXH_PRIME_2;
+        v1 = XXH_rotl64(v1, 31);
+        v1 *= XXH_PRIME_1;
+        h64 ^= v1;
+        h64 = h64 * XXH_PRIME_1 + XXH_PRIME_4;
+
+        v2 *= XXH_PRIME_2;
+        v2 = XXH_rotl64(v2, 31);
+        v2 *= XXH_PRIME_1;
+        h64 ^= v2;
+        h64 = h64 * XXH_PRIME_1 + XXH_PRIME_4;
+
+        v3 *= XXH_PRIME_2;
+        v3 = XXH_rotl64(v3, 31);
+        v3 *= XXH_PRIME_1;
+        h64 ^= v3;
+        h64 = h64 * XXH_PRIME_1 + XXH_PRIME_4;
+
+        v4 *= XXH_PRIME_2;
+        v4 = XXH_rotl64(v4, 31);
+        v4 *= XXH_PRIME_1;
+        h64 ^= v4;
+        h64 = h64 * XXH_PRIME_1 + XXH_PRIME_4;
+    }
+    else {
+        h64 = seed + XXH_PRIME_5;
+    }
+
+    h64 += (uint64_t)len;
+
+    while (p + 8 <= end) {
+        uint64_t k1 = XXH_read64(p);
+        k1 *= XXH_PRIME_2;
+        k1 = XXH_rotl64(k1, 31);
+        k1 *= XXH_PRIME_1;
+        h64 ^= k1;
+        h64 = XXH_rotl64(h64, 27) * XXH_PRIME_1 + XXH_PRIME_4;
+        p += 8;
+    }
+
+    if (p + 4 <= end) {
+        h64 ^= (uint64_t)(XXH_read32(p)) * XXH_PRIME_1;
+        h64 = XXH_rotl64(h64, 23) * XXH_PRIME_2 + XXH_PRIME_3;
+        p += 4;
+    }
+
+    while (p < end) {
+        h64 ^= (*p) * XXH_PRIME_5;
+        h64 = XXH_rotl64(h64, 11) * XXH_PRIME_1;
+        p++;
+    }
+
+    h64 ^= h64 >> 33;
+    h64 *= XXH_PRIME_2;
+    h64 ^= h64 >> 29;
+    h64 *= XXH_PRIME_3;
+    h64 ^= h64 >> 32;
+
+    return h64;
+}
+
+
+uint64_t xx3_hash(const void* data, size_t len,void* user_data){
+	xxh3_t* data=(xxh3_t*)user_data;
+	return xx3(data, len, data->seed0);
+}
+
+
