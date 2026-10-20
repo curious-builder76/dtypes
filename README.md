@@ -186,7 +186,7 @@ This library contains all  those data types in one place with the support of cus
 Currently it provides 
 
 | Data structure | Header file | Source file |
-| :---     | :---:    | ---:     |
+| :---     | :---    | :---     |
 | Dynamic Arrays |[array.h](array.h) | [array.c](array.c) | 
 | Bitset | [bitset.h](bitset.h) | [bitset.c](bitset.c) | 
 | Bloom filters | [bloom.h](bloom.h) | [bloom.c](bloom.c) |
