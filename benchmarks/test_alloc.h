@@ -1,9 +1,5 @@
 
 
-// valgrind feels a bloatware to me.
-// and now I am using this custom allocator to detect memory leaks.
-
-
 #ifndef __TEST_ALLOC_IMPL__
 #define __TEST_ALLOC_IMPL__
 
