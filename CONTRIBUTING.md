@@ -12,7 +12,7 @@ so that C programmers don't have to roam repository to repository in search of a
 
 And I admit that this code base has some serious issues and was never meant for the production . 
 
-### Real talk
+## Real talk
 
 I am maintaing this repository for a long time. and as the repository is getting bigger
 
@@ -44,7 +44,7 @@ and if the file is `list.c` it will expose `list_t` ,  `list_custom` , `list_new
 and more `list_*` functions as operations in it.
 
 
-#### What you should do and what I expect from you.
+### What you should do and what I expect from you.
 
 I expect that you will help me fixing the existing bugs in this repo.
 
@@ -52,7 +52,7 @@ or add a new data structure to the repo which is common and this repository
 
 lacks.
 
-##### If you are adding a new data structure to the repository.
+### If you are adding a new data structure to the repository.
 
 I expect that you will give them in two files.
 
@@ -68,8 +68,59 @@ Plus it should expose other `wheel_*` functions as a operations on it.
 
 like `wheel_rotate` as an hypothetical example.
 
-##### If you are fixing any code that you consider is bug.
+### If you are fixing any code that you consider is bug.
 
+
+Before you fix the bug. please check that `Is someone already fixing it?`
+
+And if not
+
+Do the following steps.
+
+#### 1.
+Clone the repository into your machine.
+
+via 
+```bash
+
+# The library is simple and doesn't need a 4 million dollar compilation setup
+gcc -Wall -Wextra -I..  -c *.c 
+
+ar rcs libdtypes.a *.o
+```
+or
+
+```bash
+gcc  -Wall -Wextra -shared *.c -o "<your sensible and convinent library name>"
+
+```
+
+which ever is most suitable to you.
+
+#### 2.
+
+Write a test condition which can reproduce the bug.
+
+Does it happen? if yes follow the last step.
+
+#### 3.
+
+Open a pull request explaining what is the bug
+
+Which additions or removal of code will fix it.
+
+Please note: If it is a very serious vulnerablity rather than a bug
+
+For example, buffer overflow or remote code execution by some how.
+
+Open a pull request , Say it is a vulnerablity rather than a bug.
+
+Give us your e-mail address, keep a hot patch ready, we will contact you back
+
+for the hot patch and we will talk how can we fix that vulnerablity.
+
+to how to fix it.
+<!--
 I expect you know what are the consequenses of removing or adding code to it
 
 and why those lines of code exist or do not exist.
@@ -79,7 +130,7 @@ Before you fix the bug. please check that `Is someone already fixing it?`
 And if not please consider a pull request of `what is the bug?` , `what issue it can cause?` along with the code
 
 you consider will fix it.
-
+-->
 
 #### Why this repository provides two constructors ?
 
