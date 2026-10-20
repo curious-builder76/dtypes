@@ -38,7 +38,7 @@ void tidwall_me(){
 	do{
 		map=hashmap_custom(initial_table_size, bucket_capacity, 
 				key_size, value_size,
-				my_hash, memcmp, malloc, free, &murmur_seed
+				murmur_hash, memcmp, malloc, free, &murmur_seed
 				);
 	}while(map==NULL);
 	debug("====benchmark of hashmap (comparable to tidwall)====");
