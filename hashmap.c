@@ -42,10 +42,6 @@ static bucket_t* get_bucket0(hashmap_t* map,size_t idx){
 }
 
 
-static uint64_t default_hash_function(void* key, size_t size, void* user_data){
-	(void)user_data;
-	return djb_hash(key, size);
-}
 
 hashmap_t* hashmap_custom(size_t table_size,size_t bucket_capacity,size_t key_size, size_t value_size,
 		uint64_t (*hash_function)(void*, size_t, void* ),
