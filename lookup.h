@@ -10,18 +10,14 @@ struct __lookup_struct;
 typedef struct __lookup_struct lookup_t;
 
 lookup_t*  lookup_custom(
-		uint32_t element_size,
-		uint32_t page_size,
-		uint32_t (*hash_function)(void*, size_t),
+		size_t table_size, size_t bucket_capacity,size_t obj_size, 
+		uint64_t (*hash)(const void* , size_t, void*),
 		void* (*xmalloc)(size_t),
-		void (*xfree)(void*)
+		void (*xfree)(void*),
+		void* user_data
 		);
 
-lookup_t* lookup_new(
-		uint32_t element_size,
-		uint32_t page_size,
-		uint32_t (*hash_function)(void*, size_t)
-		);
+lookup_t* lookup_new(size_t obj_size);
 
 
 int lookup_oom(lookup_t* look);

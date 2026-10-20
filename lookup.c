@@ -138,20 +138,20 @@ int lookup_grow(lookup_t* look, size_t new_size){
 		bucket_t* bucket=get_bucket0(look, bucket_idx);
 
 		for(size_t idx=0;idx<bucket->used; idx++){
-			uint64_t hash= bucket->hashes + idx;
+			uint64_t hash= bucket->hashes[idx];
 			if(lookup_put0(look, hash)==FAILED){
 				return 1;
 			}
 		}
 	}
 	look->free(look->table);
-	memcpy(look, look2 sizeof(lookup_t)); 
+	memcpy(look, look2, sizeof(lookup_t)); 
 	look2->free(look2);
 	return 0;
 }
 
 int lookup_put(lookup_t* look, void* obj){
-	look->oom=0;
+	look->oom_flag=0;
 	uint64_t hash=look->hash_function(obj, look->obj_size, look->user_data);
 	for(size_t idx=0;idx<5;idx++){
 		if(lookup_put0(look,hash)!=FAILED){
@@ -161,11 +161,11 @@ int lookup_put(lookup_t* look, void* obj){
 			return 1;
 		}
 	}
-	look->oom=1;
+	look->oom_flag=1;
 	return 1;
 }
 int lookup_oom(lookup_t* look){
-	return look->oom;
+	return look->oom_flag;
 }
 
 
