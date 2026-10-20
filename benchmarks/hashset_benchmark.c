@@ -4,7 +4,8 @@
 
 #define __HASHSET_DEBUG
 #include "print.h"
-#include "dtypes/hashset.c"
+#include "dtypes/hashset.h"
+#include "dtypes/hash_function.h"
 #include "test_alloc.h"
 
 void* prepare_data(size_t times, size_t input_size){
@@ -29,15 +30,14 @@ void benchmark(){
 	hashset_debug("====benchmark of hashset====");
 	size_t key_size=32;
 	hashset_t* set;
+	size_t table_size=8;
+	size_t bucket_capacity=64;
 	do{
 		set=hashset_custom(
-			512,
-			key_size,
-			NULL,
-			memcmp,
-			xmalloc,
-			xfree
-			);
+				table_size, bucket_capacity,
+				key_size, default_hash_function, // from hash function.c
+				memcmp, xmalloc, xfree, NULL
+				);
 	}
 	while(set==NULL);
 	int times=5000000;
@@ -93,28 +93,8 @@ void benchmark(){
 	}else{
 		hashset_debug("Test failed.");
 	}
-	size_t busy_pages=0;
-	hashset_debug("Busy page test.");
-	for(size_t idx=0;idx<set->table_size;idx++){
-		spage_t* page=set->pages+idx;
-		if(page->used>=page->capacity){
-			hashset_debug("Page: %zu is busy page.",idx);
-			busy_pages++;
-		}
-	}
-	if(busy_pages){
-		hashset_debug("Found %zu busy pages out of %zu pages",busy_pages,set->table_size);
-		tests_failed++;
-	}else{
-		hashset_debug("Test passed.");
-	}
-	if(!tests_failed){
-		hashset_debug("All tests passed.");
-	}else
-		hashset_debug("%d tests failed out of %d",tests_failed,3);
-
 	hashset_destroy(set);
-
+	free(data);
 	memory_leak();
 	set=NULL;
 }

@@ -17,18 +17,19 @@
 #define hashset_debug(...)
 #endif
 
-#include "dtypes/hashmap.h"
 
 
+struct __hashset_struct;
 
-typedef hashmap_t hashset_t;
+typedef struct __hashset_struct hashset_t;
 
 hashset_t* hashset_custom(
 		size_t table_size,size_t bucket_capacity,
-		size_t key_size, 
+		size_t key_size,
+		uint64_t (*hash_function)(const void* , size_t, void* ),
 		int (*compare)(const void* , const void* , size_t),
 		void* (*xmalloc)(size_t),
-		void (*xfree),
+		void (*xfree)(void*),
 		void* user_data);
 
 hashset_t* hashset_new(size_t obj_size);
