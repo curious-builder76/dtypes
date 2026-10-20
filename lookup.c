@@ -139,7 +139,7 @@ int lookup_grow(lookup_t* look, size_t new_size){
 
 		for(size_t idx=0;idx<bucket->used; idx++){
 			uint64_t hash= bucket->hashes[idx];
-			if(lookup_put0(look, hash)==FAILED){
+			if(lookup_put0(look2, hash)==FAILED){
 				return 1;
 			}
 		}
