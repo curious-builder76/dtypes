@@ -40,6 +40,15 @@ void benchmark(){
 				);
 	}
 	while(set==NULL);
+	printf(
+			"Initial table size: %zu\n"
+			"Object size: %zu\n"
+			"Bucket capacity (lifetime constant): %zu\n"
+			"Hash function(default): djb hash\n",
+		        table_size, 
+			key_size, 
+			bucket_capacity
+	      );
 	int times=5000000;
 	char* data=prepare_data(times,key_size);
 	if(!data){
