@@ -54,12 +54,6 @@ void tidwall_me(){
 			murmur_seed,
 			bucket_capacity
 			);
-	char* data=prepare_data(times,key_size);
-	if(!data){
-		printf("Failed to prepare data\n");
-		hashmap_destroy(map);
-		return ;
-	}
         int tests_failed=0;
 
         debug("Key put test");
@@ -106,7 +100,6 @@ void tidwall_me(){
                 debug("Test passed.");
         }
 
-	free(data);
         hashmap_destroy(map);
         debug("All tests passed.");
 	memory_leak();
