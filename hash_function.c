@@ -1,6 +1,6 @@
 
 #include<stdint.h>
-
+#include<string.h>
 #include "hash_function.h"
 
 uint64_t djb_hash(void* obj,size_t size){
@@ -184,8 +184,8 @@ static uint64_t SIP64(const uint8_t *in, const size_t inlen, uint64_t seed0,
 }
 
 uint64_t sip_hash(const void* data, size_t len, void* user_data){
-	sip64_t* data=(sip64_t*)user_data;
-	return SIP64((uint8_t*)data, len, data->seed0, data->seed1);
+	sip64_t* sip_data=(sip64_t*)user_data;
+	return SIP64((uint8_t*)data, len, sip_data->seed0, sip_data->seed1);
 }
 
 
@@ -317,9 +317,9 @@ static uint64_t xxh3(const void* data, size_t len, uint64_t seed) {
 }
 
 
-uint64_t xx3_hash(const void* data, size_t len,void* user_data){
+uint64_t xxh3_hash(const void* input, size_t len,void* user_data){
 	xxh3_t* data=(xxh3_t*)user_data;
-	return xx3(data, len, data->seed0);
+	return xxh3(input, len, data->seed0);
 }
 
 
