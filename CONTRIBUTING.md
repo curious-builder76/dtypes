@@ -17,7 +17,7 @@ This repository was meant to provide a collection  of common data structures use
 
 so that C programmers don't have to roam repository to repository in search of a new data structure.
 
-And I admit that this code base has some serious issues and was never meant for the production i.e. (the [hashmap](hashmap.c "Source file of hashmap.c in this repo") vulnerable to hash flooding).
+And I admit that this code base has some serious issues and was never meant for the production . 
 
 ### Real talk
 
