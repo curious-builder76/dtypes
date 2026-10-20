@@ -13,6 +13,10 @@ uint64_t djb_hash(void* obj,size_t size){
         return hash;
 }
 
+uint64_t default_hash_function(void* obj, size_t len, void* udata){
+	(void)udata;
+	return djb_hash(obj, len);
+}
 
 
 // The below hash functions were copied and adapted from 

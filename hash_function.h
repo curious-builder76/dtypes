@@ -14,6 +14,8 @@ typedef struct{
 	uint64_t seed0;
 }xxh3_t;
 
+uint64_t default_hash_function(const void* data, size_t len, void* user_data);
+
 uint64_t murmur_hash(const void* data, size_t len, void* seed);
 
 uint64_t sip_hash(const void* data, size_t len, void* user_data);
