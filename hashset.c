@@ -52,7 +52,7 @@ typedef struct{
 	void* (*malloc)(size_t);
 	void (*free)(void*);
 	int (*cmp)(const void* , const void*, size_t );
-	uint64_t (*hash)(void*, uint64_t);
+	uint64_t (*hash)(const void*, size_t);
 	
 	spage_t* pages;
 }hashset_t;
@@ -112,7 +112,7 @@ void spage_destroy(hashset_t* set,spage_t* page){
 hashset_t* hashset_custom(
 		size_t page_size,
 		size_t element_size,
-		uint64_t (*hash_function)(void*,uint64_t),
+		uint64_t (*hash_function)(const void*, size_t),
 		int (*compare)(const void* , const void*, size_t ),
 		void* (*xmalloc)(size_t),
 		void (*xfree)(void*)
@@ -164,7 +164,7 @@ hashset_custom_failed:
 hashset_t* hashset_new(
 		size_t page_size,
 		size_t element_size,
-		uint64_t (*hash_function)(void*, uint64_t),
+		uint64_t (*hash_function)(const void*, uint64_t),
 		int (*compare)(const void* ,const void*, size_t)
 		)
 {
