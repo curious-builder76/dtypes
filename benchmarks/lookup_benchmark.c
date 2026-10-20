@@ -6,7 +6,7 @@
 #include "print.h"
 #include "test_alloc.h"
 #include "dtypes/lookup.h"
-
+#include "dtypes/hash_function.h"
 
 #define debug(...)do {\
 	fprintf(stderr,__VA_ARGS__);\
@@ -24,11 +24,13 @@ void benchmark(){
 	lookup_t* lookup=NULL;
 	while(!lookup)
 		lookup=lookup_custom(
+			1024,
+			64, // page size
 			sizeof(point_t),
-			512, // page size
-			NULL, // hash function.
+			default_hash_function, // hash function.
 			xmalloc,
-			xfree
+			xfree,
+			NULL
 			    );
 	
 	debug("Key put test.");

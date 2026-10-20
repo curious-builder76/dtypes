@@ -150,7 +150,7 @@ int lookup_grow(lookup_t* look, size_t new_size){
 	return 0;
 }
 
-int lookup_put(lookup_t* look, void* obj){
+int lookup_add(lookup_t* look, void* obj){
 	look->oom_flag=0;
 	uint64_t hash=look->hash_function(obj, look->obj_size, look->user_data);
 	for(size_t idx=0;idx<5;idx++){
