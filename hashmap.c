@@ -22,7 +22,7 @@ typedef struct __hashmap_struct{
 	size_t key_size;
 	size_t value_size;
 	int oom_flag;
-	uint64_t (*hash_function)(void* ,  size_t, void* ); 
+	uint64_t (*hash_function)(const void* ,  size_t, void* ); 
 	void* (*malloc)(size_t);
 	void (*free)(void*);
 	int (*compare)(const void*, const void* , size_t  );
@@ -44,7 +44,7 @@ static bucket_t* get_bucket0(hashmap_t* map,size_t idx){
 
 
 hashmap_t* hashmap_custom(size_t table_size,size_t bucket_capacity,size_t key_size, size_t value_size,
-		uint64_t (*hash_function)(void*, size_t, void* ),
+		uint64_t (*hash_function)(const void*, size_t, void* ),
 		int (*compare)(const void*, const void* ,size_t),
 		void* (*xmalloc)(size_t),
 		void (*xfree)(void*),

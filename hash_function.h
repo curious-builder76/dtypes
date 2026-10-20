@@ -3,7 +3,7 @@
 
 #include<stdlib.h>
 
-uint64_t djb_hash(void* obj,size_t size);
+uint64_t djb_hash(const void* obj,size_t size);
 
 typedef struct{
 	uint64_t seed0;
