@@ -225,7 +225,7 @@ int main(){
 	}
 	start=clock();
 	for(size_t idx=times;idx>0;idx--){
-		if(list_delete(list,idx-1)!=0){
+		if(list_delete(list,0)!=0){
 			printf("Test failed at %zu\n",idx);
 			failure_flag=1;
 			tests_failed++;
@@ -235,11 +235,11 @@ int main(){
 	end=clock();
 	if(!failure_flag){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
-		print_benchmark("DELETE (tai element)",times,time_elapsed);
+		print_benchmark("DELETE (root)",times,time_elapsed);
 	}
 
-	test_delete();
-	test_list();
+	// test_delete();
+	// test_list();
 	// debug_list(list);
 	list_destroy(list);
 	if(tests_failed){

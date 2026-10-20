@@ -13,35 +13,25 @@
 }while(0)
 
 
-struct __spage_struct;
-typedef struct __spage_struct spage_t;
-
 #else
 #define hashset_debug(...)
 #endif
 
+#include "dtypes/hashmap.h"
 
-struct __hashset_struct;
 
-typedef struct __hashset_struct hashset_t;
+
+typedef hashmap_t hashset_t;
 
 hashset_t* hashset_custom(
-		uint32_t page_size,
-		uint32_t element_size,
-		uint32_t (*hash_function)(void*, size_t),
-		int (*compare)(const void* , const void*, size_t ),
+		size_t table_size,size_t bucket_capacity,
+		size_t key_size, 
+		int (*compare)(const void* , const void* , size_t),
 		void* (*xmalloc)(size_t),
-		void (*xfree)(void*)
-		);
+		void (*xfree),
+		void* user_data);
 
-hashset_t* hashset_new(
-		uint32_t page_size,
-		uint32_t element_size,
-		uint32_t (*hash_function)(void*, uint32_t),
-		int (*compare)(const void* ,const void*, size_t)
-		);
-
-int hashset_has_busy_page(hashset_t* set);
+hashset_t* hashset_new(size_t obj_size);
 
 int hashset_oom(hashset_t* set);
 int hashset_put(hashset_t* set,void* obj);
