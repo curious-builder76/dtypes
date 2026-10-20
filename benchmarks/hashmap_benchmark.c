@@ -19,6 +19,7 @@ uint64_t my_hash(void* key, size_t size, void* user_data){
 
 
 
+
 void* prepare_data(size_t times,size_t input_size){
 	size_t mem_required=input_size*times;
 	size_t pos=0;
@@ -39,11 +40,12 @@ void tidwall_me(){
 	size_t initial_table_size=1024;
 	size_t key_size=sizeof(int);
 	size_t value_size=key_size;
+	uint32_t murmur_seed=1792419563;
         hashmap_t* map;
 	do{
 		map=hashmap_custom(initial_table_size, bucket_capacity, 
 				key_size, value_size,
-				my_hash, memcmp, malloc, free, NULL
+				my_hash, memcmp, malloc, free, &murmur_seed
 				);
 	}while(map==NULL);
 	debug("====benchmark of hashmap (comparable to tidwall)====");
@@ -52,9 +54,11 @@ void tidwall_me(){
 			"Initial table size: %zu\n"
 			"Key size: %zu\n"
 			"Value size: %zu\n"
+			"Murmur hash seed (constant seed): %u\n"
 			"Bucket capacity (lifetime constant): %zu\n",
 			initial_table_size,
 			key_size, value_size,
+			murmur_seed,
 			bucket_capacity
 			);
 	char* data=prepare_data(times,key_size);
