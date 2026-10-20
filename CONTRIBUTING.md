@@ -83,7 +83,7 @@ Clone the repository into your machine.
 
 Compile the binary
 
-via 
+<!--via 
 ```bash
 
 # The library is simple and doesn't need a 4 million dollar compilation setup
@@ -99,7 +99,7 @@ gcc  -Wall -Wextra -shared *.c -o "<your sensible and convinent library name>"
 ```
 
 which ever is most suitable to you.
-
+-->
 #### 2.
 
 Write a test condition which can reproduce the bug.
