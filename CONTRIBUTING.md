@@ -80,6 +80,9 @@ Do the following steps.
 #### 1.
 Clone the repository into your machine.
 
+
+Compile the binary
+
 via 
 ```bash
 
