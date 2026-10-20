@@ -11,13 +11,6 @@
 #include "dtypes/hash_function.h"
 
 
-uint64_t my_hash(void* key, size_t size, void* user_data){
-	(void)user_data;
-	uint32_t hash=djb_hash(key,size);
-	return (uint64_t) hash;
-}
-
-
 
 
 void* prepare_data(size_t times,size_t input_size){
@@ -129,7 +122,7 @@ void hashmap_benchmark(){
 	do{
 		map=hashmap_custom(initial_table_size, bucket_capacity, 
 				key_size, value_size,
-				my_hash, memcmp, xmalloc, xfree, NULL
+				default_hash_function, memcmp, xmalloc, xfree, NULL
 				);
 	}while(map==NULL);
 	debug("====benchmark of hashmap====");
