@@ -192,8 +192,8 @@ Currently it provides
 | Bloom filters | [bloom.h](bloom.h) | [bloom.c](bloom.c) |
 | Deques | [deque.h](deque.h) | [deque.c](deque.c) |
 | Hash functions | [hash\_function.h](hash_function.h) | [hash\_function.c](hash_function.c) |
-| Hashmap  |   [hashmap.h](hashmap.h) [hashmap.c](hashmap.c) |
-| Hashset   | [hashset.h](hashset.h) [hashset.c](hashset.c) |
+| Hashmap  |   [hashmap.h](hashmap.h) | [hashmap.c](hashmap.c) |
+| Hashset   | [hashset.h](hashset.h) | [hashset.c](hashset.c) |
 | Singly linked lists |  [list.h](list.h) | [list.c](list.c) |
 | Lookup (experimental) | [lookup.h](lookup.h) | [lookup.c](lookup.c) |
 | ND Arrays | [ndarray.h](ndarray.h) | [ndarray.c](ndarray.c) |
