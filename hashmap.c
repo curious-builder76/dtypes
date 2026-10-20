@@ -5,6 +5,13 @@
 #include "dtypes/hashmap.h"
 #include "dtypes/hash_function.h"
 
+
+
+// A simple hashmap implemention 
+//
+// based upon open addressing 
+
+
 typedef struct{
 	uint64_t hash;
 	unsigned char data[];
@@ -30,6 +37,10 @@ typedef struct __hashmap_struct{
 	bucket_t* table;
 }hashmap_t;
 
+// Helper function,
+//
+// Returns a bucket from the given table from specified 
+// index
 
 static bucket_t* get_bucket0(hashmap_t* map,size_t idx){
 	size_t block_size=map->key_size+ map->value_size;
@@ -41,7 +52,7 @@ static bucket_t* get_bucket0(hashmap_t* map,size_t idx){
 	return (bucket_t*)((char*)map->table + bucket_size*idx);
 }
 
-
+// Returns a custom hashmap fine tuned by user. 
 
 hashmap_t* hashmap_custom(size_t table_size,size_t bucket_capacity,size_t key_size, size_t value_size,
 		uint64_t (*hash_function)(const void*, size_t, void* ),
@@ -87,6 +98,11 @@ hashmap_t* hashmap_custom(size_t table_size,size_t bucket_capacity,size_t key_si
 
 }
 
+
+// Delegates to hashmap_custom with default 
+// parameters
+
+
 hashmap_t* hashmap_new(size_t key_size, size_t value_size){
 	return hashmap_custom( 8, 64, 
 			key_size, value_size, 
@@ -95,6 +111,11 @@ hashmap_t* hashmap_new(size_t key_size, size_t value_size){
 			NULL);
 
 }
+
+
+//  Helper for hashmap_get() 
+//
+//  Returns a pointer that points to the key value pair
 
 void* hashmap_get_data(hashmap_t* map,void* key){
 	uint64_t hash=map->hash_function(key,map->key_size,map->user_data);
@@ -118,6 +139,10 @@ void* hashmap_get_data(hashmap_t* map,void* key){
 	return NULL;
 }
 
+
+// Returns a value assigned to key
+// returns NULL if the key is not present
+
 void* hashmap_get(hashmap_t* map, void* key){
 	char* data= hashmap_get_data(map,key);
 	if(!data) return NULL;
@@ -126,6 +151,11 @@ void* hashmap_get(hashmap_t* map, void* key){
 }
 
 
+// Helper function for hashmap_put()
+//
+// Returns zero upon success,
+//
+// Non zero number indicates failure
 
 int hashmap_put0(hashmap_t* map, void* key,void* value){
 
@@ -195,6 +225,9 @@ insert_new:
 	return 0;
 }
 
+
+// Delete a key value pair  from hashmap
+
 int hashmap_delete(hashmap_t* map, void* key){
 	uint64_t hash=map->hash_function(key, map->key_size, map->user_data);
 
@@ -230,6 +263,10 @@ int hashmap_delete(hashmap_t* map, void* key){
 
 }
 
+
+// Grow (or resize) the hashmap to new capacity
+// as it's new table size
+
 int hashmap_grow(hashmap_t* map,size_t new_size){
 
 	hashmap_t* map2 = hashmap_custom(
@@ -261,9 +298,23 @@ int hashmap_grow(hashmap_t* map,size_t new_size){
 	return 0;
 }
 
+
+
+// Returns 1 if the last put operation failed because of
+// Out of memory conditions.
+
 int hashmap_oom(hashmap_t* map){
 	return map->oom_flag;
 }
+
+
+// Inserts an item to hashmap,
+// grow the hashmap if nessecary.
+//
+// Or  
+//
+// Updates the key value pair if key is 
+// already present
 
 int hashmap_put(hashmap_t* map, void* key, void* value){
 	map->oom_flag=0;
@@ -278,6 +329,13 @@ int hashmap_put(hashmap_t* map, void* key, void* value){
 	map->oom_flag=1;
 	return 1;
 }
+
+
+// Destroy the hashmap and release it's resources
+// You should not use the hashmap after calling this function
+//
+// on it.
+
 void hashmap_destroy(hashmap_t* map){
 	if(!map) return;
 

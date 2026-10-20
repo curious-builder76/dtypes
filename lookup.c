@@ -1,6 +1,7 @@
 
 /*
- * Page based probablistic lookup table.
+ * Experimental data structure, similar to a bloom filter
+ * but stores  hashses.
  */
 
 /*
@@ -15,6 +16,11 @@
 
 #include "dtypes/lookup.h"
 #include "dtypes/hash_function.h"
+
+// This data structure is an adapted version of 
+// hashtable that only stores hashes
+// discarding objects
+
 
 typedef struct{
 	size_t used;
@@ -34,6 +40,9 @@ typedef struct __lookup_struct{
 	int oom_flag;
 	bucket_t* table;
 }lookup_t;
+
+
+// Returns a fine tuned lookup structure
 
 lookup_t* lookup_custom(
 		size_t table_size, size_t bucket_capacity, size_t obj_size, 
@@ -70,6 +79,8 @@ lookup_t* lookup_custom(
 	return look;
 }
 
+// Delegates to lookup_custom()
+// with default parameters
 
 lookup_t* lookup_new(size_t obj_size){
 	return lookup_custom(
@@ -80,6 +91,9 @@ lookup_t* lookup_new(size_t obj_size){
 			
 }
 
+
+// Return a bucket from the given lookup structure at given idx
+
 static bucket_t* get_bucket0(lookup_t* look, size_t idx){
 	size_t bucket_size= sizeof(bucket_t) + look->obj_size*look->bucket_capacity;
 
@@ -87,10 +101,13 @@ static bucket_t* get_bucket0(lookup_t* look, size_t idx){
 }
 
 
+// Internal macro signals used by lookup_put0
+
 #define SEEN 2
 #define FAILED 1
 #define SUCCESS 0
 
+// Helper function for lookup_put
 static int lookup_put0(lookup_t* look, uint64_t obj_hash){
 	size_t casted_hash= (size_t)obj_hash;
 
@@ -125,6 +142,9 @@ insert_new:
 	return SUCCESS;
 }
 
+// Grow (or resize) the lookup structure
+// setting new_size as it's new table size
+
 int lookup_grow(lookup_t* look, size_t new_size){
 	lookup_t* look2= lookup_custom(
 			new_size, look->bucket_capacity,
@@ -151,6 +171,11 @@ int lookup_grow(lookup_t* look, size_t new_size){
 	return 0;
 }
 
+// Adds the hash (fingerprint) to the lookup structure
+//
+// Returns zero indicating success and a non zero number
+// indicating failure
+
 int lookup_add(lookup_t* look, void* obj){
 	look->oom_flag=0;
 	uint64_t hash=look->hash_function(obj, look->obj_size, look->user_data);
@@ -165,11 +190,15 @@ int lookup_add(lookup_t* look, void* obj){
 	look->oom_flag=1;
 	return 1;
 }
+
+// Returns a non zero number indicating that the last add operation was failed 
+// due to Out of Memory conditions
 int lookup_oom(lookup_t* look){
 	return look->oom_flag;
 }
 
-
+// Returns a non zero number indicating that the structuure is confident 
+// enough to say "this object is present" returns zero otherwise
 int lookup_contains(lookup_t* look, void* obj){
 	uint64_t hash=look->hash_function(obj, look->obj_size, look->user_data);
 
@@ -191,6 +220,7 @@ int lookup_contains(lookup_t* look, void* obj){
 	return 0;
 }
 
+// Release the resources acquired by the lookup structure
 void lookup_destroy(lookup_t* look){
 	if(!look) return;
 

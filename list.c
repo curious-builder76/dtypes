@@ -29,7 +29,7 @@ typedef struct __list{
 	node_t* nodes;
 }list_t;
 
-// Create a new list.
+// Create a customized list .
 list_t* list_custom(size_t obj_size, void* (*xmalloc)(size_t), void* (*xrealloc)(void*, size_t), void (*xfree)(void*) ){
 	size_t capacity=8;
 	size_t mem_required=(sizeof(node_t)+obj_size)*capacity;
@@ -51,6 +51,7 @@ list_t* list_custom(size_t obj_size, void* (*xmalloc)(size_t), void* (*xrealloc)
 	return l;
 }
 
+// Delegates to list_custom with default parameters
 list_t* list_new(size_t obj_size){
 	return list_custom(obj_size,malloc,realloc,free);
 }
@@ -118,6 +119,9 @@ static node_t* get_node_at(list_t* list,size_t idx){
 }
 
 
+// Grow the list by 4 times of it's original size
+// (usually when full).
+
 int list_grow(list_t* list){
 	size_t new_cap= list->cap*4;
 	if(new_cap < list->cap){
@@ -170,16 +174,25 @@ create_node:
 	return free_node;
 }
 
+// Return an internal pointer pointing to the object
+//
+// stored at idx, returns NULL upon failure
 void* list_get(list_t* list,size_t idx){
 	node_t* node=get_node_at(list,idx);
 	if(!node) return NULL;
 	return node->buff;
 }
+// Helper function 
+//
+// Calculate distance from b to a (usually root of the array).
+//
 static size_t calculate_distance(void* a,void *b, size_t padding){
 	size_t distance= (size_t)((char*)b - (char*)a);
 
 	return distance/padding;
 }
+
+// Append an item to list
 int list_append(list_t* list,void* obj){
 	size_t padding=sizeof(node_t)+list->obj_size;
 

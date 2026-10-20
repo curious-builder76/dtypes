@@ -5,16 +5,34 @@
 #include "dtypes/hashset.h"
 #include "dtypes/hash_function.h"
 
+
+// This hashset is an adapted version of hashmap
+//
+// from this repository
+
+
+// Contains a cached hash and stored object
+
 typedef struct{
 	uint64_t hash;
 	unsigned char data[];
 }record_t;
+
+
+
+// Stores bucket metadata 
 
 typedef struct{
 	size_t used;
 	size_t min_hash_seen;
 	size_t max_hash_seen;
 }bucket_t;
+
+
+// Hashset is based upon open addressing
+//
+//
+
 
 typedef struct __hashset_struct{
 	size_t bucket_capacity;
@@ -29,6 +47,12 @@ typedef struct __hashset_struct{
 	bucket_t* table;
 }hashset_t;
 
+// Helper function;
+//
+// Returns a bucket from the given set at given idx.
+//
+// Not idiot proof.
+//
 
 static bucket_t* get_bucket0(hashset_t* set,size_t idx){
 	size_t block_size=set->key_size;
@@ -39,6 +63,11 @@ static bucket_t* get_bucket0(hashset_t* set,size_t idx){
 
 	return (bucket_t*)((char*)set->table + bucket_size*idx);
 }
+
+
+
+// Allows fine tuning of a hash set.
+// 
 
 hashset_t* hashset_custom(
                 size_t table_size,size_t bucket_capacity,
@@ -84,6 +113,8 @@ hashset_t* hashset_custom(
 
 }
 
+
+// Delegates to hashset_custom with default parameters
 hashset_t* hashset_new(size_t key_size){
 	return hashset_custom( 8, 64, 
 			key_size, 
@@ -93,12 +124,17 @@ hashset_t* hashset_new(size_t key_size){
 
 }
 
+
+// Destroy an hashset and release it's resources
+
 void hashset_destroy(hashset_t* set){
 	if(!set) return;
 
 	set->free(set->table);
 	set->free(set);
 }
+
+// Helper function for hashset_custom
 void* hashset_get_data(hashset_t* set,void* key){
 	uint64_t hash=set->hash_function(key,set->key_size,set->user_data);
 
@@ -121,6 +157,8 @@ void* hashset_get_data(hashset_t* set,void* key){
 	return NULL;
 }
 
+// Returns 1 if the provided object is present in given
+// hashset else returns 0
 int hashset_contains(hashset_t* set, void* obj){
 	char* data=hashset_get_data(set, obj);
 	if(data!=NULL) return 1;
@@ -129,7 +167,12 @@ int hashset_contains(hashset_t* set, void* obj){
 }
 
 
-
+// Helper for hashset_put.
+//
+// Attempts to insert an item, 
+// returns 0 upon sucess 
+// and a non zero number indicating failure
+//
 int hashset_put0(hashset_t* set, void* key){
 
 	uint64_t hash=set->hash_function(key,set->key_size,set->user_data);
@@ -196,6 +239,9 @@ insert_new:
 	return 0;
 }
 
+
+// Delete an item from a given set
+
 int hashset_delete(hashset_t* set, void* key){
 	uint64_t hash=set->hash_function(key, set->key_size, set->user_data);
 
@@ -230,6 +276,9 @@ int hashset_delete(hashset_t* set, void* key){
 
 }
 
+// Grow (or resize) the given hashset to new_size
+// as it's new table size
+
 int hashset_grow(hashset_t* set,size_t new_size){
 
 	hashset_t* set2 = hashset_custom(
@@ -260,9 +309,20 @@ int hashset_grow(hashset_t* set,size_t new_size){
 	return 0;
 }
 
+
+// Returns a non zero number if the last
+//
+// put operation failed due to 
+// Out of memory conditions
 int hashset_oom(hashset_t* set){
 	return set->oom_flag;
 }
+
+// Insert an item to hashset, grow if required.
+//
+// Returns 0 indicating sucess,
+// and a non zero number indicating failure
+//
 
 int hashset_put(hashset_t* set, void* key){
 	set->oom_flag=0;
