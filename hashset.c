@@ -222,10 +222,9 @@ int hashset_delete(hashset_t* set, void* key){
 		}
 	}
 	if(!found) return 1;
-
-	record_t* last_record=(record_t*)((char*)bucket + bucket->used-1);
-	memmove(record, last_record, record_size);
 	bucket->used--;
+	record_t* last_record=(record_t*)((char*)bucket + bucket->used*record_size);
+	memmove(record, last_record, record_size);
 
 	return 0;
 
