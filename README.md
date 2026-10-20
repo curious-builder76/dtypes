@@ -185,30 +185,30 @@ This library contains all  those data types in one place with the support of cus
 
 Currently it provides 
 
-Data structure | Header file | Source file
+| Data structure | Header file | Source file |
 | :---     | :---:    | ---:     |
 
-Dynamic Arrays |[array.h](array.h) | [array.c](array.c)
+| Dynamic Arrays |[array.h](array.h) | [array.c](array.c) | 
 
-Bitset | [bitset.h](bitset.h) | [bitset.c](bitset.c)
+| Bitset | [bitset.h](bitset.h) | [bitset.c](bitset.c) | 
 
-Bloom filters | [bloom.h](bloom.h) | [bloom.c](bloom.c)
+| Bloom filters | [bloom.h](bloom.h) | [bloom.c](bloom.c) |
 
-Deques | [deque.h](deque.h) | [deque.c](deque.c)
+| Deques | [deque.h](deque.h) | [deque.c](deque.c) |
 
-Hash functions | [hash\_function.h](hash_function.h) | [hash\_function.c](hash_function.c)
+| Hash functions | [hash\_function.h](hash_function.h) | [hash\_function.c](hash_function.c) |
 
-Hashmap  |   [hashmap.h](hashmap.h) [hashmap.c](hashmap.c)
+| Hashmap  |   [hashmap.h](hashmap.h) [hashmap.c](hashmap.c) |
 
-Hashset   | [hashset.h](hashset.h) [hashset.c](hashset.c)
+| Hashset   | [hashset.h](hashset.h) [hashset.c](hashset.c) |
 
-Singly linked lists |  [list.h](list.h) | [list.c](list.c)
+| Singly linked lists |  [list.h](list.h) | [list.c](list.c) |
 
-Lookup (experimental) | [lookup.h](lookup.h) | [lookup.c](lookup.c)
+| Lookup (experimental) | [lookup.h](lookup.h) | [lookup.c](lookup.c) |
 
-ND Arrays | [ndarray.h](ndarray.h) | [ndarray.c](ndarray.c)
+| ND Arrays | [ndarray.h](ndarray.h) | [ndarray.c](ndarray.c) |
 
-Trie | [trie.h](trie.h) | [trie.c](trie.c)
+| Trie | [trie.h](trie.h) | [trie.c](trie.c) | 
 
 
 ## Use Case
