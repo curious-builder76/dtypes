@@ -179,7 +179,7 @@ Bloom filters are the storage efficient versions of lookup structures.
 
 These structures are probabilistic cannot return a false negative but can return a false positive.
 
-Below is a table
+Below is a table 
 
 | X | Stored  | Not stored |
 | :---     | :---    | :---     |
@@ -249,5 +249,5 @@ the  bloom filter becomes a dangling pointer afterwards
 `bloom` is a bloom filter returned by either `bloom_custom()` or `bloom_new()` and can be `NULL`
 
 
-
+## Work in Progress...
 
