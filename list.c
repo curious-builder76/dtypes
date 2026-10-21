@@ -230,9 +230,6 @@ int list_update(list_t* list,size_t idx,void* obj){
 	return list_put(list,idx,obj);
 }
 
-
-
-
 // Delete an item from list.
 int list_delete(list_t* list,size_t idx){
 	if(idx>=list->length){
