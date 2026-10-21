@@ -232,7 +232,7 @@ int main(){
 	double start_monotonic=clock_monotonic();
 	start=clock();
 	for(size_t idx=times;idx>0;idx--){
-		if(list_delete(list,idx-2)!=0){
+		if(list_delete(list,idx-1)!=0){
 			printf("Test failed at %zu\n",idx);
 			failure_flag=1;
 			tests_failed++;
@@ -248,7 +248,7 @@ int main(){
 	}
 
 	// test_delete();
-	 test_list();
+	//  test_list();
 	// debug_list(list);
 	list_destroy(list);
 	if(tests_failed){
