@@ -74,39 +74,78 @@ Now your project directory shall look something like this.
 Example:
 
 ```C
+
 // project.c
+
 #include<stdio.h>
 #include<stdint.h>
 #include<string.h>
 #include "dtypes/hashmap.h"
 
 
-int main(){
 
-    uint32_t key_size=6;   // The hashmap was intended to be generic. so it allows
-                           // diffrent sized key value pairs, 
-                           // here "key_size" and "value_size" are used for demonstration.
-                           // but you are supposed to use sizeof(key) and sizeof(value)
-    uint32_t value_size=6;
-    hashmap_t* map=hashmap_new(key_size, value_size);
-    if(!map){
-        perror("");
-        return 1;
-    }
-    if(hashmap_put(map,"hello","world")!=0){
-        perror("");
-        return 1;
-    }
-    char* value=hashmap_get(map,"hello");
-    if(value!=NULL){
-        printf("Found value: %s\n",value);
-     }else{
-         printf("Value not found in map.");
-      }
-      hashmap_destroy(map);
-      map=NULL;
-      return 0;
+typedef struct{
+        int id;
+        int salary;
+        char* name;
+        char* role;
+}member_t;
+
+int main(){
+        member_t team[]={
+                { 1, 60000, "John Doe", "Senior Devloper"},
+                { 2, 70000, "Alice K." , "Team member" },
+                { 3, 50000, "Wazir A.", "Junior Devloper"},
+                { 4, 45000, "Bob H." ,  "Bug Tester"},
+                { 5, 46000,  "Raman Prakash" , "Projet Dealer" },
+                { -1, -1, NULL , NULL }
+        };
+
+        hashmap_t* map= hashmap_new( sizeof(int), sizeof(member_t)) ;
+
+        if(!map){
+                printf("Failed to create hashmap\n");
+                return 1;
+        }
+        for(size_t idx=0;; idx++){
+                member_t* member=team + idx;
+                if( member->name==NULL) 
+                        break;
+                printf("Adding member: %s\n",member->name);
+
+                if(hashmap_put(map, &member->id, member) != 0){
+                        printf("Failed to add member: %s\n",member->name);
+                }else {
+                        printf("Success!\n");
+                }
+        }
+
+        int member_id=3;
+
+        printf("Getting a member\n");
+        member_t* member=hashmap_get(map, &member_id);
+
+        if(member==NULL){
+                printf("Cannot get member id : %d\n",member_id);
+                hashmap_destroy(map);
+                map=NULL;
+                return 1;
+        }
+        printf(
+                "Name: %s\n"
+                "Salary: %d\n"
+                "Role: %s\n"
+                "Member id: %d\n",
+                member->name,
+                member->salary,
+                member->role,
+                member->id
+              );
+        hashmap_destroy(map);
+        map=NULL;
+        return 0;
 }
+
 ```
 ```bash
 gcc project.c -o project -O2 -Wall -Wextra -I. -Ldtypes -ldtypes
