@@ -1,7 +1,7 @@
 
 CC=gcc
 
-CFLAGS=-Wall -Wextra -I..  -O2 -march=native
+CFLAGS=-Wall -Wextra -I..  -fsanitize=address
 
 LIBS=-L. -ldtypes 
 

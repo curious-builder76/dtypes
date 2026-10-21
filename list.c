@@ -12,6 +12,7 @@
 
 typedef struct{
 	size_t next;
+	size_t prev;
 	char buff[];
 }node_t;
 typedef struct __list{
@@ -205,6 +206,8 @@ int list_append(list_t* list,void* obj){
 
 	size_t new_tail=calculate_distance(list->nodes,fresh_node,padding);
 
+	fresh_node->prev=list->tail_physical;
+
 	tail->next=new_tail;
 
 	list->tail_physical=tail->next;
@@ -226,6 +229,7 @@ int list_put(list_t* list,size_t idx,void* obj){
 int list_update(list_t* list,size_t idx,void* obj){
 	return list_put(list,idx,obj);
 }
+
 
 
 // Delete an item from list.
