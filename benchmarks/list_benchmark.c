@@ -113,7 +113,7 @@ int test_list(){
 	clock_t end;
 	double time_elapsed;
 	int failure_flag=0;
-	size_t times=5000000;
+	size_t times=5000005;
 	// append items from 0 to times-1
 	// So the list shall look like
 	// | 0 | 1 | 2 | 3 | ... | times-1 |
@@ -159,7 +159,7 @@ int test_list(){
 
 	if(!failure_flag){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
-		print_benchmark("DELETE (2nd item continiously)",times,time_elapsed);
+		print_benchmark("DELETE (2nd item continiously)",times-5,time_elapsed);
 	}
 
 	// debug_list(list);
