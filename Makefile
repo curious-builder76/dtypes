@@ -1,7 +1,7 @@
 
 CC=gcc
 
-CFLAGS=-Wall -Wextra -I..  -O2
+CFLAGS=-Wall -Wextra -I..  -O2 
 
 LIBS=-L. -ldtypes 
 

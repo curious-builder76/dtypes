@@ -7,12 +7,6 @@
 #include "dtypes/list.h"
 #include "print.h"
 
-
-double clock_monotonic(){
-	struct timespec now;
-	clock_gettime(CLOCK_MONOTONIC, &now);
-	return now.tv_sec + now.tv_nsec / 1e9;
-}
 int test_delete(){
 	list_t* list=list_new(sizeof(size_t));
 	if(!list){
@@ -115,17 +109,21 @@ int test_delete(){
 int test_list(){
 	list_t* list=list_new(sizeof(size_t));
 	if(!list) return 1;
-
-	// append items from 0 to 999999
+	clock_t start;
+	clock_t end;
+	double time_elapsed;
+	int failure_flag=0;
+	size_t times=5000000;
+	// append items from 0 to times-1
 	// So the list shall look like
-	// | 0 | 1 | 2 | 3 | ... | 99999 |
-	for(size_t idx=0;idx<1000000;idx++){
+	// | 0 | 1 | 2 | 3 | ... | times-1 |
+	for(size_t idx=0;idx<times;idx++){
 		if(list_append(list,&idx)!=0){
 			printf("Failed to append item %zu\n",idx);
 		}
 	}
 	// If append is working correct then this shall too.
-	for(size_t idx=0;idx<1000000;idx++){
+	for(size_t idx=0;idx<times;idx++){
 		size_t* got=list_get(list,idx);
 		if(got !=NULL && *got!=idx){
 			printf("Append is broken.");
@@ -134,13 +132,19 @@ int test_list(){
 		}
 	}
 	// This is python equivalent of
-	// for i in range(999995):
+	// for i in range(times-5):
 	//   del list[i]
-	for(size_t idx=0;idx<999995;idx++){
+	
+	start=clock();
+	for(size_t idx=0;idx<times-5;idx++){
 		if(list_delete(list,2)!=0){
-			printf("Failed to delete 2nd item.");
+			printf("Failed to delete 2nd item.\n");
+			failure_flag=1;
+			break;
 		}
 	}
+	end=clock();
+	puts("------------------------------------");
 	for(size_t idx=0;;idx++){
 		size_t* got=list_get(list,idx);
 		if(got!=NULL){
@@ -151,7 +155,13 @@ int test_list(){
 		}
 	}
 
-	puts("");
+	puts("|\n-------------------------------------");
+
+	if(!failure_flag){
+		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
+		print_benchmark("DELETE (2nd item continiously)",times,time_elapsed);
+	}
+
 	// debug_list(list);
 	list_destroy(list);
 	return 0;
@@ -165,10 +175,10 @@ int main(){
 	double time_elapsed;
 
 	int tests_failed=0;
-	int total_tests=4;
+	int total_tests=5;
 	int failure_flag=0;
 
-	size_t times=100000;
+	size_t times=5000000;
 	list_t* list=list_new(sizeof(size_t));
 	if(!list){
 		return 1;
@@ -247,7 +257,10 @@ int main(){
 	}
 
 	// test_delete();
-	test_list();
+	
+	tests_failed+=test_list();
+
+
 	// debug_list(list);
 	list_destroy(list);
 	if(tests_failed){
