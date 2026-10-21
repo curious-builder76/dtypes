@@ -26,15 +26,12 @@ here's a short brief.
 
 ### xmalloc
 `xmalloc(size_t memory_size)` can be any custom allocator of your choice, i.e an arena allocator, a mmap based allocator or anything you wish to
-
 given it cannot be NULL, and shall return a readable and writable pointer (which can return NULL indicating failures).
 
 `xrealloc(void* old_ptr, size_t new_size)` should resize the pointer/memory/region/chunk to the new provided size, this parameter cannot be NULL,
-
 but can return NULL indicating failures
 
 `xfree(void* allocated_by_malloc_or_realloc)` should release the resources aquired by `xmalloc` and `xrealloc`,
-
 this function can be a dummy function but cannot be NULL.
 
 
