@@ -157,9 +157,8 @@ void* hashmap_get(hashmap_t* map, void* key){
 //
 // Non zero number indicates failure
 
-int hashmap_put0(hashmap_t* map, void* key,void* value){
+int hashmap_put0(hashmap_t* map, uint64_t hash,void* key, void* value){
 
-	uint64_t hash=map->hash_function(key,map->key_size,map->user_data);
 
 	size_t casted_hash= (size_t) hash;
 
@@ -226,6 +225,75 @@ insert_new:
 }
 
 
+// Grow (or resize) the hashmap to new capacity
+// as it's new table size
+
+int hashmap_grow(hashmap_t* map,size_t new_size){
+
+	hashmap_t* map2 = hashmap_custom(
+			new_size, map->bucket_capacity, 
+			map->key_size, map->value_size, map->hash_function,
+			map->compare, map->malloc, map->free,
+			map->user_data);
+	if(!map2){
+		return 1;
+	}
+
+	size_t record_size= sizeof(record_t) + map->key_size + map->value_size;
+
+	for(size_t idx=0;idx<map->table_size; idx++){
+		bucket_t* bucket=get_bucket0(map,idx);
+		for(size_t bucket_idx=0;bucket_idx<bucket->used;bucket_idx++){
+			record_t* record = (record_t*)((char*)bucket + sizeof(bucket_t) + record_size* bucket_idx);
+			unsigned char* key= record->data;
+			unsigned char* value= key + map->key_size;
+			if(hashmap_put0(map2,record->hash, key,value)!=0){
+				hashmap_destroy(map2);
+				return 1;
+			}
+		}
+	}
+	map->free(map->table);
+	memcpy(map, map2, sizeof(hashmap_t));
+	map2->free(map2);
+	return 0;
+}
+
+
+
+// Returns 1 if the last put operation failed because of
+// Out of memory conditions.
+
+int hashmap_oom(hashmap_t* map){
+	return map->oom_flag;
+}
+
+
+// Inserts an item to hashmap,
+// grow the hashmap if nessecary.
+//
+// Or  
+//
+// Updates the key value pair if key is 
+// already present
+
+int hashmap_put(hashmap_t* map, void* key, void* value){
+	map->oom_flag=0;
+
+	uint64_t hash=map->hash_function(key,map->key_size,map->user_data);
+	for(size_t idx=0;idx<5;idx++){
+		if(hashmap_put0(map, hash, key, value)==0){
+			return 0;
+		}
+		if(hashmap_grow(map, map->table_size*2)!=0){
+			return 1;
+		}
+	}
+	map->oom_flag=1;
+	return 1;
+}
+
+
 // Delete a key value pair  from hashmap
 
 int hashmap_delete(hashmap_t* map, void* key){
@@ -264,71 +332,6 @@ int hashmap_delete(hashmap_t* map, void* key){
 }
 
 
-// Grow (or resize) the hashmap to new capacity
-// as it's new table size
-
-int hashmap_grow(hashmap_t* map,size_t new_size){
-
-	hashmap_t* map2 = hashmap_custom(
-			new_size, map->bucket_capacity, 
-			map->key_size, map->value_size, map->hash_function,
-			map->compare, map->malloc, map->free,
-			map->user_data);
-	if(!map2){
-		return 1;
-	}
-
-	size_t record_size= sizeof(record_t) + map->key_size + map->value_size;
-
-	for(size_t idx=0;idx<map->table_size; idx++){
-		bucket_t* bucket=get_bucket0(map,idx);
-		for(size_t bucket_idx=0;bucket_idx<bucket->used;bucket_idx++){
-			record_t* record = (record_t*)((char*)bucket + sizeof(bucket_t) + record_size* bucket_idx);
-			unsigned char* key= record->data;
-			unsigned char* value= key + map->key_size;
-			if(hashmap_put0(map2,key,value)!=0){
-				hashmap_destroy(map2);
-				return 1;
-			}
-		}
-	}
-	map->free(map->table);
-	memcpy(map, map2, sizeof(hashmap_t));
-	map2->free(map2);
-	return 0;
-}
-
-
-
-// Returns 1 if the last put operation failed because of
-// Out of memory conditions.
-
-int hashmap_oom(hashmap_t* map){
-	return map->oom_flag;
-}
-
-
-// Inserts an item to hashmap,
-// grow the hashmap if nessecary.
-//
-// Or  
-//
-// Updates the key value pair if key is 
-// already present
-
-int hashmap_put(hashmap_t* map, void* key, void* value){
-	map->oom_flag=0;
-	for(size_t idx=0;idx<5;idx++){
-		if(hashmap_put0(map, key, value)==0){
-			return 0;
-		}
-		if(hashmap_grow(map, map->table_size*2)!=0){
-			return 1;
-		}
-	}
-	map->oom_flag=1;
-	return 1;
-}
 
 
 // Destroy the hashmap and release it's resources
