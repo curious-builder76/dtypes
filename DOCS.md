@@ -56,4 +56,4 @@ Explaination of the parameters,
 
 `element_size` is the size of element in bytes , just simply pass `sizeof(element_size)` to this parameter. 
 
-[xmalloc]("###xmalloc")
+[xmalloc](###xmalloc)
