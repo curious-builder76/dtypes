@@ -233,34 +233,11 @@ int list_update(list_t* list,size_t idx,void* obj){
 
 
 
-void trigger_segfault(list_t* list){
-	size_t padding= sizeof(node_t)+ list->obj_size;
-
-	size_t max_c= list->length > 10 ? 10 : list->length;
-	node_t* node=(node_t*)((char*)list->nodes + list->tail_physical*padding);
-	for(size_t idx=0;idx<max_c;idx++){
-		size_t* got=(size_t*)node->buff;
-		printf(" %zu|",*got);
-		if(node->prev==NULL_NODE){
-			printf("Broken before going.\n");
-
-			break;
-		}
-		node= (node_t*)((char*)list->nodes + node->prev*padding);
-	}
-	puts("");
-}
-// Delete an item from list.
-
-
-
-
 // Delete an item from list.
 int list_delete(list_t* list,size_t idx){
 	if(idx>=list->length){
 		return 1;
 	}
-	trigger_segfault(list);
 	size_t padding=sizeof(node_t)+list->obj_size;
 	if(idx==0){
 		node_t* next_node=get_node_at(list,1);
@@ -278,12 +255,10 @@ int list_delete(list_t* list,size_t idx){
 		list->length--;
 		return 0;
 	}
-	node_t* prev=get_node_at(list,idx-1);
-	size_t last_access_logical=list->last_access_logical;
-	size_t last_access_physical=list->last_access_physical;
 	node_t* this_node=get_node_at(list,idx);
+	node_t* prev=(node_t*)((char*)list->nodes + this_node->prev*padding);
 	node_t* tail=(node_t*)((char*)list->nodes + list->tail_physical*padding);
-		
+
 	prev->next=this_node->next;
 	if(this_node->next!=NULL_NODE){
 		node_t* next_node=(node_t*)((char*)list->nodes + padding * this_node->next);
@@ -291,15 +266,14 @@ int list_delete(list_t* list,size_t idx){
 	}
 	if(tail==this_node){
 
-		list->tail_physical=calculate_distance(list->nodes,prev,padding);
+		list->tail_physical=this_node->prev;
 	}
 
-	memset(this_node, 255, padding);
 	list->is_full=0;
-	list->last_access_logical=0;
-	list->last_access_physical=0;
-	
+	list->last_access_logical=idx-1;
+	list->last_access_physical=this_node->prev;	
 	list->length--;
+	memset(this_node, 255, padding);
 	return 0;
 }
 

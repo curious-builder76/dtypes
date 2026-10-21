@@ -229,7 +229,7 @@ int main(){
 		print_benchmark("GET (access last element)",times,time_elapsed);
 	}
 
-	double start_monotonic=clock_monotonic();
+	
 	start=clock();
 	for(size_t idx=times;idx>0;idx--){
 		if(list_delete(list,idx-1)!=0){
@@ -240,15 +240,14 @@ int main(){
 		}
 	}
 
-	double end_monotonic=clock_monotonic();
 	end=clock();
 	if(!failure_flag){
-		time_elapsed=(double)(end_monotonic-start_monotonic);
+		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
 		print_benchmark("DELETE (tail)",times,time_elapsed);
 	}
 
 	// test_delete();
-	//  test_list();
+	test_list();
 	// debug_list(list);
 	list_destroy(list);
 	if(tests_failed){
