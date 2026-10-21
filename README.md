@@ -233,7 +233,7 @@ Currently it provides
 | Hash functions | [hash\_function.h](hash_function.h) | [hash\_function.c](hash_function.c) |
 | Hashmap  |   [hashmap.h](hashmap.h) | [hashmap.c](hashmap.c) |
 | Hashset   | [hashset.h](hashset.h) | [hashset.c](hashset.c) |
-| Linked lists |  [list.h](list.h) | [list.c](list.c) |
+| Doubly linked lists |  [list.h](list.h) | [list.c](list.c) |
 | Lookup (experimental) | [lookup.h](lookup.h) | [lookup.c](lookup.c) |
 | ND Arrays | [ndarray.h](ndarray.h) | [ndarray.c](ndarray.c) |
 | Trie | [trie.h](trie.h) | [trie.c](trie.c) | 
