@@ -7,6 +7,12 @@
 #include "dtypes/list.h"
 #include "print.h"
 
+
+double clock_monotonic(){
+	struct timespec now;
+	clock_gettime(CLOCK_MONOTONIC, &now);
+	return now.tv_sec + now.tv_nsec / 1e9;
+}
 int test_delete(){
 	list_t* list=list_new(sizeof(size_t));
 	if(!list){
@@ -204,7 +210,6 @@ int main(){
 	}
 
 	start=clock();
-
 	for(size_t idx=0;idx<times;idx++){
 		size_t* got=list_get(list,times-1);
 		if( got==NULL ||  *got!=times-1){
@@ -223,18 +228,22 @@ int main(){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
 		print_benchmark("GET (access last element)",times,time_elapsed);
 	}
+
+	double start_monotonic=clock_monotonic();
 	start=clock();
 	for(size_t idx=times;idx>0;idx--){
-		if(list_delete(list,idx-1)!=0){
+		if(list_delete(list,idx-2)!=0){
 			printf("Test failed at %zu\n",idx);
 			failure_flag=1;
 			tests_failed++;
 			break;
 		}
 	}
+
+	double end_monotonic=clock_monotonic();
 	end=clock();
 	if(!failure_flag){
-		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
+		time_elapsed=(double)(end_monotonic-start_monotonic);
 		print_benchmark("DELETE (tail)",times,time_elapsed);
 	}
 
