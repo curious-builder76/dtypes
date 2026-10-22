@@ -371,7 +371,25 @@ Returns Murmur Hash of the data supplied.
 
 `len` is the size of the `data` supplied.
 
-`seed` is the pointer pointing to a 32-bit integer or in other words `uint32_t`
+`seed` is the pointer pointing to a 32-bit integer or in other words to an `uint32_t`
+which wil as as the seed of Murmur Hash
+
+
+Example:
+
+```C
+#include<string.h>
+#include "dtypes/hash_function.h"
+
+
+char* name="Murmur Hash";
+
+uit32_t seed= /* <murmur hash seed> */
+
+// Include the nul terminator
+uint64_t hashed= murmur_hash(name, strlen(name)+1, 
+
+```
 
 
 
