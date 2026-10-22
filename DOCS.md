@@ -298,9 +298,45 @@ parameter `element_size` passed to `deque_custom()` or `deque_new()`
 void* deque_pop(deque_t* deque)
 ```
 
-Pop an item from the deque and return a pointer pointing to the popped item.
-
+Pop an item from the right side of the deque and
+return a pointer pointing to the popped item.
 In case of failure, this function returns `NULL`
+
+
+`deque` is the deque from which the item is to be popped. 
+This parameter needs to be returned by `deque_custom()` or `deque_new()` and cannot be `NULL` .
+
+
+
+```C
+int deque_appendleft(deque_t* deque,void* obj)
+```
+Pop an item from the left side of deque
+And return a pointer pointing to the item 
+or return `NULL` indicating failure.
+
+
+`deque` is the deque from which the item is to be popped. 
+This parameter needs to be returned by `deque_custom()` or `deque_new()` and cannot be `NULL` .
+
+```C
+int deque_oom(deque_t* deque)
+```
+
+Returns a non zero number if the last operation on deque failed due to
+Out of Memory condition.
+
+`deque` is a pointer returned by `deque_custom()` or `deque_new()` and cannot be `NULL`
+
+```C
+void deque_destroy(deque_t* deque)
+```
+
+Release the resources held by the deque. the deque becomes a dangling pointer after this
+
+`deque` is an pointer returned by `deque_custom()` or `deque_new()` and can be `NULL`.
+
+
 
 
 ## Work in Progress...
