@@ -23,6 +23,17 @@ struct __hashset_struct;
 
 typedef struct __hashset_struct hashset_t;
 
+
+hashset_t* hashset_custom(
+                size_t table_size,size_t bucket_capacity,
+                size_t key_size,
+                uint64_t (*hash_function)(const void* , size_t, void* ),
+                int (*compare)(const void* , const void* , size_t),
+                void* (*xmalloc)(size_t),
+                void (*xfree)(void*),
+                void* user_data);
+
+
 hashset_t* hashset_custom(
 		size_t table_size,size_t bucket_capacity,
 		size_t key_size,
@@ -39,6 +50,7 @@ int hashset_put(hashset_t* set,void* obj);
 int hashset_contains(hashset_t* set,void* obj);
 
 void hashset_destroy(hashset_t* set);
+
 
 
 #endif
