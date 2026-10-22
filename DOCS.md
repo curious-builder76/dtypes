@@ -288,7 +288,7 @@ int deque_append(deque_t* deque,void* obj)
 Append an item to the right side of deque;
 Returns zero upon success or a non zero number indicating failure.
 
-`deque` must be a non-`NULL`  pointer returned by `deque_custom()` or `deque_new()`
+`deque` is a non-`NULL`  pointer returned by `deque_custom()` or `deque_new()`
 
 `obj` is the item which will be added to the deque, it cannot be `NULL` and it's size should be equal to the 
 parameter `element_size` passed to `deque_custom()` or `deque_new()`
@@ -459,6 +459,48 @@ xx3h_t hash_context={ /* < XX hash seed > */ };
 // Include the nul terminator
 uint64_t hashed= xxh3_hash(name, strlen(name)+1, &hash_ctx);
 ```
+
+
+## Hash map (a.k.a dictionaries)
+
+A data structure that stores data in form of key value pairs
+
+or in other terms assigns value to key (i.e. `key = value` )
+
+
+```C
+hashmap_t* hashmap_custom(size_t table_size,size_t bucket_capacity,size_t key_size, size_t value_size,
+                uint64_t (*hash_function)(const void*, size_t, void* ),
+                int (*compare)(const void*,const void* ,size_t),
+                void* (*xmalloc)(size_t),
+                void (*xfree)(void*),
+                void* user_data)
+```
+
+Returns a fine tuned hash map as per user specification.
+
+
+`table_size` is the inital table size you wish it to be (useful for preallocating space, loves power of twos)
+
+`bucket_size` is the bucket size which will remain constant through out it's life time.
+
+`key_size` is the size of key object in bytes and cannot be zero
+(simply pass `sizeof(your_desired_key_size_and_it_can_be_anything)` to it.
+
+`value_size` is the size of the value object and cannot be zero
+
+`hash_function(object, object_len, hash_context)` is the hash function used by the 
+hashmap to hash structures (any of the functions provided by `"dtypes/hash_function.h" 
+will work; use the suitable hash function as per your use case
+if you feel creative, invent your own hash function and promise it won't be a terrible hash.)
+
+
+`compare(a,b)` is a call back used by the data structure to 
+compare objects, (similar of `memcmp()` and `strncmp()`) 
+which should be a non null pointer (use `memcmp()` instead 
+if you don't have any custom compare function)
+
+`user_data`
 
 ## Work in Progress...
 
