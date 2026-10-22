@@ -361,6 +361,8 @@ Currently provides
 
 
 
+### Murmur Hash
+
 ```C
 uint64_t murmur_hash(const void* data, size_t len, void* seed)
 ```
@@ -387,10 +389,43 @@ char* name="Murmur Hash";
 uit32_t seed= /* <murmur hash seed> */
 
 // Include the nul terminator
-uint64_t hashed= murmur_hash(name, strlen(name)+1, 
+uint64_t hashed= murmur_hash(name, strlen(name)+1, &seed);
 
 ```
 
+### Sip Hash
+
+```C
+uint64_t sip_hash(const void* data, size_t len, void* user_data)
+```
+
+Returns the Sip Hash of the data supplied
+
+
+`data` is a non `NULL` pointer which should meet the condition `sizeof(*data)==len`
+
+`len` is the size of the `data` supplied.
+
+
+`user_data` is the hash context  (i.e. a `sip64_t`) of this hash function.
+
+ 
+
+Example:
+
+```C
+#include<string.h>
+#include "dtypes/hash_function.h"
+
+
+char* name="Sip Hash";
+
+sip64_t hash_context={ .seed0= /* first seed */ ,.seed1= /* second seed */ };
+
+// Include the nul terminator
+uint64_t hashed= sip_hash(name, strlen(name)+1, &hash_ctx);
+
+```
 
 
 
