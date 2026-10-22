@@ -532,7 +532,25 @@ Get an item assigned to `key` from the hashmap. returns `NULL` upon failure.
 
 `map` is a non-`NULL` pointer returned by `hashmap_custom()` or `hashmap_new()`
 
-`key` is the pointer to an object whose assigned value is to be fetched. which cannot be `NULL`.
+`key` is the pointer to an object whose assigned value is to be fetched. which cannot be `NULL`
+
+
+```C
+
+int hashmap_put(hashmap_t* map,void* key,void* value)
+
+```
+
+Assign `key` to `value` incase the `key` doesn't exists.
+Or else over write the old assigned `value`
+
+`map` is a non-`NULL` pointer either returned by `hashmap_custom()` 
+or `hashmap_new()` 
+
+`key` is a non-`NULL` item for mapping `key` to `value`
+
+`value` is a non-`NULL` item being mapped by `key`
+
 
 ```C
 
@@ -541,6 +559,34 @@ int hashmap_delete(hashmap_t* map,void* key)
 ```
 
 Delete a key  from the hashmap, Returns zero upom sucess and a non zero number indicating failure.
+
+
+`map` is a non-`NULL` pointer returned by `hashmap_custom()` or `hashmao_new()` 
+
+`key` is a non `NULL` pointer whose assigned value is to be deleted along with the specified key
+
+```C
+
+int hashmap_oom(hashmap_t* map)
+
+```
+
+Returns a non zero number if the last `hashmap_put()`  failed due to 
+Out of Memory condition
+
+`map` is a non-`NULL` pointer returned by `hashmap_custom()` or `hashmao_new()` 
+
+```C
+
+void hashmap_destroy(hashmap_t* map)
+
+```
+
+Releases the resources held by the given hashmap
+
+`map` is a pointer returned by `hashmap_custom()` or `hashmap_new()` which can be `NULL`
+
+
 
 ## Work in Progress...
 
