@@ -582,9 +582,85 @@ void hashmap_destroy(hashmap_t* map)
 
 ```
 
-Releases the resources held by the given hashmap
+Releases the resources held by the given hashmap, the hashmap becomes a dangling pointer afterwards
 
 `map` is a pointer returned by `hashmap_custom()` or `hashmap_new()` which can be `NULL`
+
+## Lists
+
+The lists in this repository are implemented as a cursor based doubly linked list.
+For source code; see [here](list.c) 
+
+```C
+
+list_t* list_custom(size_t obj_size, void* (*xmalloc)(size_t), 
+                    void* (*xrealloc)(void*, size_t), void (*xfree)(void*))
+
+```
+
+Returns a custom linked list
+
+`obj_size` is the size of object/item/element in bytes; basically `sizeof(object)`
+
+See [xmalloc](#xmalloc) [xrealloc](#xrelloc) and [xfree](#xfree).
+
+
+```C
+
+list_t* list_new(size_t obj_size)
+
+```
+
+Thin wrapper around `list_custom()` ; similar of calling `list_custom(obj_size,malloc, realloc, free)`
+
+`obj_size` is the size of object in bytes ; basically `sizeof(object)` 
+
+```C
+
+void* list_get(list_t* list,size_t idx)
+
+```
+Return an item from the list at specified index. returns `NULL` upon failure.
+
+`list` is a non-`NULL` pointer returned by `list_custom()` or `list_new()`
+
+`idx` is the index of requested item.
+
+```C
+
+int list_put(list_t* list,size_t idx,void* obj)
+
+```
+Update an item at specified index, returns zero indicating succes or
+a non zero number indicating failure
+
+
+`list` is a non-`NULL` pointer returned by `list_custom()` or `list_new()
+
+`idx` is the index that will be updated.
+`
+```C
+
+int list_delete(list_t* list,size_t idx)
+
+```
+Delete an item at specified index, returns zero indicating succes or
+a non zero number indicating failure
+
+
+`list` is a non-`NULL` pointer returned by `list_custom()` or `list_new()`
+
+`idx` is the index that will be updated.
+
+```C
+
+void list_destroy(list_t* list)
+
+```
+
+Release the resources held by list
+
+`list` is a pointer which is returned by `list_custom()` or `list_new()` which can be `NULL`
 
 
 
