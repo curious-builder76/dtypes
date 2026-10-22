@@ -2,11 +2,6 @@
 #define __DEQUE_IMPL_H__
 
 
-// Note:
-// this thing is not tested yet,
-// and is still in development.
-//
-// So hidden bugs may exist.
 
 #include<stdint.h>
 
