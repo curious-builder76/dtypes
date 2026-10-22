@@ -337,6 +337,44 @@ Release the resources held by the deque. the deque becomes a dangling pointer af
 `deque` is an pointer returned by `deque_custom()` or `deque_new()` and can be `NULL`.
 
 
+## Hash functions
+
+These are used internally by the library and are 
+exposed to public via `dtypes/hash_function.h`
+
+The data structure constructors accept these in place of 
+`hash_function` parametwr.
+
+Useful for customizing a hash based data structure.
+These functions have a common pattern in general
+
+```C
+uint64_t <name>_hash(const void* data, size_t length, void* hash_context_aka_hash_context)
+```
+Currently provides
+
+| Hash name | Function name |
+| :---  | :--- |
+
+| Murmur hash | `murmur_hash` |
+| Sip hash | `sip_hash` |
+| XX3 hash | `xxh3_hash` |
+
+
+
+```C
+uint64_t murmur_hash(const void* data, size_t len, void* seed)
+```
+
+Returns Murmur Hash of the data supplied.
+
+`data` is a non `NULL` pointer which should meet the condition `sizeof(*data)==len`
+
+`len` is the size of the `data` supplied.
+
+`seed` is the pointer pointing to a 32-bit integer or in other words `uint32_t`
+
+
 
 
 ## Work in Progress...
