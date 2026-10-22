@@ -248,6 +248,60 @@ the  bloom filter becomes a dangling pointer afterwards
 
 `bloom` is a bloom filter returned by either `bloom_custom()` or `bloom_new()` and can be `NULL`
 
+## Deque
+
+The double-ended queue is most often presented as a generalized queue, which gives its name. 
+It is a queue that allows insertions and deletions at both ends.
+
+
+```C
+deque_t* deque_custom(size_t element_size,void* (*xmalloc)(size_t), void (*xfree)(void*))
+```
+
+Return a custom deque or `NULL` upon failure
+
+`element_size` is the size of element
+
+
+`xmalloc` and `xfree` are the custom allocator and deallocators passed  by user.
+
+if `xmalloc()` allocates the resources then `xfree()` must release it.
+
+See [xmalloc](#xmalloc) and [xfree](#xfree)
+ 
+
+
+```C
+deque_t* deque_new(size_t element_size)
+```
+
+Thin wrapper around `deque_custom()` same as calling `deque_custom(element_size, malloc, free)`
+
+
+`element_size` is the size of element;  just pass `sizeof(element)` to this.
+
+
+```C
+int deque_append(deque_t* deque,void* obj)
+```
+
+Append an item to the right side of deque;
+Returns zero upon success or a non zero number indicating failure.
+
+`deque` must be a non-`NULL`  pointer returned by `deque_custom()` or `deque_new()`
+
+`obj` is the item which will be added to the deque, it cannot be `NULL` and it's size should be equal to the 
+parameter `element_size` passed to `deque_custom()` or `deque_new()`
+
+
+```C
+void* deque_pop(deque_t* deque)
+```
+
+Pop an item from the deque and return a pointer pointing to the popped item.
+
+In case of failure, this function returns `NULL`
+
 
 ## Work in Progress...
 
