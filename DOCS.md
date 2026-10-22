@@ -355,7 +355,6 @@ Currently provides
 
 | Hash name | Function name |
 | :---  | :--- |
-
 | Murmur hash | `murmur_hash` |
 | Sip hash | `sip_hash` |
 | XX3 hash | `xxh3_hash` |
