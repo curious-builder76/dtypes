@@ -528,7 +528,19 @@ to hash flooding (as of now, may change in future)
 void* hashmap_get(hashmap_t* map,void* key)
 ```
 
+Get an item assigned to `key` from the hashmap. returns `NULL` upon failure.
 
+`map` is a non-`NULL` pointer returned by `hashmap_custom()` or `hashmap_new()`
+
+`key` is the pointer to an object whose assigned value is to be fetched. which cannot be `NULL`.
+
+```C
+
+int hashmap_delete(hashmap_t* map,void* key)
+
+```
+
+Delete a key  from the hashmap, Returns zero upom sucess and a non zero number indicating failure.
 
 ## Work in Progress...
 
