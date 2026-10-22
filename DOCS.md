@@ -355,9 +355,9 @@ Currently provides
 
 | Hash name | Function name |
 | :---  | :--- |
-| Murmur hash | `murmur_hash` |
-| Sip hash | `sip_hash` |
-| XX3 hash | `xxh3_hash` |
+| Murmur hash (64-bit) | `murmur_hash` |
+| Sip hash (64-bit) | `sip_hash` |
+| XX3 hash (64-bit) | `xxh3_hash` |
 
 
 
@@ -427,13 +427,13 @@ uint64_t hashed= sip_hash(name, strlen(name)+1, &hash_ctx);
 
 ```
 
-
+### XX Hash
 
 ```C
 uint64_t xxh3_hash(const void* data, size_t len, void* user_data)
 ```
 
-Returns the Sip Hash of the data supplied
+Returns the XXHash of the data supplied
 
 
 `data` is a non `NULL` pointer which should meet the condition `sizeof(*data)==len`
@@ -460,7 +460,6 @@ xx3h_t hash_context={ /* < XX hash seed > */ };
 uint64_t hashed= xxh3_hash(name, strlen(name)+1, &hash_ctx);
 ```
 
-
-
 ## Work in Progress...
+
 
