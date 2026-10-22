@@ -635,10 +635,17 @@ Update an item at specified index, returns zero indicating succes or
 a non zero number indicating failure
 
 
-`list` is a non-`NULL` pointer returned by `list_custom()` or `list_new()
+`list` is a non-`NULL` pointer returned by `list_custom()` or `list_new()`
 
 `idx` is the index that will be updated.
-`
+
+
+```C
+
+int list_update(list_t* list,size_t idx,void* obj)
+
+```
+Similar of `list_put()`
 ```C
 
 int list_delete(list_t* list,size_t idx)
