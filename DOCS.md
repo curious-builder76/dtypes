@@ -480,9 +480,10 @@ hashmap_t* hashmap_custom(size_t table_size,size_t bucket_capacity,size_t key_si
 Returns a fine tuned hash map as per user specification.
 
 
-`table_size` is the inital table size you wish it to be (useful for preallocating space, loves power of twos)
+`table_size` is the inital table size you wish it to be but not zero
+(useful for preallocating space, loves power of twos)
 
-`bucket_size` is the bucket size which will remain constant through out it's life time (loves power of twos).
+`bucket_size` is the bucket size which will remain constant through out it's life time (loves power of twos, favours integers >= 64).
 
 `key_size` is the size of key object in bytes and cannot be zero
 (simply pass `sizeof(your_desired_key_size_and_it_can_be_anything)` to it.
@@ -490,7 +491,7 @@ Returns a fine tuned hash map as per user specification.
 `value_size` is the size of the value object and cannot be zero
 
 `hash_function(object, object_len, hash_context)` is the hash function used by the 
-hashmap to hash structures (any of the functions provided by `"dtypes/hash_function.h" 
+hashmap to hash structures (any of the functions provided by `"dtypes/hash_function.h"`
 will work; use the suitable hash function as per your use case
 if you feel creative, invent your own hash function and promise it won't be a terrible hash.)
 
@@ -500,11 +501,32 @@ compare objects, (similar of `memcmp()` and `strncmp()`)
 which should be a non null pointer (use `memcmp()` instead 
 if you don't have any custom compare function)
 
-`
-See [xmalloc](#xmalloc)
+
+See [xmalloc](#xmalloc) and [xfree](#xfree)
+
 
 `user_data` is the context that will be passed to the hash function.
 
+```C
+
+hashmap_t* hashmap_new(size_t key_size,size_t value_size)
+```
+
+Wrapper over `hashmap_custom()`
+Uses the default configuration and returns a hashmap pointer.
+
+[!] Warning: uses DJB Hash by default. hashmaps returned by this are vulnerable 
+to hash flooding (as of now, may change in future)
+
+
+`key_size` is the size of key object in bytes and cannot be zero
+
+`value_size` is the size of the value object and cannot be zero
+
+```C
+
+void* hashmap_get(hashmap_t* map,void* key)
+```
 
 
 
