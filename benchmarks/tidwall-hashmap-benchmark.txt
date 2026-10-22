@@ -1,0 +1,19 @@
+Architecture:                            x86_64
+CPU op-mode(s):                          32-bit, 64-bit
+Address sizes:                           48 bits physical, 48 bits virtual
+Byte Order:                              Little Endian
+CPU(s):                                  12
+On-line CPU(s) list:                     0-11
+Vendor ID:                               AuthenticAMD
+Model name:                              AMD Ryzen 5 9600X 6-Core Processor
+
+
+Running hashmap.c benchmarks...
+seed=1792638549, count=5000000, item_size=4
+set            5000000 ops in 0.301 secs, 60 ns/op, 16636831 op/sec, 26.84 bytes/op
+get            5000000 ops in 0.181 secs, 36 ns/op, 27587881 op/sec
+delete         5000000 ops in 0.270 secs, 54 ns/op, 18541111 op/sec
+set (cap)      5000000 ops in 0.213 secs, 43 ns/op, 23454798 op/sec
+get (cap)      5000000 ops in 0.182 secs, 36 ns/op, 27545629 op/sec
+delete (cap)   5000000 ops in 0.223 secs, 45 ns/op, 22405549 op/sec
+
