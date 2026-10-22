@@ -500,7 +500,7 @@ compare objects, (similar of `memcmp()` and `strncmp()`)
 which should be a non null pointer (use `memcmp()` instead 
 if you don't have any custom compare function)
 
-`user_data`
+`user\_data`
 
 ## Work in Progress...
 
