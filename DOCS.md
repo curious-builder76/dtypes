@@ -482,7 +482,7 @@ Returns a fine tuned hash map as per user specification.
 
 `table_size` is the inital table size you wish it to be (useful for preallocating space, loves power of twos)
 
-`bucket_size` is the bucket size which will remain constant through out it's life time.
+`bucket_size` is the bucket size which will remain constant through out it's life time (loves power of twos).
 
 `key_size` is the size of key object in bytes and cannot be zero
 (simply pass `sizeof(your_desired_key_size_and_it_can_be_anything)` to it.
@@ -500,7 +500,13 @@ compare objects, (similar of `memcmp()` and `strncmp()`)
 which should be a non null pointer (use `memcmp()` instead 
 if you don't have any custom compare function)
 
-`user\_data`
+`
+See [xmalloc](#xmalloc)
+
+`user_data` is the context that will be passed to the hash function.
+
+
+
 
 ## Work in Progress...
 
