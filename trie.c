@@ -11,6 +11,8 @@
 typedef struct __node{
 	char node_value;
 	uint8_t used;
+	uint8_t min_seen;
+	uint8_t max_seen;
 	uint8_t capacity;
 	struct __node* nodes;
 }node_t;
@@ -91,7 +93,14 @@ start:
 		child->node_value=*buff;
 		return 0;
 	}
-
+	if(node->min_seen > *buff){
+		node->min_seen=*buff;
+		goto insert_new;
+	}
+	if(node->max_seen < *buff){
+		node->max_seen=*buff;
+		goto insert_new;
+	}
 	for(uint8_t idx=0;idx<node->used;idx++){
 		node_t* child=node->nodes+idx;
 		if(child->node_value== *buff){
@@ -100,7 +109,8 @@ start:
 			goto start;
 		}
 	}
-	// node_push()
+insert_new:
+	// node_push
 	node_t* child=node->nodes+node->used;
 	if(node_init(trie,child,*buff)!=0){
 		return 1;
