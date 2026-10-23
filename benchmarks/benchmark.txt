@@ -11,15 +11,15 @@ Initializing...
 done.
 Test passed.
 PUT
-  Time: 0.025946 seconds
+  Time: 0.026606 seconds
   Operations: 5000000
-  Rate: 192.7079 M ops/sec
+  Rate: 187.9275 M ops/sec
 
 Test passed.
 ARRAY AT (iteration test)
-  Time: 0.003677 seconds
+  Time: 0.003695 seconds
   Operations: 5000000
-  Rate: 1359.8042 M ops/sec
+  Rate: 1353.1800 M ops/sec
 
 All tests passed.
 No memory leaks.
@@ -30,16 +30,23 @@ Key size: 32
 Value size: 32
 Bucket capacity (lifetime constant): 64
 PUT
-  Time: 1.031726 seconds
+  Time: 1.027985 seconds
   Operations: 5000000
-  Rate: 4.8462 M ops/sec
+  Rate: 4.8639 M ops/sec
 
 Test passed
 Key get test.
 GET
-  Time: 0.733238 seconds
+  Time: 0.721578 seconds
   Operations: 5000000
-  Rate: 6.8191 M ops/sec
+  Rate: 6.9293 M ops/sec
+
+Test passed.
+Key delete test.
+DELETE
+  Time: 0.657975 seconds
+  Operations: 5000000
+  Rate: 7.5991 M ops/sec
 
 Test passed.
 All tests passed.
@@ -52,16 +59,23 @@ Value size: 4
 Murmur hash seed (constant seed): 1792419563
 Bucket capacity (lifetime constant): 64
 PUT
-  Time: 0.608927 seconds
+  Time: 0.604108 seconds
   Operations: 5000000
-  Rate: 8.2112 M ops/sec
+  Rate: 8.2767 M ops/sec
 
 Test passed
 Key get test.
 GET
-  Time: 0.470269 seconds
+  Time: 0.466415 seconds
   Operations: 5000000
-  Rate: 10.6322 M ops/sec
+  Rate: 10.7201 M ops/sec
+
+Test passed.
+Key delete test.
+DELETE
+  Time: 0.391196 seconds
+  Operations: 5000000
+  Rate: 12.7813 M ops/sec
 
 Test passed.
 All tests passed.
@@ -73,32 +87,38 @@ Object size: 32
 Bucket capacity (lifetime constant): 64
 Hash function(default): djb hash
 PUT
-  Time: 0.957243 seconds
+  Time: 0.821177 seconds
   Operations: 5000000
-  Rate: 5.2233 M ops/sec
+  Rate: 6.0888 M ops/sec
 
 Key contains test
 CONTAINS
-  Time: 0.656387 seconds
+  Time: 0.652895 seconds
   Operations: 5000000
-  Rate: 7.6175 M ops/sec
+  Rate: 7.6582 M ops/sec
+
+Key delete test
+DELETE
+  Time: 0.599540 seconds
+  Operations: 5000000
+  Rate: 8.3397 M ops/sec
 
 No memory leaks.
 ====benchmark of lookup====
 Key put test.
 Test passed.
 PUT
-  Time: 0.095122 seconds
+  Time: 0.095449 seconds
   Operations: 5000000
-  Rate: 52.5641 M ops/sec
+  Rate: 52.3840 M ops/sec
 
 Nonexistent key test.
 Test passed.
 Missing entries test.
 GET
-  Time: 0.083255 seconds
+  Time: 0.082698 seconds
   Operations: 5000000
-  Rate: 60.0565 M ops/sec
+  Rate: 60.4610 M ops/sec
 
 No missing entries were found.
 Test passed.
@@ -114,48 +134,48 @@ Nonexistent entry test
 CONTAINS: panda  -->  false
 Existent entry test.
 CONTAINS: apple  -->  true
+Random inserts.
+Test passed
+INSERT (random)
+  Time: 19.871736 seconds
+  Operations: 50000000
+  Rate: 2.5161 M ops/sec
+
 Sequential inserts.
 Test passed
 INSERT (sequential)
-  Time: 0.359732 seconds
-  Operations: 5000000
-  Rate: 13.8992 M ops/sec
-
-Random inserts.
-Test passed.
-INSERT (random)
-  Time: 1.708298 seconds
-  Operations: 5000000
-  Rate: 2.9269 M ops/sec
+  Time: 2.271216 seconds
+  Operations: 50000000
+  Rate: 22.0146 M ops/sec
 
 Random lookups.
 Test passed.
 CONTAINS (random)
-  Time: 1.674270 seconds
-  Operations: 5000000
-  Rate: 2.9864 M ops/sec
+  Time: 25.000000 seconds
+  Operations: 50000000
+  Rate: 2.0000 M ops/sec
 
 All tests passed.
 No memory leaks.
 ====benchmark of deque====
 5000000 sequential appends.
 APPEND
-  Time: 0.031827 seconds
+  Time: 0.032081 seconds
   Operations: 5000000
-  Rate: 157.0993 M ops/sec
+  Rate: 155.8555 M ops/sec
 
 Test passed.
 5000000 sequential pops.
 POPLEFT
-  Time: 0.010244 seconds
+  Time: 0.010271 seconds
   Operations: 5000000
-  Rate: 488.0906 M ops/sec
+  Rate: 486.8075 M ops/sec
 
 5000000 random operations.
 RANDOM OPERATIONS
-  Time: 0.059006 seconds
+  Time: 0.059198 seconds
   Operations: 5000000
-  Rate: 84.7371 M ops/sec
+  Rate: 84.4623 M ops/sec
 
 All tests passed.
 No memory leaks.
@@ -165,18 +185,18 @@ Elements: 1000000
 Iterations: 10
 
 PUT
-  Time: 0.107174 seconds
+  Time: 0.108990 seconds
   Operations: 10000000
-  Rate: 93.31 M ops/sec
+  Rate: 91.75 M ops/sec
 
 GET (inserted)
-  Time: 0.099758 seconds
+  Time: 0.100213 seconds
   Operations: 10000000
-  Rate: 100.24 M ops/sec
+  Rate: 99.79 M ops/sec
   Positive results: 10000000
 
 FALSE POSITIVE TEST
-  Time: 0.007982 seconds
+  Time: 0.008067 seconds
   Tested: 1000000
   False positives: 25830
   False-positive rate: 2.5830%
@@ -186,9 +206,9 @@ Nonexistent bit test.
 Test passed.
 Test passed
 SETBIT
-  Time: 0.005175 seconds
+  Time: 0.004988 seconds
   Operations: 5000000
-  Rate: 966.1836 M ops/sec
+  Rate: 1002.4058 M ops/sec
 
 Test passed
 CHEKBIT
@@ -198,15 +218,15 @@ CHEKBIT
 
 Test passed
 CLEARBIT
-  Time: 0.003724 seconds
+  Time: 0.003730 seconds
   Operations: 5000000
-  Rate: 1342.6423 M ops/sec
+  Rate: 1340.4826 M ops/sec
 
 Test passed
 5000000 random operations
-  Time: 0.042702 seconds
+  Time: 0.042830 seconds
   Operations: 5000000
-  Rate: 117.0905 M ops/sec
+  Rate: 116.7406 M ops/sec
 
 All tests passed.
 ====benchmark of ndarray====
@@ -215,45 +235,45 @@ Elements: 1000000
 Iterations: 10
 
 PUT
-  Time: 0.038163 seconds
+  Time: 0.037758 seconds
   Operations: 10000000
-  Rate: 262.03 M ops/sec
+  Rate: 264.84 M ops/sec
 
 GET
-  Time: 0.032296 seconds
+  Time: 0.032503 seconds
   Operations: 10000000
-  Rate: 309.64 M ops/sec
+  Rate: 307.66 M ops/sec
 
 Checksum: 4999995000000
 Expected: 4999995000000
 Passed.
 ====benchmark of linked list====
 APPEND
-  Time: 0.029207 seconds
+  Time: 0.029349 seconds
   Operations: 5000000
-  Rate: 171.1918 M ops/sec
+  Rate: 170.3636 M ops/sec
 
 GET (iteration)
-  Time: 0.009438 seconds
+  Time: 0.009538 seconds
   Operations: 5000000
-  Rate: 529.7733 M ops/sec
+  Rate: 524.2189 M ops/sec
 
 GET (access last element)
-  Time: 0.008338 seconds
+  Time: 0.008393 seconds
   Operations: 5000000
-  Rate: 599.6642 M ops/sec
+  Rate: 595.7345 M ops/sec
 
 DELETE (tail)
-  Time: 0.016482 seconds
+  Time: 0.016565 seconds
   Operations: 5000000
-  Rate: 303.3612 M ops/sec
+  Rate: 301.8412 M ops/sec
 
 ------------------------------------
 | 0 | 1 | 5000002 | 5000003 | 5000004 |
 -------------------------------------
 DELETE (2nd item continiously)
-  Time: 0.031446 seconds
+  Time: 0.031171 seconds
   Operations: 5000000
-  Rate: 159.0027 M ops/sec
+  Rate: 160.4055 M ops/sec
 
 All tests passed.
