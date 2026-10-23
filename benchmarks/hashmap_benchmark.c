@@ -38,7 +38,7 @@ void tidwall_me(){
 	do{
 		map=hashmap_custom(initial_table_size, bucket_capacity, 
 				key_size, value_size,
-				murmur_hash, memcmp, malloc, free, &murmur_seed
+				default_hash_function, memcmp, malloc, free, &murmur_seed
 				);
 	}while(map==NULL);
 	debug("====benchmark of hashmap (comparable to tidwall)====");
@@ -47,11 +47,12 @@ void tidwall_me(){
 			"Initial table size: %zu\n"
 			"Key size: %zu\n"
 			"Value size: %zu\n"
-			"Murmur hash seed (constant seed): %u\n"
+			"Hash function: djb hash\n"
+			// "Murmur hash seed (constant seed): %u\n"
 			"Bucket capacity (lifetime constant): %zu\n",
 			initial_table_size,
 			key_size, value_size,
-			murmur_seed,
+			// murmur_seed,
 			bucket_capacity
 			);
         int tests_failed=0;

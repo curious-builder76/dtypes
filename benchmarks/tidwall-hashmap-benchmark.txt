@@ -17,3 +17,27 @@ set (cap)      5000000 ops in 0.213 secs, 43 ns/op, 23454798 op/sec
 get (cap)      5000000 ops in 0.182 secs, 36 ns/op, 27545629 op/sec
 delete (cap)   5000000 ops in 0.223 secs, 45 ns/op, 22405549 op/sec
 
+
+
+====benchmark of hashmap (comparable to tidwall)====
+Initial table size: 1024
+Key size: 4
+Value size: 4
+Hash function: djb hash
+Bucket capacity (lifetime constant): 64
+Key put test
+PUT
+  Time: 0.385224 seconds
+  Operations: 5000000
+  Rate: 12.9795 M ops/sec
+
+Test passed
+Key get test.
+GET
+  Time: 0.179396 seconds
+  Operations: 5000000
+  Rate: 27.8713 M ops/sec
+
+Test passed.
+All tests passed.
+No memory leaks.
