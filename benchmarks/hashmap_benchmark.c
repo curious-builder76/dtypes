@@ -47,12 +47,12 @@ void tidwall_me(){
 			"Initial table size: %zu\n"
 			"Key size: %zu\n"
 			"Value size: %zu\n"
-			"Hash function: djb hash\n"
-			// "Murmur hash seed (constant seed): %u\n"
+			// "Hash function: djb hash\n"
+			"Murmur hash seed (constant seed): %u\n"
 			"Bucket capacity (lifetime constant): %zu\n",
 			initial_table_size,
 			key_size, value_size,
-			// murmur_seed,
+			murmur_seed,
 			bucket_capacity
 			);
         int tests_failed=0;
