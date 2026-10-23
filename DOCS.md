@@ -762,11 +762,11 @@ void* ndarray_get(ndarray_t* array,...)
 ```
 
 Returns a pointer pointing to the item requested;
-Or a pointer pointing to a [z][zero pointer]
+Or a pointer pointing to a [1][zero pointer]
 
 
 
-[-] 
+[1]: The pointer
 
 ```C
 
