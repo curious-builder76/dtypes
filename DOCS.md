@@ -102,7 +102,7 @@ of OOM (Out of Memory) conditions.
 
 int array_pop(array_t* array,void* obj)
 
-``
+```
 Pops an element from the last of array and copies it to obj.
 
 `array` is a non-`NULL` pointer returned by either `array_custom()` or `array_new()` 
