@@ -70,21 +70,44 @@ array_t* array_new(size_t element_size){
 
 // Grows the size of array.
 
-int array_grow(array_t* array){
+static int resize0(array_t* array, size_t new_capacity){
 	size_t old_cap=array->capacity;
-	size_t new_capacity=old_cap*2;
-
 	size_t mem_required=new_capacity*array->element_size;
 
 	uchar* new_mem=array->realloc(array->elements,mem_required);
 	if(new_mem==NULL){
-		array->oom=1;
 		return 1;
 	}
 	array->elements=new_mem;
 	array->capacity=new_capacity;
 	return 0;
 }
+
+int array_grow(array_t* array){
+	size_t old_cap=array->capacity;
+	size_t new_capacity=old_cap*2;
+	if(new_cap < old_cap)
+		return 1;
+
+	array->oom=resize0(array, new_capacity);
+	return array->oom;
+
+}
+
+#define SHRINK_AT 0.25
+
+int array_shrink(array_t* array){
+	double lf= (double)array->length / (double)array->capacity;
+	if( lf > SHRINK_AT) return 0; // doesn't needs it. 
+	size_t old_cap=array->capacity;
+	if(old_cap <= 8 ) {
+		return 0; // already too small.
+	}
+	size_t new_capacity=old_cap/2;
+	return resize0(array, new_capacity);
+}
+
+
 
 // Returns the siize of array.
 
@@ -151,6 +174,9 @@ int array_pop(array_t* array,void* obj){
 		return 1;
 	array_get(array,array->used-1,obj);
 	array->used--;
+	array_shrink(array); // Ignore the value on purpose.
+			     // if the shrinking failed. shall also mean that
+			     // the old memory wasn't freed.
 	return 0;
 }
 
