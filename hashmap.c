@@ -307,7 +307,6 @@ int hashmap_delete(hashmap_t* map, void* key){
 	bucket_t* bucket=get_bucket0(map,bucket_idx);
 
 	if(!bucket->used){
-		printf("Here\n");
 	       	return 1;
 	}
 	
@@ -322,7 +321,6 @@ int hashmap_delete(hashmap_t* map, void* key){
 		}
 	}
 	if(!found){
-		printf("Here not found.\n");
 	       	return 1;
 	}
 
