@@ -93,12 +93,34 @@ void benchmark(){
 			hashset_debug("Failed after %d keys",i);
 			tests_failed+=1;
 			has_test_failed=1;
+			break;
 		}
 	}
 	end=clock();
 	if(!has_test_failed){
 		double time_elapsed= (double)(end-start)/CLOCKS_PER_SEC;
 		print_benchmark("CONTAINS",times,time_elapsed);
+	}else{
+		hashset_debug("Test failed.");
+	}
+
+	has_test_failed=0;
+	hashset_debug("Key delete test");
+	start=clock();
+	for(int i=0;i<times;i++){
+		char* key=data+ i*key_size;
+		int ret=hashset_delete(set,key);
+		if(ret!=0){
+			hashset_debug("Failed after %d keys",i);
+			tests_failed+=1;
+			has_test_failed=1;
+			break;
+		}
+	}
+	end=clock();
+	if(!has_test_failed){
+		double time_elapsed= (double)(end-start)/CLOCKS_PER_SEC;
+		print_benchmark("DELETE",times,time_elapsed);
 	}else{
 		hashset_debug("Test failed.");
 	}

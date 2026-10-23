@@ -38,6 +38,9 @@ int hashset_oom(hashset_t* set);
 int hashset_put(hashset_t* set,void* obj);
 int hashset_contains(hashset_t* set,void* obj);
 
+int hashset_delete(hashset_t* set, void* key);
+
+
 void hashset_destroy(hashset_t* set);
 
 

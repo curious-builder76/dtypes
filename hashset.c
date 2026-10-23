@@ -244,18 +244,15 @@ insert_new:
 int hashset_delete(hashset_t* set, void* key){
 	uint64_t hash=set->hash_function(key, set->key_size, set->user_data);
 
-	size_t hash_casted=(size_t)hash;
-
 	size_t bucket_idx= hash % set->table_size;
 
 	size_t record_size=sizeof(record_t) + set->key_size;
 
 	bucket_t* bucket=get_bucket0(set,bucket_idx);
 
-	if(!bucket->used) return 1;
-	
-	if(bucket->min_hash_seen > hash_casted || bucket->max_hash_seen < hash_casted)
-		return 1;
+	if(!bucket->used){
+	       	return 1;
+	}	
 	size_t idx=0;
 	char found=0;
 	record_t* record;
@@ -266,7 +263,9 @@ int hashset_delete(hashset_t* set, void* key){
 			break;
 		}
 	}
-	if(!found) return 1;
+	if(!found){
+		return 1;
+	}
 	bucket->used--;
 	record_t* last_record=(record_t*)((char*)bucket + sizeof(bucket_t)+bucket->used*record_size);
 	memmove(record, last_record, record_size);
