@@ -20,7 +20,7 @@ data structure.
 
 ## Custom allocators
 
-This repository uses the following names for custom allocators,
+This repository uses the following parameter names for custom allocators,
 
 here's a short brief.
 
@@ -28,9 +28,11 @@ here's a short brief.
 `xmalloc(size_t memory_size)` can be any custom allocator of your choice, i.e an arena allocator, a mmap based allocator or anything you wish to
 given it cannot be NULL, and shall return a readable and writable pointer (which can return NULL indicating failures).
 
+### xrealloc
 `xrealloc(void* old_ptr, size_t new_size)` should resize the pointer/memory/region/chunk to the new provided size, this parameter cannot be NULL,
 but can return NULL indicating failures
 
+### xfree
 `xfree(void* allocated_by_malloc_or_realloc)` should release the resources aquired by `xmalloc` and `xrealloc`,
 this function can be a dummy function but cannot be NULL.
 
@@ -73,6 +75,7 @@ size_t array_getsize(array_t* array)
 ```
 Returns the size (equivalent of length) of an array
 
+`array` is a non-`NULL` pointer returned by either `array_custom()` or `array_new()` 
 
 ```C
 void* array_at(array_t* array, size_t pos)
@@ -83,22 +86,39 @@ Or you should gurantee that as long as you own it, the array won't be modified.
 It may become a dangling pointer after modifications.
 
 
+`array` is a non-`NULL` pointer returned by either `array_custom()` or `array_new()` 
+
+
 ```C
 int array_oom(array_t* array)
 ```
 Returns a non zero number if the last operation failed because
 of OOM (Out of Memory) conditions.
 
+
+`array` is a non-`NULL` pointer returned by either `array_custom()` or `array_new()` 
+
 ```C
+
 int array_pop(array_t* array,void* obj)
+
 ``
 Pops an element from the last of array and copies it to obj.
+
+`array` is a non-`NULL` pointer returned by either `array_custom()` or `array_new()` 
+
 ```C
+
 int array_destroy(array_t* array)
+
 ```
+
 Destroys the array completely, and releases resources aqquired by it.
 You should'nt use that array after
 this function is called on it.
+
+
+`array` is a  pointer returned by either `array_custom()` or `array_new()`  which can be `NULL`
 
 ## Bitset
 
@@ -128,7 +148,9 @@ equivalent of calling `bitset_custom(capacity, malloc, free)`
 `capacity` is the capacity in bits (not bytes).
 
 ```C
+
 int bitset_setbit(bitset_t* set,size_t index)
+
 ```
 
 Sets a bit in given bitset (irresepective of the bit was set or not).
@@ -140,7 +162,9 @@ Returns zero upon success or a non zero number indicating failure
 `index` is the position where the operation will be performed
 
 ```C
+
 int bitset_togglebit(bitset_t* set,size_t index)
+
 ```
 Toggles a bit in given bitset (sets to on (1) if off (0); and off (0) if on (1)).
 Returns zero upon success or a non zero number indicating 
@@ -152,7 +176,9 @@ failure (Out of Bounds operation.)
 `index` is the position where the operation will be performed
 
 ```C
+
 int bitset_clearbit(bitset_t* set,size_t index)
+
 ```
 
 
@@ -166,7 +192,9 @@ failure (Out of Bounds operation.)
 `index` is the position where the operation will be performed
 
 ```C 
+
 void bitset_destroy(bitset_t* set)
+
 ``` 
 Releases the resources held by bitset. (the bitset becomes a dangling pointer after that)
 
@@ -188,8 +216,10 @@ Below is a table
 
 
 ```C
+
 bloom_t* bloom_custom(size_t capacity,size_t element_size,uint64_t (*hash1)(void*, size_t),
  uint64_t (*hash2)(void*,size_t), void* (*xmalloc)(size_t), void (*xfree)(void*))
+
 ```
 
 Returns a custom bloom filter or `NULL` indicating failure
@@ -207,7 +237,9 @@ Returns a custom bloom filter or `NULL` indicating failure
 See [xmalloc](#xmalloc) and [xfree](#xfree)
 
 ```C
+
 bloom_t* bloom_new(size_t capacity,size_t element_size, uint64_t (*hash1)(void*, size_t), uint64_t (*hash2)(void* , size_t))
+
 ```
 `capacity` is the capacity in bits (not bytes).
 
@@ -218,7 +250,9 @@ bloom_t* bloom_new(size_t capacity,size_t element_size, uint64_t (*hash1)(void*,
 `hash2(object, object_size)` is the 2nd hash function of bloom filter and should not be same as `hash1`
 
 ```C
+
 bloom_contains(bloom_t* bloom,void* obj)
+
 ```
 Check wether the item possibly present
 Returns a non zero number if possibly present 
@@ -298,7 +332,7 @@ parameter `element_size` passed to `deque_custom()` or `deque_new()`
 void* deque_pop(deque_t* deque)
 ```
 
-Pop an item from the right side of the deque and
+Pop an item from the **right** side of the deque and
 return a pointer pointing to the popped item.
 In case of failure, this function returns `NULL`
 
@@ -311,7 +345,7 @@ This parameter needs to be returned by `deque_custom()` or `deque_new()` and can
 ```C
 int deque_appendleft(deque_t* deque,void* obj)
 ```
-Pop an item from the left side of deque
+Pop an item from the **left** side of deque
 And return a pointer pointing to the item 
 or return `NULL` indicating failure.
 
@@ -461,7 +495,7 @@ uint64_t hashed= xxh3_hash(name, strlen(name)+1, &hash_ctx);
 ```
 
 
-## Hash map (a.k.a dictionaries)
+## Hash map
 
 A data structure that stores data in form of key value pairs
 
@@ -669,6 +703,75 @@ Release the resources held by list
 
 `list` is a pointer which is returned by `list_custom()` or `list_new()` which can be `NULL`
 
+## ND-Arrays
+
+Ever heard of `numpy` ? If not, no issues; and if yes, then I guess such a person shall know what a ND-Array is.
+This data structure is basically C's `type_name name[a][b][c]...` which got abstracted.
+
+Almost every data structure kept in this repository grows dynamically; but this one is an _exception_ (it doesn't).
+
+
+```C
+
+ndarray_t* ndarray_custom(void* (*xmalloc)(size_t), void (*xfree)(void*),size_t obj_size,size_t ndims,...)
+
+```
+
+Returns a custom nd-array whose internal memory is initalized to zero. 
+Returns `NULL` upon failure.
+
+`obj_size` is the size of object.
+
+`ndims` is the number of dimensions this nd-array will have, 
+this parameter gets stored internally in the nd-array's meta data and 
+in future; calls to the specified nd-array,
+ **the  `ndarray_` prefixed functions expect exactly `ndims` arguments
+to access, or modify the nd-array; not doing so may lead to undefined behavior**
+
+Now the expression `...` is a variadic argument.
+
+Pass exactly `ndims` arguments after `ndims` parameter to avoid undefined behaviour.
+
+
+See [xmalloc](#xmallox) and [xfree](#xfree)
+
+```C
+
+ndarray_t* ndarray_new(size_t obj_size,size_t ndims,...)
+
+```
+
+`obj_size` is the size of object.
+
+`ndims` is the number of dimensions this nd-array will have, 
+this parameter gets stored internally in the nd-array's meta data and 
+in future; calls to the specified nd-array,
+ **the  `ndarray_` prefixed functions expect exactly `ndims` arguments
+to access, or modify the nd-array; not doing so may lead to undefined behavior**
+
+Now the expression `...` is a variadic argument.
+
+Pass exactly `ndims` arguments after `ndims` parameter to avoid undefined behaviour.
+
+
+
+```C
+
+void* ndarray_get(ndarray_t* array,...)
+
+```
+```C
+
+int ndarray_put(ndarray_t* a,void* obj,...)
+
+```
+
+
+```C
+
+void ndarray_destroy(ndarray_t* a)
+
+```
 
 
 ## Work in Progress...
