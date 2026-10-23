@@ -286,6 +286,26 @@ See [CONTRIBUTING.md](CONTRIBUTING.md "A small and honest lecture about how can 
 ## Benchmarks
 
 Checkout [benchmark/benchmark.txt](benchmarks/benchmark.txt "Benchmarked on author's  machine") 
+
+
+This repository does NOT promises **FUCK YEAH** ,  **SPEED GOES BRRR...** or **PRETTY DARN SPEED** performance
+but they are  **pretty decent**,
+
+the above are the benchmarks
+
+Here is the tidwall's hashmap.c [benchmark](benchmarks/tidwall-hashmap-benchmark.txt)
+ran on the same machine as of benchmark.txt; 
+and as compared to this repository's implementation of hashmap. it is pretty slow.
+
+tidwall's hashmap uses four byte whole items, but benchmark.txt contains 4 bytes of key and 4 bytes of 
+value, (means 8 byte whole) which means hypothetically the speed is double of what the comparable section shows,
+and gets very closer to beat tidwall's hashmap, but **doesn't beats it** .
+
+But I can definetly say that the repository has improved much of what it had [started](https://github.com/curious-builder76/dtypes/blob/8d586e03ac860b62d17e3769c84686d6b2ca7de0/benchmarks/benchmark.txt) 
+from.
+
+Well, to conclude; I gave you the numbers. you check them.
+
 ## License
 
 - [Apache License, Version 2.0]( LICENSE )
