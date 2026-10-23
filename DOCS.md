@@ -663,6 +663,108 @@ Releases the resources held by the given hashmap, the hashmap becomes a dangling
 
 `map` is a pointer returned by `hashmap_custom()` or `hashmap_new()` which can be `NULL`
 
+
+## Hashset
+
+A  Set  in general cannot contain duplicate items, in terms of mathematics.
+
+In the world of computer science, a hashset is basically a hash map or a hash table with dummy values
+or no values at all. And is often used for its ammortized `O(1)` lookup , or de-duplicating items.
+
+```C
+
+hashset_t* hashset_custom(
+                size_t table_size,size_t bucket_capacity,
+                size_t key_size,
+                uint64_t (*hash_function)(const void* , size_t, void* ),
+                int (*compare)(const void* , const void* , size_t),
+                void* (*xmalloc)(size_t),
+                void (*xfree)(void*),
+                void* user_data)
+
+```
+Returns a custom hash set as specified by user.
+Returns `NULL` upon failure.
+
+`table_size` is the inital table size of the given hash set ( use for pre-allocating space, loves power of twos)
+
+`bucket_capacity` is the capacity of buckets in this hash set, that will remain constant through out the
+life time of hash set.
+
+`key_size` is the size of object in bytes to be stores (basically `sizeof(object)`)
+
+`hash_function(object, object_size, hash_context)` is a custom hash function supplied by user
+(any of the hash functions provided by `"dtypes/hash_function.h"` will work, if you are feel
+creative, pass your own hash function, and promise it won't be a terrible hash)
+
+`compare(obj1 , obj2, object_size)` is used by hash set internally to compare objects.
+
+`user_data` is the hash context that will be passed to the hash function.
+
+See [xmalloc](#xmalloc) and [xfree](#xfree)
+
+
+```C
+
+hashset_t* hashset_new(size_t obj_size)
+
+```
+Returns a hash set using default parameters, or `NULL` indicating failures.
+
+`obj_size` is the size of object in bytes (basically `sizeof(object)`)
+
+
+```C
+
+int hashset_oom(hashset_t* set)
+
+```
+Returns a non zero integer if the last operation failed due to Out of memory condition.
+
+`set` is a non-`NULL` pointer returned by `hashset_custom()` or `hashset_new()`
+
+```C
+
+int hashset_put(hashset_t* set,void* obj)
+
+```
+Insert an item to the hash set , return zero upon success or a non-zero 
+number indicating failure
+
+`set` is a non-`NULL` pointer returned by `hashset_custom()` or `hashset_new()`
+
+`obj` is a non-`NULL` pointer which will be added to the given hash set.
+
+```C
+
+int hashset_contains(hashset_t* set,void* obj)
+
+```
+Check the membership of a item in the given hashset, returns a non zero number 
+
+`set` is a non-`NULL` pointer returned by `hashset_custom()` or `hashset_new()`
+
+`obj` is a non-`NULL` pointer whose membership will be tested.
+
+
+```C
+
+int hashset_delete(hashset_t* set, void* key)
+
+```
+Delete a item froom the given hash set, returns zero upon succes.
+or a non-zero number indicating failure
+
+`set` is a non-`NULL` pointer returned by `hashset_custom()` or `hashset_new()`
+
+`key` is the object which will be deleted from the given hash set
+
+```C
+
+void hashset_destroy(hashset_t* set)
+
+```
+`set` is a pointer returned by `hashset_custom()` or `hashset_new()` which can be `NULL`
 ## Lists
 
 The lists in this repository are implemented as a cursor based doubly linked list.
@@ -776,7 +878,7 @@ Now the expression `...` is a variadic argument.
 Pass exactly `ndims` arguments after `ndims` parameter to avoid undefined behaviour.
 
 
-See [xmalloc](#xmallox) and [xfree](#xfree)
+See [xmalloc](#xmalloc) and [xfree](#xfree)
 
 ```C
 
@@ -901,7 +1003,6 @@ or zero indicating that the sting was inserted successfully or it already existe
 
 `string` is an array or pointer of `char` which is terminated by `'\0'`;
 and which will be inserted into trie.
-
 
 
 ```C
