@@ -310,7 +310,7 @@ and gets very closer to beat tidwall's hashmap, but **doesn't beats it** .
 But I can definetly say that the repository has improved much of what it had [started](https://github.com/curious-builder76/dtypes/blob/8d586e03ac860b62d17e3769c84686d6b2ca7de0/benchmarks/benchmark.txt) 
 from.
 
-Well, to conclude; I gave you the numbers. you check them.
+Well, to conclude; There exists, proof; and the numbers won't lie
 
 ## License
 
