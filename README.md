@@ -275,6 +275,12 @@ and those systems may merely contain the ram required by this.
 - Trade-offs speed with space.
 - Not thread safe.
 
+## Documentation
+
+Checkout [DOCS.md](DOCS.md) 
+
+The documentation isn't complete and the work is still in progress
+
 ## API related note
 
 The function `<name>`\_oom isn't implemented for every data type.
