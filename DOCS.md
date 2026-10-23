@@ -5,24 +5,26 @@
 
 ## Table of Content
 
-[Short description](#Short description)
-[Custom allocators](#Custom allocators)
+
+[Short description](#Short-description)
+[Custom allocators](#Custom-allocators)
 [xmalloc](#xmalloc)
 [xrealloc](#xrealloc)
 [xfree](#xfree)
-[Dynamic Arrays](#Dynamic Arrays)
+[Dynamic Arrays](#Dynamic-Arrays)
 [array\_custom](#array\_custom)
 [Bitset](#Bitset)
-[Bloom filters](#Bloom filters)
+[Bloom filters](#Bloom-filters)
 [Deque](#Deque)
-[Hash functions](#Hash functions)
-[Murmur Hash](#Murmur Hash)
-[Sip Hash](#Sip Hash)
-[XX Hash](#XX Hash)
-[Hash map](#Hash map)
+[Hash functions](#Hash-functions)
+[Murmur Hash](#Murmur-Hash)
+[Sip Hash](#Sip-Hash)
+[XX Hash](#XX-Hash)
+[Hash map](#Hash-map)
 [Lists](#Lists)
 [ND-Arrays](#ND-Arrays)
 [Trie](#Trie)
+
 
 ## Short description
 
