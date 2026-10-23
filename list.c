@@ -123,7 +123,7 @@ static node_t* get_node_at(list_t* list,size_t idx){
 // Grow the list by 2 times of it's original size
 // (usually when full).
 
-int list_grow(list_t* list){
+static int list_grow(list_t* list){
 	size_t new_cap= list->cap*2;
 	if(new_cap < list->cap){
 		return 1;

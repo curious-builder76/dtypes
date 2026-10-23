@@ -18,8 +18,6 @@
 
 [Dynamic Arrays](#Dynamic-Arrays)
 
-<!--[array\_custom](#array\_custom) -->
-
 [Bitset](#Bitset)
 
 [Bloom filters](#Bloom-filters)

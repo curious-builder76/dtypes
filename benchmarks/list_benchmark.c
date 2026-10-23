@@ -216,8 +216,29 @@ int main(){
 	end=clock();
 	if(!failure_flag){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
-		print_benchmark("GET (iteration)",times,time_elapsed);
+		print_benchmark("GET (iteration, left to right)",times,time_elapsed);
 	}
+
+	start=clock();
+	for(size_t idx=times-1;idx!=0;idx--){
+		size_t* got=list_get(list,idx);
+		if(got==NULL || *got!=idx){
+			puts("Test failed.");
+			if(!got){
+				printf("list get(iteration)\nExpected %zu got null\n",idx);
+			}else
+				printf("list get(iteration)\nExpected %zu got %zu\n",idx,*got);
+			tests_failed++;
+			failure_flag=1;
+			break;
+		}
+	}
+	end=clock();
+	if(!failure_flag){
+		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
+		print_benchmark("GET (iteration, right to left)",times,time_elapsed);
+	}
+
 
 	start=clock();
 	for(size_t idx=0;idx<times;idx++){
