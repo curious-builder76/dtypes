@@ -760,13 +760,17 @@ Pass exactly `ndims` arguments after `ndims` parameter to avoid undefined behavi
 void* ndarray_get(ndarray_t* array,...)
 
 ```
+Returns a non-`NULL` pointer upon success,
+if the position was never over-written or updated before,  
+A zero-initialized pointer is returned.
 
-Returns a pointer pointing to the item requested;
-Or a pointer pointing to a [zero pointer][1]
+And a `NULL` pointer indicating failure
+(usualy Out of Bounds operation)
 
+`array` is a non-`NULL` pointer returned by `ndarray_custom()` or `ndarray_new()`
 
+The variadic expression `...` expects `ndims` arguments passsed to `ndarray_custom()` or `ndarray_new()`
 
-[1]: The pointer
 
 ```C
 
@@ -774,13 +778,19 @@ int ndarray_put(ndarray_t* a,void* obj,...)
 
 ```
 
+`array` is a non-`NULL` pointer returned by `ndarray_custom()` or `ndarray_new()`
+
+`obj` is the item which will be stored in this nd-array
+
+The variadic expression `...` expects `ndims` arguments passsed to `ndarray_custom()` or `ndarray_new()`
+
 
 ```C
 
-void ndarray_destroy(ndarray_t* a)
+void ndarray_destroy(ndarray_t* array)
 
 ```
-
+`array` is a pointer returned by `ndarray_custom()` or `ndarray_new()` which can be `NULL`
 
 ## Work in Progress...
 
