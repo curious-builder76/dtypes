@@ -122,11 +122,14 @@ this function is called on it.
 
 ## Bitset
 
+Bitset is an array data structure that compactly stores bits.
 
-
+For extended info; See [here](https://en.wikipedia.org/wiki/Bit_array).
 
 ```C
+
 bitset_t* bitset_custom(size_t capacity, void* (*xmalloc)(size_t), void (*xfree)(void*))
+
 ```
 Returns a custom bitset specified by the user or `NULL` upon failure.
 

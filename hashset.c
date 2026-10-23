@@ -173,9 +173,8 @@ int hashset_contains(hashset_t* set, void* obj){
 // returns 0 upon sucess 
 // and a non zero number indicating failure
 //
-int hashset_put0(hashset_t* set, void* key){
+int hashset_put0(hashset_t* set, uint64_t hash, void* key){
 
-	uint64_t hash=set->hash_function(key,set->key_size,set->user_data);
 
 	size_t casted_hash= (size_t) hash;
 
@@ -297,7 +296,7 @@ int hashset_grow(hashset_t* set,size_t new_size){
 		for(size_t bucket_idx=0;bucket_idx<bucket->used;bucket_idx++){
 			record_t* record = (record_t*)((char*)bucket + sizeof(bucket_t) + record_size* bucket_idx);
 			unsigned char* key= record->data;
-			if(hashset_put0(set2,key)!=0){
+			if(hashset_put0(set2,record->hash,key)!=0){
 				hashset_destroy(set2);
 				return 1;
 			}
@@ -326,8 +325,10 @@ int hashset_oom(hashset_t* set){
 
 int hashset_put(hashset_t* set, void* key){
 	set->oom_flag=0;
+
+	uint64_t hash=set->hash_function(key,set->key_size,set->user_data);
 	for(size_t idx=0;idx<5;idx++){
-		if(hashset_put0(set, key)==0){
+		if(hashset_put0(set, hash,key)==0){
 			return 0;
 		}
 		if(hashset_grow(set, set->table_size*2)!=0){
