@@ -3,6 +3,7 @@
 #include<time.h>
 #include<string.h>
 #include<stdint.h>
+#include<stdlib.h>
 
 #include "dtypes/list.h"
 #include "print.h"
@@ -260,7 +261,29 @@ int main(){
 		print_benchmark("GET (access last element)",times,time_elapsed);
 	}
 
-	
+	size_t times_random=100000;
+	start=clock();
+	for(size_t idx=0;idx<times_random;idx++){
+		size_t val = random() % times_random;
+		size_t* got=list_get(list,val);
+		if( got==NULL ||  *got!=val){
+			tests_failed++;
+			puts("Test failed.");
+			if(!got) puts("list get (access last element)\nUnexpected null return");
+			else{
+				printf("list get (access last element)\nExpected %zu got %zu\n",idx,*got);
+			}
+			failure_flag=1;
+			break;
+		}
+	}
+	end=clock();
+	if(!failure_flag){
+		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
+		print_benchmark("GET (random)",times_random,time_elapsed);
+	}
+
+
 	start=clock();
 	for(size_t idx=times;idx>0;idx--){
 		if(list_delete(list,idx-1)!=0){

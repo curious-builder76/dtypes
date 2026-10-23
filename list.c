@@ -63,6 +63,20 @@ void list_destroy(list_t* l){
 	l->free(l);
 }
 
+
+
+// Helper function 
+//
+// Calculate distance from b to a (usually root of the array).
+//
+static size_t calculate_distance(void* a,void *b, size_t padding){
+	size_t distance= (size_t)((char*)b - (char*)a);
+
+	return distance/padding;
+}
+
+
+
 // Well. this won't hack your computer.
 //
 // this just takes advantage of recorded last access.
@@ -94,16 +108,44 @@ static node_t* exploit_last_access(list_t* list,size_t idx){
 	return curr;
 }
 
+static node_t* exploit_last_access_reverse(list_t* list, size_t idx){
+
+	size_t distance= list->last_access_logical - idx;
+
+	size_t padding=sizeof(node_t)+list->obj_size;
+
+	size_t physical_address=list->last_access_physical;
+	size_t logical_address=list->last_access_physical;
+
+	node_t* curr=(node_t*)((char*)list->nodes + padding*physical_address);
+
+	while(distance--){
+		if(curr->prev==NULL_NODE){
+			return NULL;
+		}
+		physical_address=curr->prev;
+		logical_address--;
+		curr=(node_t*)((char*)list->nodes + padding*physical_address);		
+	}
+	list->last_access_logical=logical_address;
+	list->last_access_physical=physical_address;
+	return curr;
+}
+
+
 // Logically traverse the list.
 static node_t* get_node_at(list_t* list,size_t idx){
 	if (idx>=list->length) return NULL;
-	node_t* curr=list->nodes;
 
-	size_t padding=sizeof(node_t)+list->obj_size;
 	if(idx>=list->last_access_logical){
 		return exploit_last_access(list,idx);
 
 	}
+	return exploit_last_access_reverse(list,idx);
+	/*
+	
+	size_t padding=sizeof(node_t)+list->obj_size;
+	node_t* curr=list->nodes;
 	size_t physical_address=0;
 	size_t logical_address=0;
 	while(idx--){
@@ -117,6 +159,7 @@ static node_t* get_node_at(list_t* list,size_t idx){
 	list->last_access_logical=logical_address;
 	list->last_access_physical=physical_address;
 	return curr;
+	*/
 }
 
 
@@ -183,16 +226,6 @@ void* list_get(list_t* list,size_t idx){
 	if(!node) return NULL;
 	return node->buff;
 }
-// Helper function 
-//
-// Calculate distance from b to a (usually root of the array).
-//
-static size_t calculate_distance(void* a,void *b, size_t padding){
-	size_t distance= (size_t)((char*)b - (char*)a);
-
-	return distance/padding;
-}
-
 // Append an item to list
 int list_append(list_t* list,void* obj){
 	size_t padding=sizeof(node_t)+list->obj_size;
