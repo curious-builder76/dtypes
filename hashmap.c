@@ -299,7 +299,6 @@ int hashmap_put(hashmap_t* map, void* key, void* value){
 int hashmap_delete(hashmap_t* map, void* key){
 	uint64_t hash=map->hash_function(key, map->key_size, map->user_data);
 
-	size_t hash_casted=(size_t)hash;
 
 	size_t bucket_idx= hash % map->table_size;
 
@@ -307,10 +306,11 @@ int hashmap_delete(hashmap_t* map, void* key){
 
 	bucket_t* bucket=get_bucket0(map,bucket_idx);
 
-	if(!bucket->used) return 1;
+	if(!bucket->used){
+		printf("Here\n");
+	       	return 1;
+	}
 	
-	if(bucket->min_hash_seen > hash_casted || bucket->max_hash_seen < hash_casted)
-		return 1;
 	size_t idx=0;
 	char found=0;
 	record_t* record;
@@ -321,10 +321,13 @@ int hashmap_delete(hashmap_t* map, void* key){
 			break;
 		}
 	}
-	if(!found) return 1;
+	if(!found){
+		printf("Here not found.\n");
+	       	return 1;
+	}
 
 	bucket->used--;
-	record_t* last_record=(record_t*)((char*)bucket + bucket->used*record_size);
+	record_t* last_record=(record_t*)((char*)bucket + sizeof(bucket_t)+bucket->used*record_size);
 	memmove(record, last_record, record_size);
 
 	return 0;

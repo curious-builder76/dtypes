@@ -38,7 +38,7 @@ void tidwall_me(){
 	do{
 		map=hashmap_custom(initial_table_size, bucket_capacity, 
 				key_size, value_size,
-				default_hash_function, memcmp, malloc, free, &murmur_seed
+				murmur_hash, memcmp, malloc, free, &murmur_seed
 				);
 	}while(map==NULL);
 	debug("====benchmark of hashmap (comparable to tidwall)====");
@@ -47,7 +47,6 @@ void tidwall_me(){
 			"Initial table size: %zu\n"
 			"Key size: %zu\n"
 			"Value size: %zu\n"
-			// "Hash function: djb hash\n"
 			"Murmur hash seed (constant seed): %u\n"
 			"Bucket capacity (lifetime constant): %zu\n",
 			initial_table_size,
@@ -100,7 +99,24 @@ void tidwall_me(){
 		print_benchmark("GET",times,time_elapsed);
                 debug("Test passed.");
         }
-
+        debug("Key delete test.");
+	int failure_flag=0;
+	start=clock();
+	for(int idx=0;idx<times;idx++){
+		if(hashmap_delete(map,&idx)!=0){
+			failure_flag=1;
+			printf("Idx: %d\n",idx);
+			break;
+		}
+	}
+	end=clock();
+	time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
+        if(failure_flag){
+                debug("Test failed.");
+        }else{
+		print_benchmark("DELETE",times,time_elapsed);
+                debug("Test passed.");
+        }
         hashmap_destroy(map);
         debug("All tests passed.");
 	memory_leak();
@@ -182,7 +198,24 @@ void hashmap_benchmark(){
 		print_benchmark("GET",times,time_elapsed);
                 debug("Test passed.");
         }
-
+        debug("Key delete test.");
+	int failure_flag=0;
+	start=clock();
+	for(int idx=0;idx<times;idx++){
+		char* ptr=data+ idx*key_size;
+		if(hashmap_delete(map,ptr)!=0){
+			failure_flag=1;
+			break;
+		}
+	}
+	end=clock();
+	time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
+        if(failure_flag){
+                debug("Test failed.");
+        }else{
+		print_benchmark("DELETE",times,time_elapsed);
+                debug("Test passed.");
+        }
 	free(data);
         hashmap_destroy(map);
         debug("All tests passed.");
