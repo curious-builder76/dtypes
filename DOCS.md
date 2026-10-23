@@ -366,7 +366,9 @@ Out of Memory condition.
 `deque` is a pointer returned by `deque_custom()` or `deque_new()` and cannot be `NULL`
 
 ```C
+
 void deque_destroy(deque_t* deque)
+
 ```
 
 Release the resources held by the deque. the deque becomes a dangling pointer after this
@@ -401,7 +403,9 @@ Currently provides
 ### Murmur Hash
 
 ```C
+
 uint64_t murmur_hash(const void* data, size_t len, void* seed)
+
 ```
 
 Returns Murmur Hash of the data supplied.
@@ -467,7 +471,9 @@ uint64_t hashed= sip_hash(name, strlen(name)+1, &hash_ctx);
 ### XX Hash
 
 ```C
+
 uint64_t xxh3_hash(const void* data, size_t len, void* user_data)
+
 ```
 
 Returns the XXHash of the data supplied
@@ -547,6 +553,7 @@ See [xmalloc](#xmalloc) and [xfree](#xfree)
 ```C
 
 hashmap_t* hashmap_new(size_t key_size,size_t value_size)
+
 ```
 
 Wrapper over `hashmap_custom()`
@@ -563,6 +570,7 @@ to hash flooding (as of now, may change in future)
 ```C
 
 void* hashmap_get(hashmap_t* map,void* key)
+
 ```
 
 Get an item assigned to `key` from the hashmap. returns `NULL` upon failure.
@@ -795,6 +803,95 @@ void ndarray_destroy(ndarray_t* array)
 ```
 `array` is a pointer returned by `ndarray_custom()` or `ndarray_new()` which can be `NULL`
 
+## Trie
+
+Trie is a data structure based on a tree used to store a tons of strings in a relatively very less space
+than any other data structure.
+
+Unlike every data structure in this repository which are designed to store any kind of objects,
+This data structure is dedicated to strings (`char*` and `char[]` terminating with `'\0'`).
+
+This data structure is relatively slow as compared to other data strucutes in this library,
+as it is difficult to implement as a contigious memory and consists of pointy pointer, and chasing pointers
+is slow.
+
+```C
+
+trie_t* trie_custom(
+                void* (*xmalloc)(size_t),
+                void* (*xrealloc)(void*, size_t),
+                void (*free)(void*)
+                )
+```
+
+Returns a customized trie as user specifications; or returns `NULL` upon failure.
+
+This has no such parameters like `obj_size`, `element_size` or anything else.
+
+But just accepts the usual [xmalloc](#xmalloc), [xrealloc](#xrealloc) and [xfree](#xfree) functions
+
+```C
+
+trie_t* trie_new()
+
+```
+
+Thin wrapper around `trie_custom()` and similar of calling `trie_custom(malloc,realloc,free)`
+
+Takes no arguments
+
+```C
+
+int trie_contains(trie_t* trie, char* string)
+
+```
+
+Check membership of given `string` in the given `trie`.
+
+`trie` is a non-`NULL` parameter returned by `trie_custom()` or `trie_new()`
+
+`string` is an array or pointer of `char` which is terminated by `'\0'`;
+and whose membership is to be tested.
+
+
+
+
+```C
+
+int trie_insert(trie_t* trie, char* string)
+
+```
+
+Insert (or add) a string to the trie; returns a non-zero number upon failure
+or zero indicating that the sting was inserted successfully or it already existed.
+
+`trie` is a non-`NULL` parameter returned by `trie_custom()` or `trie_new()`
+
+`string` is an array or pointer of `char` which is terminated by `'\0'`;
+and which will be inserted into trie.
+
+
+
+```C
+
+int trie_oom(trie_t* trie)
+
+```
+Returns a non-zero number if the last insert operation failed becuase of 
+Out of Memory condition.
+
+`trie` is a non-`NULL` parameter returned by `trie_custom()` or `trie_new()`
+
+
+```C
+
+void trie_destroy(trie_t* trie)
+
+```
+
+Release the resources held by the trie; 
+the trie becomes a dangling pointer afterwards in general.
+
+`trie` is a pointer returned by `trie_custom()` or `trie_new()` which can be `NULL`
+
 ## Work in Progress...
-
-
