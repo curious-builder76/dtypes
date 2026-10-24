@@ -97,7 +97,7 @@ int array_grow(array_t* array){
 #define SHRINK_AT 0.25
 
 int array_shrink(array_t* array){
-	double lf= (double)array->length / (double)array->capacity;
+	double lf= (double)array->used / (double)array->capacity;
 	if( lf > SHRINK_AT) return 0; // doesn't needs it. 
 	size_t old_cap=array->capacity;
 	if(old_cap <= 8 ) {
