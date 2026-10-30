@@ -86,7 +86,7 @@ static int resize0(array_t* array, size_t new_capacity){
 int array_grow(array_t* array){
 	size_t old_cap=array->capacity;
 	size_t new_capacity=old_cap*2;
-	if(new_cap < old_cap)
+	if(new_capacity < old_cap)
 		return 1;
 
 	array->oom=resize0(array, new_capacity);
