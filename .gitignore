@@ -1,0 +1,7 @@
+*.o
+a.out
+*.out
+*.swp
+*.py
+*.a
+benchmarks/bench_*
