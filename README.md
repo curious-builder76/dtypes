@@ -251,7 +251,9 @@ Definetely a big YES.
 
 If you are going to use it for real industry grade projects
 
-Probably no. as it still lacks some of the features set by industries.
+Probably no, This might be ready for industries but I don't feel confident enough
+
+to say that it is industry ready.
 
 If you are going to implement it in lower lever hardwares  such as ESP-32 or Raspberry PI.
 
