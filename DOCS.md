@@ -72,7 +72,8 @@ but can return NULL indicating failures
 this function can be a dummy function but cannot be NULL.
 
 
-## Common Advice
+<details open>
+<summary> <h2>Common Advice </h2> </summary>
 
 DO NOT RETAIN THE POINTERS RETURNED BY ANY DATA STRUCTURES OF THIS LIBRARY, SUBSEQUENT OPERATIONS TO THE DATA STRUCTURE
 ARE LIKELY INVALIDATE THEM, THE POINTER RETURNED BY THE DATA STRUCTURE ARE OWNED BY THEMSELVES.
@@ -128,6 +129,7 @@ int main(){
 
 ```
 
+</details>
 ## Dynamic Arrays
 
 The dynamic array,
