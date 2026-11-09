@@ -130,6 +130,8 @@ int main(){
 ```
 
 </details>
+
+
 ## Dynamic Arrays
 
 The dynamic array,
