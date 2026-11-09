@@ -3,10 +3,9 @@
 # Documentation of `dtypes`
 
 
+## Table of Content
 <details>
 <summary> 
-
-Table of Content
 </summary>
 [Short description](#short-description)
 
