@@ -176,12 +176,12 @@ Returns the size (equivalent of length) of an array
 
 `array` is a non-`NULL` pointer returned by either `array_custom()` or `array_new()` 
 
+-----------------
 ```C
 
 void* array_at(array_t* array, size_t pos)
 
 ```
------------------
 
 Returns a direct pointer on success or NULL on failure.
 Which is faster. However you shouldn't keep that pointer ownership.
@@ -191,6 +191,7 @@ It may become a dangling pointer after modifications.
 
 `array` is a non-`NULL` pointer returned by either `array_custom()` or `array_new()` 
 
+-----------------
 
 ```C
 
@@ -198,30 +199,29 @@ int array_oom(array_t* array)
 
 ```
 
------------------
 Returns a non zero number if the last operation failed because
 of OOM (Out of Memory) conditions.
 
 
 `array` is a non-`NULL` pointer returned by either `array_custom()` or `array_new()` 
 
+-----------------
 ```C
 
 int array_pop(array_t* array,void* obj)
 
 ```
 
------------------
 Pops an element from the last of array and copies it to obj.
 
 `array` is a non-`NULL` pointer returned by either `array_custom()` or `array_new()` 
 
+-----------------
 ```C
 
 int array_destroy(array_t* array)
 
 ```
------------------
 Destroys the array completely, and releases resources aqquired by it.
 You should'nt use that array after
 this function is called on it.
@@ -229,12 +229,14 @@ this function is called on it.
 
 `array` is a  pointer returned by either `array_custom()` or `array_new()`  which can be `NULL`
 
+-----------------
 ## Bitset
 
 Bitset is an array data structure that compactly stores bits.
 
 For extended info; See [here](https://en.wikipedia.org/wiki/Bit_array).
 
+-----------------
 ```C
 
 bitset_t* bitset_custom(size_t capacity, void* (*xmalloc)(size_t), void (*xfree)(void*))
@@ -249,6 +251,7 @@ Parameter `xmalloc` is the custom allocator provided by user, and `xfree` is the
 
 See [xmalloc](#xmalloc) and [xfree](#xfree)
 
+-----------------
 ```C
 bitset_t* bitset_new(size_t capacity)
 ```
@@ -259,6 +262,7 @@ equivalent of calling `bitset_custom(capacity, malloc, free)`
 
 `capacity` is the capacity in bits (not bytes).
 
+-----------------
 ```C
 
 int bitset_setbit(bitset_t* set,size_t index)
@@ -273,6 +277,7 @@ Returns zero upon success or a non zero number indicating failure
 
 `index` is the position where the operation will be performed
 
+-----------------
 ```C
 
 int bitset_togglebit(bitset_t* set,size_t index)
@@ -287,6 +292,7 @@ failure (Out of Bounds operation.)
 
 `index` is the position where the operation will be performed
 
+-----------------
 ```C
 
 int bitset_clearbit(bitset_t* set,size_t index)
@@ -303,6 +309,7 @@ failure (Out of Bounds operation.)
 
 `index` is the position where the operation will be performed
 
+-----------------
 ```C 
 
 void bitset_destroy(bitset_t* set)
@@ -327,6 +334,7 @@ Below is a table
 | Lookup returns false | False negative | True negative |
 
 
+-----------------
 ```C
 
 bloom_t* bloom_custom(size_t capacity,size_t element_size,uint64_t (*hash1)(void*, size_t),
@@ -348,6 +356,7 @@ Returns a custom bloom filter or `NULL` indicating failure
 
 See [xmalloc](#xmalloc) and [xfree](#xfree)
 
+-----------------
 ```C
 
 bloom_t* bloom_new(size_t capacity,size_t element_size, uint64_t (*hash1)(void*, size_t), uint64_t (*hash2)(void* , size_t))
@@ -361,6 +370,7 @@ bloom_t* bloom_new(size_t capacity,size_t element_size, uint64_t (*hash1)(void*,
 
 `hash2(object, object_size)` is the 2nd hash function of bloom filter and should not be same as `hash1`
 
+-----------------
 ```C
 
 bloom_contains(bloom_t* bloom,void* obj)
@@ -375,6 +385,7 @@ else returns 0
 `obj` is the pointer pointing to the object whose membership is to be tested.
 
 
+-----------------
 ```C
 int bloom_add(bloom_t* bloom,void* obj)
 ```
@@ -384,6 +395,7 @@ Add an item to the bloom filter
 
 `obj` is the pointer pointing to the item whose membership is to be added.
 
+-----------------
 ```C
 void bloom_destroy(bloom_t* bloom)
 ```
@@ -400,6 +412,7 @@ The double-ended queue is most often presented as a generalized queue, which giv
 It is a queue that allows insertions and deletions at both ends.
 
 
+-----------------
 ```C
 deque_t* deque_custom(size_t element_size,void* (*xmalloc)(size_t), void (*xfree)(void*))
 ```
@@ -417,6 +430,7 @@ See [xmalloc](#xmalloc) and [xfree](#xfree)
  
 
 
+-----------------
 ```C
 deque_t* deque_new(size_t element_size)
 ```
@@ -427,6 +441,7 @@ Thin wrapper around `deque_custom()` same as calling `deque_custom(element_size,
 `element_size` is the size of element;  just pass `sizeof(element)` to this.
 
 
+-----------------
 ```C
 int deque_append(deque_t* deque,void* obj)
 ```
@@ -440,6 +455,7 @@ Returns zero upon success or a non zero number indicating failure.
 parameter `element_size` passed to `deque_custom()` or `deque_new()`
 
 
+-----------------
 ```C
 void* deque_pop(deque_t* deque)
 ```
@@ -454,6 +470,7 @@ This parameter needs to be returned by `deque_custom()` or `deque_new()` and can
 
 
 
+-----------------
 ```C
 int deque_appendleft(deque_t* deque,void* obj)
 ```
@@ -465,6 +482,7 @@ or return `NULL` indicating failure.
 `deque` is the deque from which the item is to be popped. 
 This parameter needs to be returned by `deque_custom()` or `deque_new()` and cannot be `NULL` .
 
+-----------------
 ```C
 int deque_oom(deque_t* deque)
 ```
@@ -474,6 +492,7 @@ Out of Memory condition.
 
 `deque` is a pointer returned by `deque_custom()` or `deque_new()` and cannot be `NULL`
 
+-----------------
 ```C
 
 void deque_destroy(deque_t* deque)
@@ -496,6 +515,7 @@ The data structure constructors accept these in place of
 Useful for customizing a hash based data structure.
 These functions have a common pattern in general
 
+-----------------
 ```C
 uint64_t <name>_hash(const void* data, size_t length, void* hash_context_aka_hash_context)
 ```
@@ -620,6 +640,7 @@ A data structure that stores data in form of key value pairs
 or in other terms assigns value to key (i.e. `key = value` )
 
 
+-----------------
 ```C
 hashmap_t* hashmap_custom(size_t table_size,size_t bucket_capacity,size_t key_size, size_t value_size,
                 uint64_t (*hash_function)(const void*, size_t, void* ),
@@ -659,6 +680,7 @@ See [xmalloc](#xmalloc) and [xfree](#xfree)
 
 `user_data` is the context that will be passed to the hash function.
 
+-----------------
 ```C
 
 hashmap_t* hashmap_new(size_t key_size,size_t value_size)
@@ -676,6 +698,7 @@ to hash flooding (as of now, may change in future)
 
 `value_size` is the size of the value object and cannot be zero
 
+-----------------
 ```C
 
 void* hashmap_get(hashmap_t* map,void* key)
@@ -689,6 +712,7 @@ Get an item assigned to `key` from the hashmap. returns `NULL` upon failure.
 `key` is the pointer to an object whose assigned value is to be fetched. which cannot be `NULL`
 
 
+-----------------
 ```C
 
 int hashmap_put(hashmap_t* map,void* key,void* value)
@@ -706,6 +730,7 @@ or `hashmap_new()`
 `value` is a non-`NULL` item being mapped by `key`
 
 
+-----------------
 ```C
 
 int hashmap_delete(hashmap_t* map,void* key)
@@ -719,6 +744,7 @@ Delete a key  from the hashmap, Returns zero upom sucess and a non zero number i
 
 `key` is a non `NULL` pointer whose assigned value is to be deleted along with the specified key
 
+-----------------
 ```C
 
 int hashmap_oom(hashmap_t* map)
@@ -730,6 +756,7 @@ Out of Memory condition
 
 `map` is a non-`NULL` pointer returned by `hashmap_custom()` or `hashmao_new()` 
 
+-----------------
 ```C
 
 void hashmap_destroy(hashmap_t* map)
@@ -748,6 +775,7 @@ A  Set  in general cannot contain duplicate items, in terms of mathematics.
 In the world of computer science, a hashset is basically a hash map or a hash table with dummy values
 or no values at all. And is often used for its ammortized `O(1)` lookup , or de-duplicating items.
 
+-----------------
 ```C
 
 hashset_t* hashset_custom(
@@ -781,6 +809,7 @@ creative, pass your own hash function, and promise it won't be a terrible hash)
 See [xmalloc](#xmalloc) and [xfree](#xfree)
 
 
+-----------------
 ```C
 
 hashset_t* hashset_new(size_t obj_size)
@@ -791,6 +820,7 @@ Returns a hash set using default parameters, or `NULL` indicating failures.
 `obj_size` is the size of object in bytes (basically `sizeof(object)`)
 
 
+-----------------
 ```C
 
 int hashset_oom(hashset_t* set)
@@ -800,6 +830,7 @@ Returns a non zero integer if the last operation failed due to Out of memory con
 
 `set` is a non-`NULL` pointer returned by `hashset_custom()` or `hashset_new()`
 
+-----------------
 ```C
 
 int hashset_put(hashset_t* set,void* obj)
@@ -812,6 +843,7 @@ number indicating failure
 
 `obj` is a non-`NULL` pointer which will be added to the given hash set.
 
+-----------------
 ```C
 
 int hashset_contains(hashset_t* set,void* obj)
@@ -824,6 +856,7 @@ Check the membership of a item in the given hashset, returns a non zero number
 `obj` is a non-`NULL` pointer whose membership will be tested.
 
 
+-----------------
 ```C
 
 int hashset_delete(hashset_t* set, void* key)
@@ -836,6 +869,7 @@ or a non-zero number indicating failure
 
 `key` is the object which will be deleted from the given hash set
 
+-----------------
 ```C
 
 void hashset_destroy(hashset_t* set)
@@ -847,6 +881,7 @@ void hashset_destroy(hashset_t* set)
 The lists in this repository are implemented as a cursor based doubly linked list.
 For source code; see [here](list.c) 
 
+-----------------
 ```C
 
 list_t* list_custom(size_t obj_size, void* (*xmalloc)(size_t), 
@@ -861,6 +896,7 @@ Returns a custom linked list
 See [xmalloc](#xmalloc) [xrealloc](#xrelloc) and [xfree](#xfree).
 
 
+-----------------
 ```C
 
 list_t* list_new(size_t obj_size)
@@ -871,6 +907,7 @@ Thin wrapper around `list_custom()` ; similar of calling `list_custom(obj_size,m
 
 `obj_size` is the size of object in bytes ; basically `sizeof(object)` 
 
+-----------------
 ```C
 
 void* list_get(list_t* list,size_t idx)
@@ -882,6 +919,7 @@ Return an item from the list at specified index. returns `NULL` upon failure.
 
 `idx` is the index of requested item.
 
+-----------------
 ```C
 
 int list_put(list_t* list,size_t idx,void* obj)
@@ -896,12 +934,15 @@ a non zero number indicating failure
 `idx` is the index that will be updated.
 
 
+-----------------
 ```C
 
 int list_update(list_t* list,size_t idx,void* obj)
 
 ```
 Similar of `list_put()`
+
+-----------------
 ```C
 
 int list_delete(list_t* list,size_t idx)
@@ -915,6 +956,7 @@ a non zero number indicating failure
 
 `idx` is the index that will be updated.
 
+-----------------
 ```C
 
 void list_destroy(list_t* list)
@@ -933,6 +975,7 @@ This data structure is basically C's `type_name name[a][b][c]...` which got abst
 Almost every data structure kept in this repository grows dynamically; but this one is an _exception_ (it doesn't).
 
 
+-----------------
 ```C
 
 ndarray_t* ndarray_custom(void* (*xmalloc)(size_t), void (*xfree)(void*),size_t obj_size,size_t ndims,...)
@@ -957,6 +1000,7 @@ Pass exactly `ndims` arguments after `ndims` parameter to avoid undefined behavi
 
 See [xmalloc](#xmalloc) and [xfree](#xfree)
 
+-----------------
 ```C
 
 ndarray_t* ndarray_new(size_t obj_size,size_t ndims,...)
@@ -977,6 +1021,7 @@ Pass exactly `ndims` arguments after `ndims` parameter to avoid undefined behavi
 
 
 
+-----------------
 ```C
 
 void* ndarray_get(ndarray_t* array,...)
@@ -994,6 +1039,7 @@ And a `NULL` pointer indicating failure
 The variadic expression `...` expects `ndims` arguments passsed to `ndarray_custom()` or `ndarray_new()`
 
 
+-----------------
 ```C
 
 int ndarray_put(ndarray_t* a,void* obj,...)
@@ -1007,6 +1053,7 @@ int ndarray_put(ndarray_t* a,void* obj,...)
 The variadic expression `...` expects `ndims` arguments passsed to `ndarray_custom()` or `ndarray_new()`
 
 
+-----------------
 ```C
 
 void ndarray_destroy(ndarray_t* array)
@@ -1026,6 +1073,7 @@ This data structure is relatively slow as compared to other data strucutes in th
 as it is difficult to implement as a contigious memory and consists of pointy pointer, and chasing pointers
 is slow.
 
+-----------------
 ```C
 
 trie_t* trie_custom(
@@ -1041,6 +1089,7 @@ This has no such parameters like `obj_size`, `element_size` or anything else.
 
 But just accepts the usual [xmalloc](#xmalloc), [xrealloc](#xrealloc) and [xfree](#xfree) functions
 
+-----------------
 ```C
 
 trie_t* trie_new()
@@ -1051,6 +1100,7 @@ Thin wrapper around `trie_custom()` and similar of calling `trie_custom(malloc,r
 
 Takes no arguments
 
+-----------------
 ```C
 
 int trie_contains(trie_t* trie, char* string)
@@ -1067,6 +1117,7 @@ and whose membership is to be tested.
 
 
 
+-----------------
 ```C
 
 int trie_insert(trie_t* trie, char* string)
@@ -1082,6 +1133,7 @@ or zero indicating that the sting was inserted successfully or it already existe
 and which will be inserted into trie.
 
 
+-----------------
 ```C
 
 int trie_oom(trie_t* trie)
@@ -1093,6 +1145,7 @@ Out of Memory condition.
 `trie` is a non-`NULL` parameter returned by `trie_custom()` or `trie_new()`
 
 
+-----------------
 ```C
 
 void trie_destroy(trie_t* trie)
