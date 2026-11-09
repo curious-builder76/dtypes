@@ -6,9 +6,9 @@
 ## Table of Content
 
 
-[Short description](#Short-description)
+[Short description](#short-description)
 
-[Custom allocators](#Custom-allocators)
+[Custom allocators](#custom-allocators)
 
 [xmalloc](#xmalloc)
 
@@ -16,29 +16,31 @@
 
 [xfree](#xfree)
 
-[Dynamic Arrays](#Dynamic-Arrays)
+[Common Advice](#common-advice)
 
-[Bitset](#Bitset)
+[Dynamic Arrays](#dynamic-Arrays)
 
-[Bloom filters](#Bloom-filters)
+[Bitset](#bitset)
 
-[Deque](#Deque)
+[Bloom filters](#bloom-filters)
 
-[Hash functions](#Hash-functions)
+[Deque](#deque)
 
-[Murmur Hash](#Murmur-Hash)
+[Hash functions](#hash-functions)
 
-[Sip Hash](#Sip-Hash)
+[Murmur Hash](#murmur-Hash)
 
-[XX Hash](#XX-Hash)
+[Sip Hash](#sip-Hash)
 
-[Hash map](#Hash-map)
+[XX Hash](#xx-Hash)
 
-[Lists](#Lists)
+[Hash map](#hash-map)
 
-[ND-Arrays](#ND-Arrays)
+[Lists](#lists)
 
-[Trie](#Trie)
+[ND-Arrays](#nd-Arrays)
+
+[Trie](#trie)
 
 
 ## Short description
