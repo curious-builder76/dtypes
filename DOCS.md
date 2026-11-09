@@ -5,7 +5,7 @@
 
 ## Table of Content
 <details>
-<summary> Expand
+<summary> Expand / Collapse
 </summary>
 
 [Short description](#short-description)
