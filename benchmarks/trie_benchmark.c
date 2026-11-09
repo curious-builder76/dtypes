@@ -92,7 +92,7 @@ int random_lookups(trie_t* trie,char* input, size_t input_size, size_t times, do
 		}
 	}
 	clock_t end=clock();
-	*time_elapsed= (end-start)/CLOCKS_PER_SEC;
+	*time_elapsed= (double)(end-start)/CLOCKS_PER_SEC;
 	return 0;
 }
 
@@ -121,7 +121,7 @@ void benchmark(){
 
 	double time_elapsed;
 	int tests_failed=0;
-	int times=50000000;
+	int times=5000000;
 
 	// int times = 5000000;
 	char* input=get_data(times, 32);
