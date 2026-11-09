@@ -3,9 +3,8 @@
 # Documentation of `dtypes`
 
 
-# Table of Content
 <details>
-<summary> Expand / Collapse
+<summary> <b> Table of Contents </b>
 </summary>
 
 [Short description](#short-description)
