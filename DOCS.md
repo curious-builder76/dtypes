@@ -143,7 +143,7 @@ which is just abstracted.
 array_t* array_custom(size_t element_size,void* (*xmalloc)(size_t),void* (*xrealloc)(void* , size_t),void (*xfree)(void*))
  
 ```
-
+-----------------
 It creates an customized array , passing invalid arguments to this/these function(s) is not recomended.
 
 
@@ -158,20 +158,31 @@ It creates an customized array , passing invalid arguments to this/these functio
 array_t* array_new(size_t element_size)
 ``` 
 
+-----------------
+
 It delegates to `array_custom` with default parameters.
 
 `element_size` is the size of element in bytes , just simply pass `sizeof(element_size)` to this parameter. 
 
 ```C
+
 size_t array_getsize(array_t* array)
+
 ```
+
+-----------------
+
 Returns the size (equivalent of length) of an array
 
 `array` is a non-`NULL` pointer returned by either `array_custom()` or `array_new()` 
 
 ```C
+
 void* array_at(array_t* array, size_t pos)
+
 ```
+-----------------
+
 Returns a direct pointer on success or NULL on failure.
 Which is faster. However you shouldn't keep that pointer ownership.
 Or you should gurantee that as long as you own it, the array won't be modified.
@@ -182,8 +193,12 @@ It may become a dangling pointer after modifications.
 
 
 ```C
+
 int array_oom(array_t* array)
+
 ```
+
+-----------------
 Returns a non zero number if the last operation failed because
 of OOM (Out of Memory) conditions.
 
@@ -195,6 +210,8 @@ of OOM (Out of Memory) conditions.
 int array_pop(array_t* array,void* obj)
 
 ```
+
+-----------------
 Pops an element from the last of array and copies it to obj.
 
 `array` is a non-`NULL` pointer returned by either `array_custom()` or `array_new()` 
@@ -204,7 +221,7 @@ Pops an element from the last of array and copies it to obj.
 int array_destroy(array_t* array)
 
 ```
-
+-----------------
 Destroys the array completely, and releases resources aqquired by it.
 You should'nt use that array after
 this function is called on it.
