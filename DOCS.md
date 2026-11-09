@@ -69,6 +69,62 @@ but can return NULL indicating failures
 this function can be a dummy function but cannot be NULL.
 
 
+## Common Advice
+
+DO NOT RETAIN THE POINTERS RETURNED BY ANY DATA STRUCTURES OF THIS LIBRARY, SUBSEQUENT OPERATIONS TO THE DATA STRUCTURE
+ARE LIKELY INVALIDATE THEM, THE POINTER RETURNED BY THE DATA STRUCTURE ARE OWNED BY THEMSELVES.
+IN A LATTER OF LATER USE, COPY THE POINTER TO A MEMORY THAT YOU OWN WHICH IS SAFER THAN OWNING THE DIRECT POINTERS RETURNED
+BY THE DATA STRUCTURE. IF YOU DO HOLD THE POINTERS RETURNED BY THAT DATA STRUCTURE, YOU ARE NOW RESPONSIBLE THAT THE DATA STRUCTURE
+WON'T MUTATE ITSELF, NOT DOING SO MAY RESULT IN USE AFTER FREE BUGS.
+
+```C
+/* example */
+
+/* where <datatype> is a place holder of any data type
+*/
+
+#include "dtypes/<datatype>.h"
+
+int main(){
+        <datatype>_t* instance= <datatype>_new();
+        if(!instance){
+                /* handle error */
+        }
+
+        void* some_pointer= <datatype>_some_operation();
+
+        void* copied_pointer = copy_pointer(some_pointer);
+        if(!some_pointer){
+                /* handle error */
+        }
+
+        /* Do not keep this pointer.
+         * For single use it's ok */
+
+        some_single_operation(pointer);
+
+         <datatype>_some_another_operation();
+        <datatype>_some_another_operation();
+        <datatype>_some_another_operation();
+        <datatype>_some_another_operation();
+
+
+        /* the old pointer can be invalid 
+         * and isn't recomended DO NOT USE. 
+         */
+        some_task(some_pointer); 
+
+        /* Recomended */
+
+        some_task(copied_pointer);
+
+        return 0;
+}
+
+
+
+```
+
 ## Dynamic Arrays
 
 The dynamic array,
