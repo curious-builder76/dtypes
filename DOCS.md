@@ -3,9 +3,11 @@
 # Documentation of `dtypes`
 
 
-## Table of Content
+<details>
+<summary> 
 
-
+Table of Content
+</summary>
 [Short description](#short-description)
 
 [Custom allocators](#custom-allocators)
@@ -41,7 +43,7 @@
 [ND-Arrays](#nd-Arrays)
 
 [Trie](#trie)
-
+</details>
 
 ## Short description
 
