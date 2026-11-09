@@ -4,7 +4,7 @@
 
 
 <details>
-<summary> <b> Table of Contents </b>
+<summary> <h1> Table of Contents </h1>
 </summary>
 
 [Short description](#short-description)
