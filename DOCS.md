@@ -3,7 +3,7 @@
 # Documentation of `dtypes`
 
 
-## Table of Content
+# Table of Content
 <details>
 <summary> Expand / Collapse
 </summary>
