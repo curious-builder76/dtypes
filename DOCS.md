@@ -146,7 +146,6 @@ which is just abstracted.
 array_t* array_custom(size_t element_size,void* (*xmalloc)(size_t),void* (*xrealloc)(void* , size_t),void (*xfree)(void*))
  
 ```
------------------
 It creates an customized array , passing invalid arguments to this/these function(s) is not recomended.
 
 
@@ -161,19 +160,18 @@ It creates an customized array , passing invalid arguments to this/these functio
 array_t* array_new(size_t element_size)
 ``` 
 
------------------
 
 It delegates to `array_custom` with default parameters.
 
 `element_size` is the size of element in bytes , just simply pass `sizeof(element_size)` to this parameter. 
 
+-----------------
 ```C
 
 size_t array_getsize(array_t* array)
 
 ```
 
------------------
 
 Returns the size (equivalent of length) of an array
 
