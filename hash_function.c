@@ -13,9 +13,15 @@ uint64_t djb_hash(const void* obj,size_t size){
         return hash;
 }
 
+static sip64_t default_hash_ctx= { 0 };
+
+
 uint64_t default_hash_function(const void* obj, size_t len, void* udata){
+	if(!default_hash_ctx.seed0){
+		default_hash_ctx.seed0=random();
+	}
 	(void)udata;
-	return djb_hash(obj, len);
+	return xxh3_hash(obj, len, &default_hash_ctx);
 }
 
 
