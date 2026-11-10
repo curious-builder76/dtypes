@@ -10,6 +10,7 @@
 
 
 typedef struct memory_allocator_context{
+	int oom;
 	void* (*malloc)(size_t);
 	void* (*realloc)(void* , size_t);
 	void (*free)(void*);
@@ -107,6 +108,7 @@ static inline int trie_grow(trie_t* trie, uchar ch, ctx_t* ctx){
 int trie_insert(trie_t* trie, char* input){
 	uchar* data= (uchar*)input;
 
+
 	ctx_t* ctx=get_ctx(trie);
 	while(1){
 		uchar ch=*data++;
@@ -116,6 +118,7 @@ int trie_insert(trie_t* trie, char* input){
 		}
 		
 		if(trie_grow(trie,ch,ctx)!=0){
+			ctx->oom=1;
 			return 1;
 		}
 		trie= trie->nodes+ (ch-1);
@@ -135,6 +138,11 @@ int trie_contains(trie_t* trie,char* input){
 		}
 		trie= trie->nodes + (ch-1);
 	}
+}
+
+int trie_contains(trie_t* trie){
+	ctx_t* ctx=get_ctx(trie);
+	return ctx->oom;
 }
 
 void trie_destroy0(trie_t* trie, ctx_t* ctx){
