@@ -19,7 +19,7 @@
 
 [Common Advice](#common-advice)
 
-[Dynamic Arrays](#dynamic-Arrays)
+[Dynamic Arrays](#dynamic-arrays)
 
 [Bitset](#bitset)
 
