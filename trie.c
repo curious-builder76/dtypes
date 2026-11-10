@@ -8,6 +8,14 @@
 #define MAX_NODES 255
 
 
+/*
+ * Adapted from 
+ * https://github.com/curious-builder76/trie/
+ *
+ */
+
+
+// Item and string are used inter-changably in this file
 
 typedef struct memory_allocator_context{
 	int oom;
@@ -28,10 +36,16 @@ typedef unsigned char uchar;
 typedef trie_t node_t;
 
 
+
+
+/* extract the allocator context */
+
 static  ctx_t* get_ctx(node_t* node){
 	return (ctx_t*)((char*)node + sizeof(node_t));
 }
 
+// Return a custom trie.
+//
 trie_t* trie_custom(void* (*xmalloc)(size_t), void* (*xrealloc)(void*, size_t), void (*xfree)(void* )){
 	size_t mem_required= sizeof(trie_t)+sizeof(ctx_t);
 
@@ -47,11 +61,13 @@ trie_t* trie_custom(void* (*xmalloc)(size_t), void* (*xrealloc)(void*, size_t), 
 	return root;
 }
 
-
+// Thin wrapper over trie_custom()
 trie_t* trie_new(){
 	return trie_custom(malloc,realloc,free);
 }
 
+
+// Lookup table used for computing the nearest power of twos
 static const uint16_t table[]={
 	1, 1, 2, 4, 4, 8, 8, 8, 8, 16, 16, 16, 16, 16, 16, 16,
 16, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32,
@@ -71,6 +87,7 @@ static const uint16_t table[]={
 256, 256, 256, 256, 256, 256, 256, 256, 256, 256, 256, 256, 256, 256, 256, 256
 };
 
+// Grow a node of the trie using the given context
 static inline int trie_grow(trie_t* trie, uchar ch, ctx_t* ctx){
 	if(trie->capacity >=MAX_NODES){
 		/* At maximum capacity*/
@@ -105,6 +122,8 @@ static inline int trie_grow(trie_t* trie, uchar ch, ctx_t* ctx){
 	return 0;
 }
 
+// Insert an item to the trie, Return zero upon success
+// or a non zero number indicating failure.
 int trie_insert(trie_t* trie, char* input){
 	uchar* data= (uchar*)input;
 
@@ -125,6 +144,9 @@ int trie_insert(trie_t* trie, char* input){
 	}
 }
 
+// Return a non zero number if the item is present in the trie.
+// Or zero indicating absence.
+//
 int trie_contains(trie_t* trie,char* input){
 	uchar* data=(uchar*)input;
 
@@ -140,12 +162,16 @@ int trie_contains(trie_t* trie,char* input){
 	}
 }
 
-int trie_contains(trie_t* trie){
+// Returns a non zero number if the last insert operation 
+// failed because of out of memory condition.
+int trie_oom(trie_t* trie){
 	ctx_t* ctx=get_ctx(trie);
 	return ctx->oom;
 }
 
-void trie_destroy0(trie_t* trie, ctx_t* ctx){
+// Helper for trie_destroy().
+// Destroys all the branches of the trie.
+static void trie_destroy0(trie_t* trie, ctx_t* ctx){
 	if(!trie || !trie->nodes){
 		return;
 	}
@@ -156,6 +182,7 @@ void trie_destroy0(trie_t* trie, ctx_t* ctx){
 	}
 	ctx->free(trie->nodes);
 }
+// Destroy the trie completely.
 void trie_destroy(trie_t* trie){
 	if(!trie) return;
 	ctx_t* ctx=get_ctx(trie);
