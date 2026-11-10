@@ -11,7 +11,7 @@ typedef struct __trie trie_t;
 trie_t* trie_custom(
 		void* (*xmalloc)(size_t),
 		void* (*xrealloc)(void*, size_t),
-		void (*free)(void*)
+		void (*xfree)(void*)
 		);
 trie_t* trie_new();
 
