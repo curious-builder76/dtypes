@@ -691,8 +691,6 @@ hashmap_t* hashmap_new(size_t key_size,size_t value_size)
 Wrapper over `hashmap_custom()`
 Uses the default configuration and returns a hashmap pointer.
 
-[!] Warning: uses DJB Hash by default. hashmaps returned by this are vulnerable 
-to hash flooding (as of now, may change in future)
 
 
 `key_size` is the size of key object in bytes and cannot be zero
@@ -741,7 +739,7 @@ int hashmap_delete(hashmap_t* map,void* key)
 Delete a key  from the hashmap, Returns zero upom sucess and a non zero number indicating failure.
 
 
-`map` is a non-`NULL` pointer returned by `hashmap_custom()` or `hashmao_new()` 
+`map` is a non-`NULL` pointer returned by `hashmap_custom()` or `hashmap_new()` 
 
 `key` is a non `NULL` pointer whose assigned value is to be deleted along with the specified key
 
