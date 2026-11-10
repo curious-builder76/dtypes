@@ -71,7 +71,6 @@ array_t* array_new(size_t element_size){
 // Grows the size of array.
 
 static int resize0(array_t* array, size_t new_capacity){
-	size_t old_cap=array->capacity;
 	size_t mem_required=new_capacity*array->element_size;
 
 	uchar* new_mem=array->realloc(array->elements,mem_required);
