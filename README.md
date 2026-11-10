@@ -19,7 +19,7 @@ For Linux and friends:
 Install it via
 
 ```bash
-git clone https://github.com/curious-builder76/dtypes.git dtypes
+git clone https://codeberg.org/curious-builder76/dtypes.git dtypes
 
 cd dtypes
 
