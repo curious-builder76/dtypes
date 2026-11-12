@@ -956,6 +956,19 @@ a non zero number indicating failure
 `idx` is the index that will be updated.
 
 -----------------
+
+```C
+
+size_t list_length(list_t* list)
+
+```
+Returns the length of list 
+
+
+`list` is a non-`NULL` pointer returned by `list_custom()` or `list_new()`
+
+-----------------
+
 ```C
 
 void list_destroy(list_t* list)

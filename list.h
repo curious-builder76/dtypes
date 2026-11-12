@@ -15,5 +15,6 @@ int list_append(list_t* list,void* obj);
 int list_put(list_t* list,size_t idx,void* obj);
 int list_update(list_t* list,size_t idx,void* obj);
 int list_delete(list_t* list,size_t idx);
+size_t list_length(list_t* list);
 // int debug_list(list_t* list);
 #endif

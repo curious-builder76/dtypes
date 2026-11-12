@@ -133,6 +133,11 @@ static node_t* exploit_last_access_reverse(list_t* list, size_t idx){
 }
 
 
+// Return length of list.
+size_t list_length(list_t* list){
+	return list->length;
+}
+
 // Logically traverse the list.
 static node_t* get_node_at(list_t* list,size_t idx){
 	if (idx>=list->length) return NULL;
