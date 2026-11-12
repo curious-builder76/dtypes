@@ -19,6 +19,12 @@ For Linux and friends:
 Install it via
 
 ```bash
+
+# Clone the repository via GitHub
+
+git clone https://github.com/curious-builder76/dtypes.git dtypes
+
+# Or Codeberg
 git clone https://codeberg.org/curious-builder76/dtypes.git dtypes
 
 cd dtypes
