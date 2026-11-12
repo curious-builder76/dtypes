@@ -518,7 +518,7 @@ These functions have a common pattern in general
 
 -----------------
 ```C
-uint64_t <name>_hash(const void* data, size_t length, void* hash_context_aka_hash_context)
+uint64_t <name>_hash(const void* data, size_t length, void* hash_context_aka_user_data)
 ```
 Currently provides
 
