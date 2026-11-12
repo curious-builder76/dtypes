@@ -113,7 +113,7 @@ void benchmark(){
 	INSERT(trie,"banana");
 	CONTAINS(trie,"apple");
 	debug("Nonexistent entry test");
-	INSERT(trie,"aplicatiiiiiiiiooooooonnnnn");
+	CONTAINS(trie,"aplicatiiiiiiiiooooooonnnnn");
 	CONTAINS(trie,"panda");
 	debug("Existent entry test.");
 	CONTAINS(trie,"apple");
