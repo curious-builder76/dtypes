@@ -78,7 +78,7 @@ trie_t* insert(char* input, size_t input_size, size_t times, double* time_elapse
 	return trie;
 }
 
-int random_lookups(trie_t* trie,char* input, size_t input_size, size_t times, double* time_elapsed){
+int lookup(trie_t* trie,char* input, size_t input_size, size_t times, double* time_elapsed){
 	if(!trie){
 		debug("NULL trie found");
 		return 1;
@@ -113,6 +113,7 @@ void benchmark(){
 	INSERT(trie,"banana");
 	CONTAINS(trie,"apple");
 	debug("Nonexistent entry test");
+	INSERT(trie,"aplicatiiiiiiiiooooooonnnnn");
 	CONTAINS(trie,"panda");
 	debug("Existent entry test.");
 	CONTAINS(trie,"apple");
@@ -158,13 +159,24 @@ void benchmark(){
 	}
 	debug("Random lookups.");
 	prepare_random(input, 32, times); 
-	if(random_lookups(trie,input, 32, times,&time_elapsed)!=0){
+	if(lookup(trie,input, 32, times,&time_elapsed)!=0){
 		debug("Test failed.");
 		tests_failed++;
 	}else{
 		debug("Test passed.");
 		print_benchmark("CONTAINS (random)",times,time_elapsed);
 	}
+	
+	debug("Sequential lookups.");
+	prepare_sequential(input, 32, times); 
+	if(lookup(trie,input, 32, times,&time_elapsed)!=0){
+		debug("Test failed.");
+		tests_failed++;
+	}else{
+		debug("Test passed.");
+		print_benchmark("CONTAINS (sequential)",times,time_elapsed);
+	}
+
 	if(trie){
 		trie_destroy(trie);
 	}
