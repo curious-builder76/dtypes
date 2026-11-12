@@ -107,7 +107,7 @@ int main(){
 
         some_single_operation(pointer);
 
-         <datatype>_some_another_operation();
+        <datatype>_some_another_operation();
         <datatype>_some_another_operation();
         <datatype>_some_another_operation();
         <datatype>_some_another_operation();

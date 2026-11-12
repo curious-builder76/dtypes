@@ -206,7 +206,9 @@ int lookup_contains(lookup_t* look, void* obj){
 
 	size_t bucket_idx= hash % look->table_size;
 
+	
 	bucket_t* bucket=get_bucket0(look, bucket_idx);
+	bucket->min_hash_seen=bucket->used ? bucket->min_hash_seen : (size_t)-1 ;
 
 	if(bucket->min_hash_seen > hash_casted) return 0;
 

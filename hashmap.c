@@ -172,7 +172,7 @@ int hashmap_put0(hashmap_t* map, uint64_t hash,void* key, void* value){
 		return 1;
 	}
 
-	size_t min_hash=bucket->min_hash_seen;
+	size_t min_hash=bucket->used ? bucket->min_hash_seen : (size_t)-1 ;
 	size_t max_hash=bucket->max_hash_seen;
 
 	// This fellow techinque works on the belief that 

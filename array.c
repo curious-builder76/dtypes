@@ -29,6 +29,9 @@ array_t* array_custom(
 		void (*xfree)(void*)
 		)
 {
+	if( !element_size || !xmalloc || !xrealloc || !xfree){
+		return NULL;
+	}
 	size_t capacity=512;
 	size_t mem_required=capacity*element_size;
 	

@@ -188,7 +188,7 @@ int hashset_put0(hashset_t* set, uint64_t hash, void* key){
 		return 1;
 	}
 
-	size_t min_hash=bucket->min_hash_seen;
+	size_t min_hash=bucket->used ? bucket->min_hash_seen : (size_t)-1 ;
 	size_t max_hash=bucket->max_hash_seen;
 
 	// This fellow techinque works on the belief that 
