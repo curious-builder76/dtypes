@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<stdint.h>
 #include<stdio.h>
-#include "dtypes/list.h"
+#include "list.h"
 #define NULL_NODE ((size_t)-1)
 
 

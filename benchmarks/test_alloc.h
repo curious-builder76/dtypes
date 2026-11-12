@@ -8,22 +8,23 @@
 #include<stdlib.h>
 #include<stdint.h>
 #include<errno.h>
+#include<time.h>
 
-uint64_t total_mem_allocated=0;
-uint64_t total_mem_freed=0;
-
-
-char hostile_enviroment=0;
-
-int null_frequency=5;
-
-uint64_t malloc_called=0;
-uint64_t realloc_called=0;
-uint64_t free_called=0;
+static uint64_t total_mem_allocated=0;
+static uint64_t total_mem_freed=0;
 
 
+static char hostile_enviroment=0;
 
-void* xmalloc(size_t size){
+static int null_frequency=5;
+
+static uint64_t malloc_called=0;
+static uint64_t realloc_called=0;
+static uint64_t free_called=0;
+
+
+
+static inline void* xmalloc(size_t size){
 	static char seeded=0;
 	if(!seeded){
 		seeded=1;
@@ -34,7 +35,7 @@ void* xmalloc(size_t size){
 		errno=ENOMEM;
 		return NULL;
 	}
-	size_t* p=malloc(sizeof(size_t)+size);
+	size_t* p=(size_t*)malloc(sizeof(size_t)+size);
 	if(!p){
 		return NULL;
 	}
@@ -45,11 +46,11 @@ void* xmalloc(size_t size){
 	return p;
 }
 
-void xfree(void* ptr){
+static inline void xfree(void* ptr){
 	if(!ptr)
 		return;
 	free_called++;
-	size_t* orig_ptr=ptr;
+	size_t* orig_ptr=(size_t *)ptr;
 	orig_ptr--;
 
 	total_mem_freed+=(uint64_t)(*orig_ptr);
@@ -57,7 +58,7 @@ void xfree(void* ptr){
 	free(orig_ptr);
 }
 
-void* xrealloc(void* ptr, size_t new_size){
+static inline void* xrealloc(void* ptr, size_t new_size){
 	errno=0;
 	if( hostile_enviroment && rand()%null_frequency==0){
 		errno=ENOMEM;
@@ -69,7 +70,7 @@ void* xrealloc(void* ptr, size_t new_size){
 	}
 
 	realloc_called++;
-	size_t* old_ptr=ptr;
+	size_t* old_ptr=(size_t *)ptr;
 
 	// Restore the pointer to original position.
 	old_ptr--;
@@ -79,7 +80,7 @@ void* xrealloc(void* ptr, size_t new_size){
 	size_t old_size=*old_ptr;
 
 	// Create new pointer.
-	size_t* new_ptr=realloc(old_ptr,new_size+sizeof(size_t));
+	size_t* new_ptr=(size_t *)realloc(old_ptr,new_size+sizeof(size_t));
 
 	if(!new_ptr)
 		return NULL;
@@ -99,7 +100,7 @@ void* xrealloc(void* ptr, size_t new_size){
 
 }
 
-void memory_leak(){
+static inline void memory_leak(void)  {
 	if(total_mem_allocated==total_mem_freed){
 		fprintf(stderr,"No memory leaks.\n");
 		return;
@@ -118,5 +119,3 @@ void memory_leak(){
 }
 
 #endif
-
-

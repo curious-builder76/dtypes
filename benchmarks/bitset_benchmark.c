@@ -4,7 +4,7 @@
 #include<string.h>
 #include<time.h>
 #include "print.h"
-#include "dtypes/bitset.h"
+#include "bitset.h"
 
 #define debug(...) do{\
 	fprintf(stderr,__VA_ARGS__);\
@@ -44,7 +44,7 @@
 
 
 
-void benchmark(){
+void benchmark(void){
 	debug("====benchmark of bitset====");
 	// Create an bitset of 5000000 bits
 	int times=5000000;
@@ -66,7 +66,7 @@ void benchmark(){
 	BENCHMARK("CHEKBIT",CODE_BLOCK(bitset_checkbit(bitset,i)!=1), times, tests_failed);
 	BENCHMARK("CLEARBIT",CODE_BLOCK(bitset_clearbit(bitset,i)), times, tests_failed);
 #undef CODE_BLOCK
-#undef FMT_STRING 
+#undef FMT_STRING
 #define FMT_STRING "%zu random operations in %.3f seconds"
 #define CODE_BLOCK(code) code
 	bitset_destroy(bitset);
@@ -112,7 +112,7 @@ void benchmark(){
 	}
 }
 
-int main(){
+int main(void){
 	benchmark();
 	return 0;
 }

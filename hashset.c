@@ -2,8 +2,8 @@
 #include<string.h>
 #include<stdlib.h>
 #include<stdio.h>
-#include "dtypes/hashset.h"
-#include "dtypes/hash_function.h"
+#include "hashset.h"
+#include "hash_function.h"
 
 
 // This hashset is an adapted version of hashmap

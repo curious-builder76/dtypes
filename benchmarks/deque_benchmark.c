@@ -1,9 +1,8 @@
 #include<stdio.h>
 #include<stdint.h>
-#include<string.h>
 #include<time.h>
 
-#include "dtypes/deque.h"
+#include "deque.h"
 #include "test_alloc.h"
 #include "print.h"
 
@@ -12,7 +11,7 @@
 	fprintf(stderr,"\n");\
 }while(0)
 
-void benchmark(){
+void benchmark(void){
 	deque_t* deque=NULL;
 	while(!deque)
 		deque=deque_custom(sizeof(int),xmalloc,xfree);
@@ -132,8 +131,7 @@ void benchmark(){
 	memory_leak();
 
 }
-int main(){
+int main(void){
 	benchmark();
 	return 0;
 }
-

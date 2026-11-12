@@ -5,10 +5,10 @@
 #include<stdint.h>
 
 #define __HASHMAP_DEBUG
-#include "dtypes/hashmap.h"
+#include "hashmap.h"
 #include "test_alloc.h"
 #include "print.h"
-#include "dtypes/hash_function.h"
+#include "hash_function.h"
 
 
 
@@ -28,7 +28,7 @@ void* prepare_data(size_t times,size_t input_size){
 	}
 	return memory;
 }
-void tidwall_me(){
+void tidwall_me(void){
 	size_t bucket_capacity=64;
 	size_t initial_table_size=1024;
 	size_t key_size=sizeof(int);
@@ -36,7 +36,7 @@ void tidwall_me(){
 	uint32_t murmur_seed=1792419563;
         hashmap_t* map;
 	do{
-		map=hashmap_custom(initial_table_size, bucket_capacity, 
+		map=hashmap_custom(initial_table_size, bucket_capacity,
 				key_size, value_size,
 				murmur_hash, memcmp, malloc, free, &murmur_seed
 				);
@@ -57,7 +57,7 @@ void tidwall_me(){
         int tests_failed=0;
 
         debug("Key put test");
-	
+
 	double time_elapsed;
 	clock_t start;
 	clock_t end;
@@ -123,14 +123,14 @@ void tidwall_me(){
         map=NULL;
 }
 
-void hashmap_benchmark(){
+void hashmap_benchmark(void){
 	size_t bucket_capacity=64;
 	size_t initial_table_size=1024;
 	size_t key_size=32;
 	size_t value_size=key_size;
         hashmap_t* map;
 	do{
-		map=hashmap_custom(initial_table_size, bucket_capacity, 
+		map=hashmap_custom(initial_table_size, bucket_capacity,
 				key_size, value_size,
 				default_hash_function, memcmp, xmalloc, xfree, NULL
 				);
@@ -155,7 +155,7 @@ void hashmap_benchmark(){
         int tests_failed=0;
 
         debug("Key put test");
-	
+
 	double time_elapsed;
 	clock_t start;
 	clock_t end;
@@ -179,7 +179,7 @@ void hashmap_benchmark(){
 	start=clock();
         int key_not_found=0;
         for(int i=0;i<times;i++){
-		char* ptr=data + i*key_size; 
+		char* ptr=data + i*key_size;
                 char* value=hashmap_get(map,ptr);
                 if(value==NULL){
                         debug("Key was not found : %s",ptr);
@@ -223,10 +223,9 @@ void hashmap_benchmark(){
         map=NULL;
 }
 
-int main(){
+int main(void){
 
 	hashmap_benchmark();
 	tidwall_me();
         return 0;
 }
-

@@ -5,10 +5,10 @@
 #include<stdint.h>
 #include<stdlib.h>
 
-#include "dtypes/list.h"
+#include "list.h"
 #include "print.h"
 
-int test_delete(){
+int test_delete(void){
 	list_t* list=list_new(sizeof(size_t));
 	if(!list){
 		perror("list_new()");
@@ -107,7 +107,7 @@ int test_delete(){
 }
 
 
-int test_list(){
+int test_list(void){
 	list_t* list=list_new(sizeof(size_t));
 	if(!list) return 1;
 	clock_t start;
@@ -135,7 +135,7 @@ int test_list(){
 	// This is python equivalent of
 	// for i in range(times-5):
 	//   del list[i]
-	
+
 	start=clock();
 	for(size_t idx=0;idx<times-5;idx++){
 		if(list_delete(list,2)!=0){
@@ -168,7 +168,7 @@ int test_list(){
 	return 0;
 }
 
-int main(){
+int main(void){
 
 	puts("====benchmark of linked list====");
 	clock_t start;
@@ -196,7 +196,7 @@ int main(){
 
 	end=clock();
 	if(!failure_flag){
-		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
+		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
 		print_benchmark("APPEND",times,time_elapsed);
 	}
 
@@ -216,7 +216,7 @@ int main(){
 	}
 	end=clock();
 	if(!failure_flag){
-		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
+		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
 		print_benchmark("GET (iteration, left to right)",times,time_elapsed);
 	}
 
@@ -236,7 +236,7 @@ int main(){
 	}
 	end=clock();
 	if(!failure_flag){
-		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
+		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
 		print_benchmark("GET (iteration, right to left)",times,time_elapsed);
 	}
 
@@ -257,7 +257,7 @@ int main(){
 	}
 	end=clock();
 	if(!failure_flag){
-		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
+		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
 		print_benchmark("GET (access last element)",times,time_elapsed);
 	}
 
@@ -279,7 +279,7 @@ int main(){
 	}
 	end=clock();
 	if(!failure_flag){
-		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC; 
+		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
 		print_benchmark("GET (random)",times_random,time_elapsed);
 	}
 
@@ -301,7 +301,7 @@ int main(){
 	}
 
 	// test_delete();
-	
+
 	tests_failed+=test_list();
 
 

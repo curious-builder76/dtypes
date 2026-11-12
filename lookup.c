@@ -14,10 +14,10 @@
 #include<stdint.h>
 
 
-#include "dtypes/lookup.h"
-#include "dtypes/hash_function.h"
+#include "lookup.h"
+#include "hash_function.h"
 
-// This data structure is an adapted version of 
+// This data structure is an adapted version of
 // hashtable that only stores hashes
 // discarding objects
 
@@ -45,7 +45,7 @@ typedef struct __lookup_struct{
 // Returns a fine tuned lookup structure
 
 lookup_t* lookup_custom(
-		size_t table_size, size_t bucket_capacity, size_t obj_size, 
+		size_t table_size, size_t bucket_capacity, size_t obj_size,
 		uint64_t (*hash)(const void* , size_t, void*),
 		void* (*xmalloc)(size_t),
 		void (*xfree)(void*),
@@ -84,11 +84,11 @@ lookup_t* lookup_custom(
 
 lookup_t* lookup_new(size_t obj_size){
 	return lookup_custom(
-			8, 64, obj_size, 
+			8, 64, obj_size,
 			default_hash_function, malloc, free,
 			NULL
 			);
-			
+
 }
 
 
@@ -132,7 +132,7 @@ static int lookup_put0(lookup_t* look, uint64_t obj_hash){
 		if(hash==obj_hash)
 			return SEEN;
 	}
-insert_new:
+insert_new: {
 	size_t insert_idx=bucket->used++;
 
 	uint64_t* hash_ptr=bucket->hashes + insert_idx;
@@ -141,6 +141,7 @@ insert_new:
 
 	return SUCCESS;
 }
+}
 
 // Grow (or resize) the lookup structure
 // setting new_size as it's new table size
@@ -148,10 +149,10 @@ insert_new:
 int lookup_grow(lookup_t* look, size_t new_size){
 	lookup_t* look2= lookup_custom(
 			new_size, look->bucket_capacity,
-			look->obj_size, look->hash_function, 
+			look->obj_size, look->hash_function,
 			look->malloc, look->free, look->user_data
 			);
-	if(!look2) 
+	if(!look2)
 		return 1;
 
 	for(size_t bucket_idx=0;bucket_idx<look->table_size; bucket_idx++){
@@ -166,7 +167,7 @@ int lookup_grow(lookup_t* look, size_t new_size){
 		}
 	}
 	look->free(look->table);
-	memcpy(look, look2, sizeof(lookup_t)); 
+	memcpy(look, look2, sizeof(lookup_t));
 	look2->free(look2);
 	return 0;
 }
@@ -191,13 +192,13 @@ int lookup_add(lookup_t* look, void* obj){
 	return 1;
 }
 
-// Returns a non zero number indicating that the last add operation was failed 
+// Returns a non zero number indicating that the last add operation was failed
 // due to Out of Memory conditions
 int lookup_oom(lookup_t* look){
 	return look->oom_flag;
 }
 
-// Returns a non zero number indicating that the structuure is confident 
+// Returns a non zero number indicating that the structuure is confident
 // enough to say "this object is present" returns zero otherwise
 int lookup_contains(lookup_t* look, void* obj){
 	uint64_t hash=look->hash_function(obj, look->obj_size, look->user_data);
@@ -206,7 +207,7 @@ int lookup_contains(lookup_t* look, void* obj){
 
 	size_t bucket_idx= hash % look->table_size;
 
-	
+
 	bucket_t* bucket=get_bucket0(look, bucket_idx);
 	bucket->min_hash_seen=bucket->used ? bucket->min_hash_seen : (size_t)-1 ;
 

@@ -1,5 +1,6 @@
 #ifndef __BITSET_IMPL_H__
 #define __BITSET_IMPL_H__
+#include <stddef.h>
 #include<stdint.h>
 
 struct __bitset;
@@ -24,4 +25,3 @@ void bitset_destroy(bitset_t* );
 
 
 #endif
-

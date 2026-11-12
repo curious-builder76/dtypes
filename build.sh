@@ -1,40 +1,42 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
+[[ -v "CC" ]] || CC="gcc"
+CFLAGS="${CFLAGS:-} -Wall -Wextra -Wpedantic -I."
 
-
-run_benchmark(){
-	for name in "$@"
-	do
-		target="benchmarks/bench_${name}"
-		build="benchmarks/${name}_benchmark.c"
-		gcc -O2  -I.. -Wall -Wextra  $build -L. -ldtypes -o $target
-
-
-	done
-
-	for name in "$@"
-	do
-		target="benchmarks/bench_${name}"
-		$target 
-		[ -n "$PURGE" ] && rm -f $target
-	done
-
-
-
+genflags() {
+  printf '%s\n' $CFLAGS > compile_flags.txt
 }
 
+benchmark() {
+	for name in "$@"; do
+		target="benchmarks/bench_${name}"
+		build="benchmarks/${name}_benchmark.c"
+		${CC} ${CFLAGS} -O2 $build -L. -ldtypes -o $target
+	done
 
-main(){
-	gcc -O2 -pedantic  -Wall -Wextra -c -I.. *.c 
+	for name in "$@"; do
+		target="benchmarks/bench_${name}"
+		$target
+		if [[ -v PURGE ]]; then
+			rm -f $target
+		fi
+	done
+}
+
+main() {
+	${CC} -O2 ${CFLAGS} -c *.c
 	ar rcs libdtypes.a *.o
 	rm *.o
 
-	[  -n "$BENCH"  ] || exit 0
-	lscpu | head -n 8 2>&1 
-       	run_benchmark array hashmap hashset lookup trie deque bloom bitset ndarray list
+	if [[ -v BENCH ]]; then
+		lscpu | head -n 8 2>&1
+	 	benchmark array hashmap hashset lookup trie deque bloom bitset ndarray list
+	fi
 
-	# [  -n "$BENCH"  ] && run_benchmark ndarray
+	if [[ -v GFLAG ]]; then
+		genflags
+	fi
 }
-set -e
-main
 
+main

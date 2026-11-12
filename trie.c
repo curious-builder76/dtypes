@@ -3,13 +3,13 @@
 #include<string.h>
 #include<stdint.h>
 
-#include "dtypes/trie.h"
+#include "trie.h"
 
 #define MAX_NODES 255
 
 
 /*
- * Adapted from 
+ * Adapted from
  * https://github.com/curious-builder76/trie/
  *
  */
@@ -60,12 +60,6 @@ trie_t* trie_custom(void* (*xmalloc)(size_t), void* (*xrealloc)(void*, size_t), 
 	ctx->free=xfree;
 	return root;
 }
-
-// Thin wrapper over trie_custom()
-trie_t* trie_new(){
-	return trie_custom(malloc,realloc,free);
-}
-
 
 // Lookup table used for computing the nearest power of twos
 static const uint16_t table[]={
@@ -135,7 +129,7 @@ int trie_insert(trie_t* trie, char* input){
 			trie->seen_null=1;
 			return 0;
 		}
-		
+
 		if(trie_grow(trie,ch,ctx)!=0){
 			ctx->oom=1;
 			return 1;
@@ -162,7 +156,7 @@ int trie_contains(trie_t* trie,char* input){
 	}
 }
 
-// Returns a non zero number if the last insert operation 
+// Returns a non zero number if the last insert operation
 // failed because of out of memory condition.
 int trie_oom(trie_t* trie){
 	ctx_t* ctx=get_ctx(trie);
@@ -189,4 +183,3 @@ void trie_destroy(trie_t* trie){
 	trie_destroy0(trie,ctx);
 	ctx->free(trie);
 }
-

@@ -1,6 +1,7 @@
 #ifndef DTYPES_LIST_H
 
 #define DTYPES_LIST_H
+#include<stddef.h>
 #include<stdint.h>
 struct __list;
 

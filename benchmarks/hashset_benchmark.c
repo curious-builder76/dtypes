@@ -4,8 +4,8 @@
 
 #define __HASHSET_DEBUG
 #include "print.h"
-#include "dtypes/hashset.h"
-#include "dtypes/hash_function.h"
+#include "hashset.h"
+#include "hash_function.h"
 #include "test_alloc.h"
 
 void* prepare_data(size_t times, size_t input_size){
@@ -25,7 +25,7 @@ void* prepare_data(size_t times, size_t input_size){
 
 	return memory;
 }
-void benchmark(){
+void benchmark(void){
 
 	hashset_debug("====benchmark of hashset====");
 	size_t key_size=32;
@@ -45,8 +45,8 @@ void benchmark(){
 			"Object size: %zu\n"
 			"Bucket capacity (lifetime constant): %zu\n"
 			"Hash function(default): djb hash\n",
-		        table_size, 
-			key_size, 
+		        table_size,
+			key_size,
 			bucket_capacity
 	      );
 	int times=5000000;
@@ -57,8 +57,8 @@ void benchmark(){
 		return;
 	}
 
-	int tests_failed=0;
-	
+	// int tests_failed=0;
+
 	clock_t start;
 	clock_t end;
 	char put_test_failed=0;
@@ -69,7 +69,7 @@ void benchmark(){
 		int ret=hashset_put(set,key);
 		if(ret!=0){
 			hashset_debug("Failed after %d keys",i);
-			tests_failed+=1;
+			// tests_failed+=1;
 			put_test_failed=1;
 			break;
 		}
@@ -91,7 +91,7 @@ void benchmark(){
 		int ret=hashset_contains(set,key);
 		if(!ret){
 			hashset_debug("Failed after %d keys",i);
-			tests_failed+=1;
+			// tests_failed+=1;
 			has_test_failed=1;
 			break;
 		}
@@ -112,7 +112,7 @@ void benchmark(){
 		int ret=hashset_delete(set,key);
 		if(ret!=0){
 			hashset_debug("Failed after %d keys",i);
-			tests_failed+=1;
+			// tests_failed+=1;
 			has_test_failed=1;
 			break;
 		}
@@ -131,7 +131,7 @@ void benchmark(){
 }
 
 
-int main(){
+int main(void){
 	benchmark();
 	return 0;
 }

@@ -1,6 +1,7 @@
 #ifndef __HASH_FUNCTIONS__
 #define __HASH_FUNCTIONS__
 
+#include <stdint.h>
 #include<stdlib.h>
 
 uint64_t djb_hash(const void* obj,size_t size);

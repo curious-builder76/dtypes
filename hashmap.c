@@ -2,8 +2,8 @@
 #include<string.h>
 #include<stdlib.h>
 #include<stdio.h>
-#include "dtypes/hashmap.h"
-#include "dtypes/hash_function.h"
+#include "hashmap.h"
+#include "hash_function.h"
 
 
 

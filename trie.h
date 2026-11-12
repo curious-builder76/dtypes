@@ -13,7 +13,7 @@ trie_t* trie_custom(
 		void* (*xrealloc)(void*, size_t),
 		void (*xfree)(void*)
 		);
-trie_t* trie_new();
+trie_t* trie_new(void);
 
 int trie_insert(trie_t* , char*);
 
@@ -24,5 +24,3 @@ int trie_contains(trie_t*, char*);
 void trie_destroy(trie_t*);
 
 #endif
-
-
