@@ -183,7 +183,7 @@ void benchmark(){
 	if(!tests_failed){
 		debug("All tests passed.");
 	}else{
-		debug("%d tests failed out of 3.",tests_failed);
+		debug("%d tests failed out of 4.",tests_failed);
 	}
 	free(input);
 	input=NULL;
