@@ -4,8 +4,8 @@
 
 #include "print.h"
 #include "test_alloc.h"
-#include "lookup.h"
-#include "hash_function.h"
+#include "dtypes/lookup.h"
+#include "dtypes/hash_function.h"
 
 #define debug(...)do {\
 	fprintf(stderr,__VA_ARGS__);\

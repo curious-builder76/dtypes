@@ -1,5 +1,5 @@
 
-#include "deque.h"
+#include "dtypes/deque.h"
 #include<stdlib.h>
 #include<stdint.h>
 #include<string.h>

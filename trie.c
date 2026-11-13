@@ -1,6 +1,6 @@
 
 
-#include "trie.h"
+#include "dtypes/trie.h"
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>

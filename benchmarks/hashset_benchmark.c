@@ -4,8 +4,8 @@
 
 #define __HASHSET_DEBUG
 #include "print.h"
-#include "hashset.h"
-#include "hash_function.h"
+#include "dtypes/hashset.h"
+#include "dtypes/hash_function.h"
 #include "test_alloc.h"
 
 void* prepare_data(size_t times, size_t input_size){

@@ -5,10 +5,10 @@
 #include<stdint.h>
 
 #define __HASHMAP_DEBUG
-#include "hashmap.h"
+#include "dtypes/hashmap.h"
+#include "dtypes/hash_function.h"
 #include "test_alloc.h"
 #include "print.h"
-#include "hash_function.h"
 
 
 

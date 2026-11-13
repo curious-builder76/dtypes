@@ -3,7 +3,7 @@
 #include<stdlib.h>
 #include<time.h>
 #include<string.h>
-#include "trie.h"
+#include "dtypes/trie.h"
 
 #include "print.h"
 #include "test_alloc.h"

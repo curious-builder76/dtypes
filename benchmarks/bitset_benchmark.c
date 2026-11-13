@@ -3,8 +3,11 @@
 #include<stdint.h>
 #include<string.h>
 #include<time.h>
+
+#include "dtypes/bitset.h"
+
+
 #include "print.h"
-#include "bitset.h"
 
 #define debug(...) do{\
 	fprintf(stderr,__VA_ARGS__);\

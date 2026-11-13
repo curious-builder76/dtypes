@@ -1,5 +1,5 @@
 
-#include "ndarray.h"
+#include "dtypes/ndarray.h"
 
 #include<stdio.h>
 #include<stdlib.h>

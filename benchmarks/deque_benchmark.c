@@ -2,7 +2,7 @@
 #include<stdint.h>
 #include<time.h>
 
-#include "deque.h"
+#include "dtypes/deque.h"
 #include "test_alloc.h"
 #include "print.h"
 

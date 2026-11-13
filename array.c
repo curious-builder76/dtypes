@@ -1,5 +1,5 @@
 
-#include "array.h"
+#include "dtypes/array.h"
 #include<stdlib.h>
 #include<stdint.h>
 #include<string.h>

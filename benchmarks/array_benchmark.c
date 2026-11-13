@@ -3,7 +3,7 @@
 #include<string.h>
 #include<stdint.h>
 #include<stdlib.h>
-#include "array.h"
+#include "dtypes/array.h"
 
 #include "test_alloc.h"
 #include "print.h"

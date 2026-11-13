@@ -2,7 +2,7 @@
 set -euo pipefail
 
 [[ -v "CC" ]] || CC="gcc"
-CFLAGS="${CFLAGS:-} -Wall -Wextra -Wpedantic -I."
+CFLAGS="${CFLAGS:-} -Wall -Wextra -Wpedantic -I.."
 
 genflags() {
   printf '%s\n' $CFLAGS > compile_flags.txt

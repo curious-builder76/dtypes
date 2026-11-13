@@ -10,8 +10,8 @@
  */
 
 
-#include "lookup.h"
-#include "hash_function.h"
+#include "dtypes/lookup.h"
+#include "dtypes/hash_function.h"
 #include<string.h>
 #include<stdlib.h>
 #include<stdint.h>
