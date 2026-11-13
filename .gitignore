@@ -5,3 +5,4 @@ a.out
 *.py
 *.a
 benchmarks/bench_*
+compile_flags.txt

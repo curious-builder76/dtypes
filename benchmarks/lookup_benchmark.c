@@ -1,12 +1,11 @@
 #include<stdio.h>
-#include<stdlib.h>
 #include<stdint.h>
 #include<time.h>
 
 #include "print.h"
 #include "test_alloc.h"
-#include "dtypes/lookup.h"
-#include "dtypes/hash_function.h"
+#include "lookup.h"
+#include "hash_function.h"
 
 #define debug(...)do {\
 	fprintf(stderr,__VA_ARGS__);\
@@ -19,7 +18,7 @@ typedef struct{
 }point_t;
 
 
-void benchmark(){
+void benchmark(void){
 	debug("====benchmark of lookup====");
 	lookup_t* lookup=NULL;
 	while(!lookup)
@@ -32,7 +31,7 @@ void benchmark(){
 			xfree,
 			NULL
 			    );
-	
+
 	debug("Key put test.");
 	int broke=0;
 	int tests_failed=0;
@@ -43,7 +42,7 @@ void benchmark(){
 	clock_t end;
 	double time_elapsed;
 	int total_tests=3;
-	
+
 	start=clock();
 	for(int i=0;i<outer_loop_iterates;i++){
 		for(int j=0;j<inner_loop_iterates;j++){
@@ -60,7 +59,7 @@ void benchmark(){
 		}
 	}
 	end=clock();
-	
+
 	if(!broke){
 		time_elapsed=(double)(end-start)/CLOCKS_PER_SEC;
 		debug("Test passed.");
@@ -68,7 +67,7 @@ void benchmark(){
 	} else{
 		debug("Test failed.");
 	}
-	
+
 	point_t nonexistent={ (uint32_t)(times+1), (uint32_t)(times+33) };
 
 	debug("Nonexistent key test.");
@@ -126,7 +125,7 @@ void benchmark(){
 	memory_leak();
 }
 
-int main(){
+int main(void){
 	benchmark();
 	return 0;
 }

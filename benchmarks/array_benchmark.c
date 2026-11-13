@@ -3,7 +3,7 @@
 #include<string.h>
 #include<stdint.h>
 #include<stdlib.h>
-#include "dtypes/array.h"
+#include "array.h"
 
 #include "test_alloc.h"
 #include "print.h"
@@ -19,10 +19,10 @@ typedef struct{
 	char string[32];
 }digit_t;
 
-void benchmark(){
+void benchmark(void){
 	log("==== benchmark of array====");
 	uint32_t times=5000000;
-	
+
 	digit_t* digits=malloc(sizeof(digit_t)*times);
 	if(digits==NULL){
 		perror("malloc()");
@@ -44,9 +44,9 @@ void benchmark(){
 	int test_failed=0;
 	int total_tests=2;
 	int tests_failed=0;
-	
+
 	array_t* array;
-	
+
 	do{
 		array=array_custom(
 			sizeof(digit_t),
@@ -56,7 +56,7 @@ void benchmark(){
 			);
 	}
 	while(array==NULL);
-	
+
 	start=clock();
 	for(uint32_t idx=0;idx<times;idx++){
 		if(array_put(array,digits+idx)!=0){
@@ -76,7 +76,7 @@ void benchmark(){
 		print_benchmark("PUT", times, time_elapsed);
 
 	}
-	
+
 
 	uint32_t size_estimated=array_getsize(array);
 	uint32_t size_actual=0;
@@ -110,8 +110,7 @@ void benchmark(){
 }
 
 
-int main(){
+int main(void){
 	benchmark();
 	return 0;
 }
-

@@ -1,6 +1,7 @@
 #ifndef NDARRAY_IMPL_H
 
-#define NDARRAY_IMPL_H 
+#define NDARRAY_IMPL_H
+#include <stddef.h>
 
 struct __ndarray__;
 
@@ -17,4 +18,3 @@ int ndarray_put(ndarray_t* a,void* obj,...);
 void ndarray_destroy(ndarray_t* a);
 
 #endif
-

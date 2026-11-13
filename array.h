@@ -1,6 +1,7 @@
 #ifndef __ARRAY_IMPL__
 #define __ARRAY_IMPL__
 
+#include <stddef.h>
 #include<stdint.h>
 
 struct __array_struct;
@@ -21,4 +22,3 @@ int array_oom(array_t* array);
 int array_destroy(array_t* array);
 
 #endif
-

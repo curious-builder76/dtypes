@@ -2,7 +2,7 @@
 #define __DEQUE_IMPL_H__
 
 
-
+#include<stddef.h>
 #include<stdint.h>
 
 struct __deque;
@@ -21,4 +21,3 @@ void deque_destroy(deque_t*);
 
 
 #endif
-

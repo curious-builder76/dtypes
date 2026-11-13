@@ -4,9 +4,6 @@
 
 #ifdef __HASHMAP_DEBUG
 
-
-#include<stdint.h>
-
 #define debug(...) do{\
 	fprintf(stderr,__VA_ARGS__);\
 	fprintf(stderr,"\n");\
@@ -14,6 +11,9 @@
 #else
 #define debug(...)
 #endif
+
+#include<stdint.h>
+#include<stddef.h>
 
 struct __hashmap_struct;
 

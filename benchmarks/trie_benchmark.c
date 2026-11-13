@@ -3,7 +3,7 @@
 #include<stdlib.h>
 #include<time.h>
 #include<string.h>
-#include "dtypes/trie.h"
+#include "trie.h"
 
 #include "print.h"
 #include "test_alloc.h"
@@ -96,7 +96,7 @@ int lookup(trie_t* trie,char* input, size_t input_size, size_t times, double* ti
 	return 0;
 }
 
-void benchmark(){
+void benchmark(void) {
 	debug("==== benchmark of trie.====");
 	trie_t* trie;
 	do{
@@ -158,7 +158,7 @@ void benchmark(){
 
 	}
 	debug("Random lookups.");
-	prepare_random(input, 32, times); 
+	prepare_random(input, 32, times);
 	if(lookup(trie,input, 32, times,&time_elapsed)!=0){
 		debug("Test failed.");
 		tests_failed++;
@@ -166,9 +166,9 @@ void benchmark(){
 		debug("Test passed.");
 		print_benchmark("CONTAINS (random)",times,time_elapsed);
 	}
-	
+
 	debug("Sequential lookups.");
-	prepare_sequential(input, 32, times); 
+	prepare_sequential(input, 32, times);
 	if(lookup(trie,input, 32, times,&time_elapsed)!=0){
 		debug("Test failed.");
 		tests_failed++;
@@ -189,7 +189,8 @@ void benchmark(){
 	input=NULL;
 	memory_leak();
 }
-int main(){
+
+int main(void) {
 	benchmark();
 	return 0;
 }

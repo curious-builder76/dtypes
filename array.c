@@ -3,12 +3,12 @@
 #include<stdint.h>
 #include<string.h>
 
-#include "dtypes/array.h"
+#include "array.h"
 
 
 typedef unsigned char uchar;
 
-typedef struct __array_struct{ 
+typedef struct __array_struct{
 	char oom;
 	size_t element_size;
 	size_t capacity;
@@ -34,7 +34,7 @@ array_t* array_custom(
 	}
 	size_t capacity=512;
 	size_t mem_required=capacity*element_size;
-	
+
 	uchar* elements=NULL;
 	array_t* array=NULL;
 
@@ -63,7 +63,7 @@ array_new_failed:
 // Wrapper of array_custom for ease of use.
 //
 array_t* array_new(size_t element_size){
-	return array_custom( 
+	return array_custom(
 			element_size,
 			malloc,
 			realloc,
@@ -100,7 +100,7 @@ int array_grow(array_t* array){
 
 int array_shrink(array_t* array){
 	double lf= (double)array->used / (double)array->capacity;
-	if( lf > SHRINK_AT) return 0; // doesn't needs it. 
+	if( lf > SHRINK_AT) return 0; // doesn't needs it.
 	size_t old_cap=array->capacity;
 	if(old_cap <= 8 ) {
 		return 0; // already too small.
@@ -121,7 +121,7 @@ size_t array_getsize(array_t* array){
 
 int array_put(array_t* array,void* obj){
 	if (array->used>=array->capacity){
-		if(array_grow(array)!=0) 
+		if(array_grow(array)!=0)
 			return 1;
 	}
 	size_t ret_point=array->used*array->element_size;
@@ -132,7 +132,7 @@ int array_put(array_t* array,void* obj){
 }
 
 
-// Copies "element_size" bytes to array 
+// Copies "element_size" bytes to array
 // and returns 0 on success and a non zero number on error.
 
 int array_get(array_t* array,size_t pos,void* obj){
@@ -183,19 +183,17 @@ int array_pop(array_t* array,void* obj){
 }
 
 // Returns a non zero number if the last operation failed because
-// of OOM (Out of Memory) conditions. 
+// of OOM (Out of Memory) conditions.
 
 int array_oom(array_t* array){
 	return array->oom;
 }
 
 // Destroys the array completely, and releases resources aqquired by it.
-// You should'nt use that array after 
+// You should'nt use that array after
 // this function is called on it.
 int array_destroy(array_t* array){
 	array->free(array->elements);
 	array->free(array);
 	return 0;
 }
-
-

@@ -1,10 +1,10 @@
 #ifndef DTYPES_PRINT_H
 
-#define DTYPES_PRINT_H 
+#define DTYPES_PRINT_H
 
 #include<stdio.h>
 
-int print_benchmark(char* name,size_t operations, double time_elapsed){
+static inline int print_benchmark(char* name,size_t operations, double time_elapsed){
 	fflush(stdout);
 	printf(
                         "%s\n"

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include<stdint.h>
-#include "dtypes/ndarray.h"
+#include "ndarray.h"
 
 #define SIZE 100
 #define ITERATIONS 10

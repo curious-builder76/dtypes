@@ -3,7 +3,6 @@
 #include<stdlib.h>
 #include<string.h>
 
-#include "dtypes/hash_function.h"
 
 
 
@@ -21,7 +20,7 @@ typedef struct{
 
 // Return a custom  bloom filter
 //
-// Or return NULL upon failure. 
+// Or return NULL upon failure.
 
 bloom_t* bloom_custom(size_t capacity,size_t element_size,uint64_t (*hash1)(void*, size_t), uint64_t (*hash2)(void*,size_t), void* (*xmalloc)(size_t), void (*xfree)(void*)){
 	size_t size_actual= (capacity+7)>>3;
@@ -66,7 +65,7 @@ void bloom_destroy(bloom_t* bloom){
 //
 // Returns zero upon success, or a non zero number indicating failure.
 //
-int bloom_add(bloom_t* bloom,void* obj){ 
+int bloom_add(bloom_t* bloom,void* obj){
 	for(int i=0;i<2;i++){
 		uint64_t hash= bloom->hash_functions[i](obj,bloom->element_size);
 
@@ -78,11 +77,11 @@ int bloom_add(bloom_t* bloom,void* obj){
 
 
 // Check wether the item possibly present
-// 
-// Returns a non zero number if possibly present 
+//
+// Returns a non zero number if possibly present
 // else returns 0
 //
-int bloom_contains(bloom_t* bloom,void* obj){ 
+int bloom_contains(bloom_t* bloom,void* obj){
 	for(int i=0;i<2;i++){
 		uint64_t hash= bloom->hash_functions[i](obj,bloom->element_size);
 		uint64_t index= hash % bloom->capacity;
@@ -90,6 +89,3 @@ int bloom_contains(bloom_t* bloom,void* obj){
 	}
 	return 1;
 }
-
-
-

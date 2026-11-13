@@ -4,7 +4,7 @@
 #include<string.h>
 #include<stdarg.h>
 
-#include "dtypes/ndarray.h"
+#include "ndarray.h"
 typedef struct __ndarray__{
 	void (*free)(void*);
 	size_t ndims;

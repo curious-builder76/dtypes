@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include<stdint.h>
-#include "dtypes/bitset.h"
+#include "bitset.h"
 
 
 // bitset is an array of "capacity"/8 sized bytes 
