@@ -9,13 +9,13 @@
  * then this can also guarantees that there will be neither false positives nor negatives.
  */
 
+
+#include "lookup.h"
+#include "hash_function.h"
 #include<string.h>
 #include<stdlib.h>
 #include<stdint.h>
 
-
-#include "lookup.h"
-#include "hash_function.h"
 
 // This data structure is an adapted version of
 // hashtable that only stores hashes

@@ -1,8 +1,10 @@
+
+#include "list.h"
+
 #include<string.h>
 #include<stdlib.h>
 #include<stdint.h>
 #include<stdio.h>
-#include "list.h"
 #define NULL_NODE ((size_t)-1)
 
 

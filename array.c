@@ -1,9 +1,9 @@
 
+#include "array.h"
 #include<stdlib.h>
 #include<stdint.h>
 #include<string.h>
 
-#include "array.h"
 
 
 typedef unsigned char uchar;

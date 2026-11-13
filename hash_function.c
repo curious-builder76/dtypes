@@ -1,7 +1,7 @@
 
+#include "hash_function.h"
 #include<stdint.h>
 #include<string.h>
-#include "hash_function.h"
 
 uint64_t djb_hash(const void* obj,size_t size){
         unsigned char* buff=(unsigned char*)obj;

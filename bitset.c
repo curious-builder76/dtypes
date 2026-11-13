@@ -1,8 +1,10 @@
+
+#include "bitset.h"
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<stdint.h>
-#include "bitset.h"
 
 
 // bitset is an array of "capacity"/8 sized bytes 

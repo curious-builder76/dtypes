@@ -1,9 +1,11 @@
+
+
+#include "trie.h"
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<stdint.h>
 
-#include "trie.h"
 
 #define MAX_NODES 255
 

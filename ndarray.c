@@ -1,10 +1,12 @@
+
+#include "ndarray.h"
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdint.h>
 #include<string.h>
 #include<stdarg.h>
 
-#include "ndarray.h"
 typedef struct __ndarray__{
 	void (*free)(void*);
 	size_t ndims;

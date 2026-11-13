@@ -1,3 +1,5 @@
+
+#include "bloom.h"
 #include<stdio.h>
 #include<stdint.h>
 #include<stdlib.h>
@@ -5,10 +7,7 @@
 
 
 
-
-
-
-typedef struct{
+typedef struct __bloom{
 	void (*free)(void*);
 	uint64_t (*hash_functions[2])(void*, size_t);
 	size_t capacity;
