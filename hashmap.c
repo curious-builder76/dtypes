@@ -11,7 +11,6 @@
 
 // A simple hashmap implemention 
 //
-// based upon open addressing 
 
 
 typedef struct{
